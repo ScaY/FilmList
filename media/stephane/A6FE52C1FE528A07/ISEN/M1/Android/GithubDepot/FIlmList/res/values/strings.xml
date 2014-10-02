@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">FIlmList</string>
+    <string name="title_activity_home">Home</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="app_name">FilmList</string>
+
+    <string-array name="navigation_array">
+        <item>Vos films favoris</item>
+        <item>Film à voir</item>
+        <item>Liste complète de vos films</item>
+        <item>A propos</item>
+    </string-array>
+
+    <string name="title_activity_apropos">APropos</string>
 
 </resources>
