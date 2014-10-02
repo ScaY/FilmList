@@ -1,5 +1,8 @@
 package fr.isen.android.filmlist;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -51,5 +54,20 @@ public class FilmDAO extends DAOBase {
 		  Cursor c = mDb.query(TABLE_NAME, columns, KEY + " = ?", args, "", "", "");
 		  c.moveToFirst();
 		  return new Film(id, c.getString(0));
+	  }
+	  
+	  public List<Film> getAllFilms() {
+		  List<Film> films = new ArrayList<Film>();
+		  
+		  String columns[] = {KEY, NAME};
+		  String args[] = {};
+		  Cursor c = mDb.query(TABLE_NAME, columns, "", args, "", "", "");
+		  
+		  while(c.moveToNext()) {
+			  Film film = new Film(c.getLong(0), c.getString(1));
+			  films.add(film);
+		  }
+		  
+		  return films;
 	  }
 	}

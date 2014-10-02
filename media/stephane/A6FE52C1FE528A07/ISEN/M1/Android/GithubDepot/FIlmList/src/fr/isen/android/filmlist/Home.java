@@ -9,6 +9,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -31,12 +32,16 @@ public class Home extends Activity {
 	private ActionBarDrawerToggle drawerToggle;
 	private CharSequence drawerTitle;
 	private CharSequence mTitle;
+	
+	private FilmDAO dao;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
 
+		this.dao = new FilmDAO(this);
+		
 		navigationArray = getResources().getStringArray(
 				R.array.navigation_array);
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -79,8 +84,11 @@ public class Home extends Activity {
 		// Set the drawer toggle as the DrawerListener
 		drawerLayout.setDrawerListener(drawerToggle);
 
-
+		/*dao.openReadMode();
+		final ArrayList<String> list = (ArrayList)dao.getAllFilms();*/
+		
 	    final ListView listview = (ListView) findViewById(R.id.listview);
+		
 	    String[] values = new String[] { "Android", "iPhone", "WindowsMobile",
 	        "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
 	        "Linux", "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux",
@@ -88,6 +96,7 @@ public class Home extends Activity {
 	        "Android", "iPhone", "WindowsMobile" };
 
 	    final ArrayList<String> list = new ArrayList<String>();
+	    
 	    for (int i = 0; i < values.length; ++i) {
 	      list.add(values[i]);
 	    }

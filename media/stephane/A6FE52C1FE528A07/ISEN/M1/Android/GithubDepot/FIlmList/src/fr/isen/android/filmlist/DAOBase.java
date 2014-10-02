@@ -17,10 +17,14 @@ public abstract class DAOBase {
 	    this.mHandler = new DatabaseHandler(pContext, NOM, null, VERSION);
 	  }
 	    
-	  public SQLiteDatabase open() {
+	  public void openWriteMode() {
 	    // Pas besoin de fermer la dernière base puisque getWritableDatabase s'en charge
 	    mDb = mHandler.getWritableDatabase();
-	    return mDb;
+	  }
+	  
+	  public void openReadMode() {
+	    // Pas besoin de fermer la dernière base puisque getWritableDatabase s'en charge
+	    mDb = mHandler.getReadableDatabase();
 	  }
 	    
 	  public void close() {
