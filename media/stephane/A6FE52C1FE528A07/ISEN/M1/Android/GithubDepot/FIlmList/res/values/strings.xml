@@ -5,7 +5,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="app_name">FilmList</string>
-
+	<string name="action_search">Chercher un film...</string>
+	
     <string-array name="navigation_array">
         <item>Vos films favoris</item>
         <item>Film à voir</item>

@@ -1,5 +1,6 @@
 package fr.isen.android.filmlist;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.filmlist.R;
 
@@ -48,7 +50,9 @@ public class Home extends Activity {
 
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
-		
+  ActionBar actionBar = getActionBar();
+    actionBar.setDisplayHomeAsUpEnabled(true);
+
 		drawerToggle = new ActionBarDrawerToggle(this,
 		drawerLayout, 
 		R.drawable.ic_drawer, 
@@ -87,6 +91,7 @@ public class Home extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.home, menu);
+
 		return true;
 	}
 	
@@ -97,11 +102,17 @@ public class Home extends Activity {
         if (drawerToggle.onOptionsItemSelected(item)) {
           return true;
         }
-        // Handle your other action bar items...
-
         return super.onOptionsItemSelected(item);
-    }
 
+
+    }
+    private void openSearch() {
+        Toast.makeText(this, "Search button pressed", Toast.LENGTH_SHORT).show();
+    }
+    
+    private void  openSettings(){
+    	
+    }
 
 	private class DrawerItemClickListener implements
 			ListView.OnItemClickListener {
