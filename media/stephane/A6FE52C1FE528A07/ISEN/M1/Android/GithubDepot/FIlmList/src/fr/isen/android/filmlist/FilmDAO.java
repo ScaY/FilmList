@@ -38,7 +38,7 @@ public class FilmDAO extends DAOBase {
 	   */
 	  public void edit(Film f) {
 		  ContentValues value = new ContentValues();
-		  value.put(NAME, m.getName());
+		  value.put(NAME, f.getName());
 		  mDb.update(TABLE_NAME, value, KEY  + " = ?", new String[] {String.valueOf(f.getId())});
 	  }
 
