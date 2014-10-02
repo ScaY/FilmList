@@ -30,6 +30,10 @@
             android:name="fr.isen.android.filmlist.APropos"
             android:label="@string/title_activity_apropos" >
         </activity>
+        <activity
+            android:name="fr.isen.android.filmlist.DisplaySearchResults"
+            android:label="@string/title_activity_display_search_results" >
+        </activity>
     </application>
 
 </manifest>
