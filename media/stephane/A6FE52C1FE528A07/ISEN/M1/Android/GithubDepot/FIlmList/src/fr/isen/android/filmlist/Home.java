@@ -7,9 +7,7 @@ import java.util.List;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.SearchManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -22,6 +20,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
+import android.widget.SearchView.OnQueryTextListener;
 import android.widget.Toast;
 
 import com.example.filmlist.R;
@@ -91,7 +91,7 @@ public class Home extends Activity {
 		/*dao.openReadMode();
 		final ArrayList<String> list = (ArrayList)dao.getAllFilms();*/
 		
-	    final ListView listview = (ListView) findViewById(R.id.listview);
+	    /*final ListView listview = (ListView) findViewById(R.id.listview);
 		
 	    String[] values = new String[] { "Android", "iPhone", "WindowsMobile",
 	        "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
@@ -125,20 +125,14 @@ public class Home extends Activity {
 	            });
 	      }
 
-	    });
-	    
-	    // Gestion de "l'intent" pour la barre de recherche/ajout
-	    Intent intent = getIntent();
-	    if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-	      String query = intent.getStringExtra(SearchManager.QUERY);
-	      handleSearch(query);
-	    }
+	    });*/
 
 	}
 
 	public void handleSearch(String query){
 		selectItem(2);
 	}
+	
 	@Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -149,19 +143,11 @@ public class Home extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.home, menu);
-		/*
-		 SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-		    searchView.setOnKeyListener(new OnKeyListener() {
-
-		        @Override
-		        public boolean onKey(View v, int keyCode, KeyEvent event) {
-		            if(event.getAction() ==  KeyEvent.KEYCODE_ENTER){
-		            	 Toast.makeText(this, "Refresh selected", Toast.LENGTH_SHORT)
-		                 .show();
-		            }
-		            return true;
-		        }
-		    });*/
+		
+		// Ajout du listener sur la barre de recherche
+		SearchView searchView=(SearchView)menu.findItem(R.id.action_search).getActionView();
+		searchView.setOnQueryTextListener(new searchActiontOnQueryTextListener());
+		
 		return true;
 	}
 	
@@ -190,6 +176,24 @@ public class Home extends Activity {
 		}
 	}
 	
+	/** Fonction permettant de détecter la saisi de l'utilisateur dans la barre de recherche */
+	private class searchActiontOnQueryTextListener implements OnQueryTextListener
+	{
+
+		@Override
+		public boolean onQueryTextChange(String newText) {
+			
+			return true;
+		}
+
+		@Override
+		public boolean onQueryTextSubmit(String query) {
+			Toast.makeText(getApplicationContext(),query, Toast.LENGTH_LONG).show();
+			return true;
+		}
+		
+		
+	}
 	public void setTitle(CharSequence title) {
 	    mTitle = title;
 	    getActionBar().setTitle(mTitle);
