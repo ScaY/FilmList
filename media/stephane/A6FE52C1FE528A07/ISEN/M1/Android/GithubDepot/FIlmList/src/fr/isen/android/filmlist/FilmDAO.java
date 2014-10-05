@@ -35,6 +35,10 @@ public class FilmDAO extends DAOBase {
 	  public void delete(Film film) {
 		  mDb.delete(DatabaseHandler.FILM_TABLE_NAME, DatabaseHandler.FILM_KEY + " = ?", new String[] {String.valueOf(film.getId())});
 	  }
+	  
+	  public void delete(String filmName) {
+		  mDb.delete(DatabaseHandler.FILM_TABLE_NAME, DatabaseHandler.FILM_NAME + " = ?", new String[] {filmName});
+	  }
 
 	  /**
 	   * @param m le film modifié

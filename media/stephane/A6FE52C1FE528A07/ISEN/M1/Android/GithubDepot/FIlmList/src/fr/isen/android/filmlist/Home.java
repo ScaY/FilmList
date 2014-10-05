@@ -113,6 +113,9 @@ public class Home extends Activity {
 	        .withEndAction(new Runnable() {
 	              @Override
 	              public void run() {
+	            	dao.open();
+	            	dao.delete(item);
+	            	dao.close();
 	                list.remove(item);
 	                adapter.notifyDataSetChanged();
 	                view.setAlpha(1);
