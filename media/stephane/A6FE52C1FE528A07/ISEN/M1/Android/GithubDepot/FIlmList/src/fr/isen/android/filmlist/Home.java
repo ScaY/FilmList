@@ -91,7 +91,7 @@ public class Home extends Activity {
 		/*dao.openReadMode();
 		final ArrayList<String> list = (ArrayList)dao.getAllFilms();*/
 		
-	    /*final ListView listview = (ListView) findViewById(R.id.listview);
+	    final ListView listview = (ListView) findViewById(R.id.listview);
 		
 	    String[] values = new String[] { "Android", "iPhone", "WindowsMobile",
 	        "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
@@ -125,7 +125,7 @@ public class Home extends Activity {
 	            });
 	      }
 
-	    });*/
+	    });
 
 	}
 
@@ -145,9 +145,27 @@ public class Home extends Activity {
 		getMenuInflater().inflate(R.menu.home, menu);
 		
 		// Ajout du listener sur la barre de recherche
-		SearchView searchView=(SearchView)menu.findItem(R.id.action_search).getActionView();
-		searchView.setOnQueryTextListener(new searchActiontOnQueryTextListener());
-		
+		final SearchView searchView=(SearchView)menu.findItem(R.id.action_search).getActionView();
+		final MenuItem searchMenuItem = menu.findItem(R.id.action_search);
+		searchView.setOnQueryTextListener(new OnQueryTextListener(){
+
+			@Override
+			public boolean onQueryTextChange(String newText) {
+				
+				return true;
+			}
+
+			@Override
+			public boolean onQueryTextSubmit(String query) {
+				Toast.makeText(getApplicationContext(),query, Toast.LENGTH_LONG).show();
+				selectItem(3);
+				searchMenuItem.collapseActionView();
+                searchView.setQuery("", false);
+				return true;
+			}
+			
+			
+		});
 		return true;
 	}
 	
@@ -189,11 +207,13 @@ public class Home extends Activity {
 		@Override
 		public boolean onQueryTextSubmit(String query) {
 			Toast.makeText(getApplicationContext(),query, Toast.LENGTH_LONG).show();
+			selectItem(3);
 			return true;
 		}
 		
 		
 	}
+	
 	public void setTitle(CharSequence title) {
 	    mTitle = title;
 	    getActionBar().setTitle(mTitle);
