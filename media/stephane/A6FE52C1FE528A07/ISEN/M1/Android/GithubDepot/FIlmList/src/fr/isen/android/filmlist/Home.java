@@ -22,7 +22,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
-import android.widget.Toast;
 
 import com.example.filmlist.R;
 
@@ -36,7 +35,8 @@ public class Home extends Activity {
 	private CharSequence mTitle;
 	
 	private FilmDAO dao;
-	private ArrayList<String> list; 
+	private ArrayList<String> list;
+	private ArrayAdapter adapter; 
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -88,26 +88,21 @@ public class Home extends Activity {
 		// Set the drawer toggle as the DrawerListener
 		drawerLayout.setDrawerListener(drawerToggle);
 
-		/*dao.openReadMode();
-		final ArrayList<String> list = (ArrayList)dao.getAllFilms();*/
+		dao.open();
+		final List<Film> films = dao.getAllFilms();
+		dao.close();
 		
 	    final ListView listview = (ListView) findViewById(R.id.listview);
-		
-	    String[] values = new String[] { "Android", "iPhone", "WindowsMobile",
-	        "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
-	        "Linux", "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux",
-	        "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux", "OS/2",
-	        "Android", "iPhone", "WindowsMobile" };
 
 	    list = new ArrayList<String>();
 	    
-	    for (int i = 0; i < values.length; ++i) {
-	      list.add(values[i]);
+	    for(Film film : films) {
+	    	list.add(film.getName());
 	    }
-	    final StableArrayAdapter adapter = new StableArrayAdapter(this,
+	    adapter = new ArrayAdapter<String>(this,
 	        android.R.layout.simple_list_item_1, list);
 	    listview.setAdapter(adapter);
-
+	    
 	    listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 	      @Override
@@ -157,8 +152,11 @@ public class Home extends Activity {
 
 			@Override
 			public boolean onQueryTextSubmit(String query) {
-				Toast.makeText(getApplicationContext(),query, Toast.LENGTH_LONG).show();
-				selectItem(3);
+				dao.open();
+				Film film = dao.insert(query);
+				dao.close();
+				list.add(film.getName());
+				adapter.notifyDataSetChanged();
 				searchMenuItem.collapseActionView();
                 searchView.setQuery("", false);
 				return true;
@@ -177,7 +175,7 @@ public class Home extends Activity {
           return true;
         }
         if(R.id.action_search == item.getItemId()){
-        	selectItem(2);
+        	//selectItem(2);
         }
         // Handle your other action bar items...
 
@@ -192,26 +190,6 @@ public class Home extends Activity {
 				long id) {
 			selectItem(position);
 		}
-	}
-	
-	/** Fonction permettant de détecter la saisi de l'utilisateur dans la barre de recherche */
-	private class searchActiontOnQueryTextListener implements OnQueryTextListener
-	{
-
-		@Override
-		public boolean onQueryTextChange(String newText) {
-			
-			return true;
-		}
-
-		@Override
-		public boolean onQueryTextSubmit(String query) {
-			Toast.makeText(getApplicationContext(),query, Toast.LENGTH_LONG).show();
-			selectItem(3);
-			return true;
-		}
-		
-		
 	}
 	
 	public void setTitle(CharSequence title) {
