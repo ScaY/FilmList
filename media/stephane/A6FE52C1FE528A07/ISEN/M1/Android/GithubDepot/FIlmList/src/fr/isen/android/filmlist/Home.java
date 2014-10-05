@@ -7,9 +7,10 @@ import java.util.List;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -21,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.filmlist.R;
 
@@ -34,7 +36,8 @@ public class Home extends Activity {
 	private CharSequence mTitle;
 	
 	private FilmDAO dao;
-
+	private ArrayList<String> list; 
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -42,6 +45,7 @@ public class Home extends Activity {
 
 		this.dao = new FilmDAO(this);
 		
+		// Initialisation du "tiroir"
 		navigationArray = getResources().getStringArray(
 				R.array.navigation_array);
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -95,7 +99,7 @@ public class Home extends Activity {
 	        "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux", "OS/2",
 	        "Android", "iPhone", "WindowsMobile" };
 
-	    final ArrayList<String> list = new ArrayList<String>();
+	    list = new ArrayList<String>();
 	    
 	    for (int i = 0; i < values.length; ++i) {
 	      list.add(values[i]);
@@ -122,8 +126,19 @@ public class Home extends Activity {
 	      }
 
 	    });
+	    
+	    // Gestion de "l'intent" pour la barre de recherche/ajout
+	    Intent intent = getIntent();
+	    if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+	      String query = intent.getStringExtra(SearchManager.QUERY);
+	      handleSearch(query);
+	    }
+
 	}
 
+	public void handleSearch(String query){
+		selectItem(2);
+	}
 	@Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -134,6 +149,19 @@ public class Home extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.home, menu);
+		/*
+		 SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+		    searchView.setOnKeyListener(new OnKeyListener() {
+
+		        @Override
+		        public boolean onKey(View v, int keyCode, KeyEvent event) {
+		            if(event.getAction() ==  KeyEvent.KEYCODE_ENTER){
+		            	 Toast.makeText(this, "Refresh selected", Toast.LENGTH_SHORT)
+		                 .show();
+		            }
+		            return true;
+		        }
+		    });*/
 		return true;
 	}
 	
@@ -143,6 +171,9 @@ public class Home extends Activity {
         // true, then it has handled the app icon touch event
         if (drawerToggle.onOptionsItemSelected(item)) {
           return true;
+        }
+        if(R.id.action_search == item.getItemId()){
+        	selectItem(2);
         }
         // Handle your other action bar items...
 
@@ -155,7 +186,6 @@ public class Home extends Activity {
 		@Override
 		public void onItemClick(AdapterView parent, View view, int position,
 				long id) {
-			setTitle("Tiitle !");
 			selectItem(position);
 		}
 	}
