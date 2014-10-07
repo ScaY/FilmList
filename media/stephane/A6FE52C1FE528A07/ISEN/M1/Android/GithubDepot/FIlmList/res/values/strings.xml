@@ -20,7 +20,9 @@
     <string name="action_websearch">Web search</string>
     <string name="app_not_available">Sorry, there\'s no web browser available</string>
 
-    <string name="title_activity_apropos">APropos</string>
+    <string name="title_activity_apropos">About</string>
     <string name="title_activity_display_search_results">Search results</string>
+    
+    <string name="action_share">Share</string>
 
 </resources>
