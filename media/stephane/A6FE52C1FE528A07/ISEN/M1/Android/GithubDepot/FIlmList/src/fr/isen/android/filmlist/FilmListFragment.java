@@ -3,7 +3,7 @@ package fr.isen.android.filmlist;
 import java.util.ArrayList;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +19,10 @@ public class FilmListFragment extends Fragment {
 	private ListView listview;
 	
 	public static final String LIST_KEY = "key";
+	
+	public FilmListFragment(){
+		super();
+	}
 	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,5 +48,10 @@ public class FilmListFragment extends Fragment {
 		 });
     	
         return view;
+    }
+    
+    public void refresh(String film){
+		list.add(film);
+		adapter.notifyDataSetChanged();
     }
 }

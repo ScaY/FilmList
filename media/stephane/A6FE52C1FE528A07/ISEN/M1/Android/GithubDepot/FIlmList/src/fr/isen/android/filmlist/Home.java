@@ -35,9 +35,13 @@ public class Home extends FragmentActivity {
 	private CharSequence mTitle;
 
 	private ShareActionProvider mShareActionProvider;
-
+	private android.app.Fragment filmListFragment;
+	
 	private FilmDAO dao;
 
+	public Home(){
+		super();
+	}
 	 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -94,10 +98,13 @@ public class Home extends FragmentActivity {
 			list.add(film.getName());
 		}
 		
-		Fragment fragment = getSupportFragmentManager().getFragments().get(0);
+		filmListFragment = new FilmListFragment();
 		Bundle args = new Bundle();
-        args.putStringArrayList(FilmListFragment.LIST_KEY, list);
-        //fragment.getArguments().putBundle(FilmListFragment.LIST_KEY, args);
+	    args.putInt("someInt", 42);
+	    filmListFragment.setArguments(args);
+	    FragmentManager fragmentManager = getFragmentManager();
+		fragmentManager.beginTransaction().replace(R.id.film_list_fragment, filmListFragment).commit();
+	    
 	}
 
 	public void handleSearch(String query) {
@@ -129,13 +136,13 @@ public class Home extends FragmentActivity {
 
 			@Override
 			public boolean onQueryTextSubmit(String query) {
-				/*dao.open();
+				dao.open();
 				Film film = dao.insert(query);
 				dao.close();
-				list.add(film.getName());
-				adapter.notifyDataSetChanged();
+				FilmListFragment fL = (FilmListFragment) filmListFragment;
+				fL.refresh(film.getName());
 				searchMenuItem.collapseActionView();
-				searchView.setQuery("", false);*/
+				searchView.setQuery("", false);
 				return true;
 			}
 		});
