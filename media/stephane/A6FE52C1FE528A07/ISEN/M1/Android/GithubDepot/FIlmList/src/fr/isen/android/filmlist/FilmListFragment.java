@@ -31,7 +31,12 @@ public class FilmListFragment extends Fragment {
     	
     	Bundle args = getArguments();
     	
-    	list = new ArrayList<String>();//args.getStringArrayList(FilmListFragment.LIST_KEY);
+    	if(args != null && args.containsKey(FilmListFragment.LIST_KEY)) {
+    		list = args.getStringArrayList(FilmListFragment.LIST_KEY);
+    	}
+    	else {
+    		list = new ArrayList<String>();
+    	}
     	
 		adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, list);
 		listview = (ListView) view.findViewById(R.id.listview);

@@ -100,7 +100,7 @@ public class Home extends FragmentActivity {
 		
 		filmListFragment = new FilmListFragment();
 		Bundle args = new Bundle();
-	    args.putInt("someInt", 42);
+	    args.putStringArrayList(FilmListFragment.LIST_KEY, list);
 	    filmListFragment.setArguments(args);
 	    FragmentManager fragmentManager = getFragmentManager();
 		fragmentManager.beginTransaction().replace(R.id.film_list_fragment, filmListFragment).commit();
