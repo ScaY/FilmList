@@ -103,22 +103,23 @@ public class Home extends Activity {
 				android.R.layout.simple_list_item_1, list);
 		listview.setAdapter(adapter);
 
-		/*
-		 * listview.setOnItemClickListener(new AdapterView.OnItemClickListener()
-		 * {
-		 * 
-		 * @Override public void onItemClick(AdapterView<?> parent, final View
-		 * view, int position, long id) { final String item = (String)
-		 * parent.getItemAtPosition(position);
-		 * view.animate().setDuration(2000).alpha(0) .withEndAction(new
-		 * Runnable() {
-		 * 
-		 * @Override public void run() { dao.open(); dao.delete(item);
-		 * dao.close(); list.remove(item); adapter.notifyDataSetChanged();
-		 * view.setAlpha(1); } }); }
-		 * 
-		 * });
-		 */
+		listview.setOnItemClickListener(new AdapterView.OnItemClickListener()
+		{
+		 
+			@Override public void onItemClick(AdapterView<?> parent, final View
+			 view, int position, long id) { final String item = (String)
+			 parent.getItemAtPosition(position);
+			 	// Create a new fragment and specify the planet to show based on
+				// position
+				Fragment fragment = new FilmDetails.PlaceholderFragment();
+
+				// Insert the fragment by replacing any existing fragment
+				FragmentManager fragmentManager = getFragmentManager();
+				fragmentManager.beginTransaction()
+						.replace(R.id.content_frame, fragment).commit();
+				setTitle(item);
+			}
+		 });
 
 	}
 
@@ -208,7 +209,7 @@ public class Home extends Activity {
 	private void selectItem(int position) {
 		// Create a new fragment and specify the planet to show based on
 		// position
-		Fragment fragment = new PlaceholderFragment2();
+		Fragment fragment = new APropos.PlaceholderFragment();
 
 		// Insert the fragment by replacing any existing fragment
 		FragmentManager fragmentManager = getFragmentManager();
@@ -229,20 +230,6 @@ public class Home extends Activity {
 		boolean drawerOpen = drawerLayout.isDrawerOpen(drawerList);
 		menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
 		return super.onPrepareOptionsMenu(menu);
-	}
-
-	public static class PlaceholderFragment2 extends Fragment {
-
-		public PlaceholderFragment2() {
-		}
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_apropos,
-					container, false);
-			return rootView;
-		}
 	}
 
 	@Override
