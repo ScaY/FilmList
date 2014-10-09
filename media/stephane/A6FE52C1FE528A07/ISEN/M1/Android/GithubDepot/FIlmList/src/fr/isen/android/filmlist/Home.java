@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
@@ -88,13 +88,16 @@ public class Home extends FragmentActivity {
 		final List<Film> films = dao.getAllFilms();
 		dao.close();
 
-		final ListView listview = (ListView) findViewById(R.id.listview);
-
 		ArrayList<String> list = new ArrayList<String>();
 
 		for (Film film : films) {
 			list.add(film.getName());
 		}
+		
+		Fragment fragment = getSupportFragmentManager().getFragments().get(0);
+		Bundle args = new Bundle();
+        args.putStringArrayList(FilmListFragment.LIST_KEY, list);
+        //fragment.getArguments().putBundle(FilmListFragment.LIST_KEY, args);
 	}
 
 	public void handleSearch(String query) {
@@ -183,7 +186,7 @@ public class Home extends FragmentActivity {
 	private void selectItem(int position) {
 		// Create a new fragment and specify the planet to show based on
 		// position
-		Fragment fragment = new APropos.PlaceholderFragment();
+		android.app.Fragment fragment = new APropos.PlaceholderFragment();
 
 		// Insert the fragment by replacing any existing fragment
 		FragmentManager fragmentManager = getFragmentManager();
