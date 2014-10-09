@@ -10,11 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
     
-    <ListView xmlns:android="http://schemas.android.com/apk/res/android"
-	    android:id="@+id/listview"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content" />
-    
     <!-- The navigation drawer -->
     <ListView android:id="@+id/left_drawer"
         android:layout_width="240dp"
@@ -26,10 +21,10 @@
         android:background="#111"/>
     
     
-    <fragment android:name="fr.isen.android.filmlist.HomeFragment"
-              android:id="@+id/home_fragment"
+    <!--<fragment android:name="fr.isen.android.filmlist.FilmListFragment"
+              android:id="@+id/film_list_fragment"
               android:layout_weight="1"
               android:layout_width="wrap_content"
-              android:layout_height="wrap_content" />
+              android:layout_height="wrap_content" />-->
     
 </android.support.v4.widget.DrawerLayout>

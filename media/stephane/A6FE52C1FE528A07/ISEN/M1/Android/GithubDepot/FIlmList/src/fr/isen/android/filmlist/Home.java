@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
@@ -14,11 +13,9 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -37,13 +34,9 @@ public class Home extends FragmentActivity {
 	private CharSequence drawerTitle;
 	private CharSequence mTitle;
 
-	private FilmDAO dao;
-	private ArrayList<String> list;
-	private ArrayAdapter adapter;
-
 	private ShareActionProvider mShareActionProvider;
 
-	    
+	private FilmDAO dao;
 
 	 
 	@Override
@@ -90,40 +83,18 @@ public class Home extends FragmentActivity {
 
 		// Set the drawer toggle as the DrawerListener
 		drawerLayout.setDrawerListener(drawerToggle);
-
+		
 		dao.open();
 		final List<Film> films = dao.getAllFilms();
 		dao.close();
 
 		final ListView listview = (ListView) findViewById(R.id.listview);
 
-		list = new ArrayList<String>();
+		ArrayList<String> list = new ArrayList<String>();
 
 		for (Film film : films) {
 			list.add(film.getName());
 		}
-		adapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, list);
-		listview.setAdapter(adapter);
-
-		listview.setOnItemClickListener(new AdapterView.OnItemClickListener()
-		{
-		 
-			@Override public void onItemClick(AdapterView<?> parent, final View
-			 view, int position, long id) { final String item = (String)
-			 parent.getItemAtPosition(position);
-			 	// Create a new fragment and specify the planet to show based on
-				// position
-				Fragment fragment = new FilmDetails.PlaceholderFragment();
-
-				// Insert the fragment by replacing any existing fragment
-				FragmentManager fragmentManager = getFragmentManager();
-				fragmentManager.beginTransaction()
-						.replace(R.id.content_frame, fragment).commit();
-				setTitle(item);
-			}
-		 });
-
 	}
 
 	public void handleSearch(String query) {
@@ -155,13 +126,13 @@ public class Home extends FragmentActivity {
 
 			@Override
 			public boolean onQueryTextSubmit(String query) {
-				dao.open();
+				/*dao.open();
 				Film film = dao.insert(query);
 				dao.close();
 				list.add(film.getName());
 				adapter.notifyDataSetChanged();
 				searchMenuItem.collapseActionView();
-				searchView.setQuery("", false);
+				searchView.setQuery("", false);*/
 				return true;
 			}
 		});
