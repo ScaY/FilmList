@@ -193,17 +193,18 @@ public class Home extends FragmentActivity {
 	private void selectItem(int position) {
 		// Create a new fragment and specify the planet to show based on
 		// position
-		android.app.Fragment fragment = new APropos.PlaceholderFragment();
+		android.app.Fragment fragment = new About();
 
 		// Insert the fragment by replacing any existing fragment
 		FragmentManager fragmentManager = getFragmentManager();
 		fragmentManager.beginTransaction()
-				.replace(R.id.content_frame, fragment).commit();
+				.replace(R.id.film_list_fragment, fragment).commit();
 
 		// Highlight the selected item, update the title, and close the drawer
 		drawerList.setItemChecked(position, true);
 		setTitle(navigationArray[position]);
 		drawerLayout.closeDrawer(drawerList);
+		setTitle("BOuyachka");
 	}
 
 	/* Called whenever we call invalidateOptionsMenu() */
