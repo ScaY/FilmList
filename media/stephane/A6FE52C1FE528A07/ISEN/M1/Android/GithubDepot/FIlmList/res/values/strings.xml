@@ -24,5 +24,6 @@
     <string name="title_activity_display_search_results">Search results</string>
     <string name="action_share">Share</string>
     <string name="title_activity_film_details">FilmDetails</string>
+    <string name="title_activity_main">Main</string>
 
 </resources>

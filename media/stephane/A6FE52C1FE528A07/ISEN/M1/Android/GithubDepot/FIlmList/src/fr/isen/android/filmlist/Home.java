@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,7 +28,7 @@ import android.widget.ShareActionProvider;
 
 import com.example.filmlist.R;
 
-public class Home extends Activity {
+public class Home extends FragmentActivity {
 	private String[] navigationArray;
 	private DrawerLayout drawerLayout;
 	private ListView drawerList;
@@ -42,11 +43,13 @@ public class Home extends Activity {
 
 	private ShareActionProvider mShareActionProvider;
 
+	    
+
+	 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
-
 		this.dao = new FilmDAO(this);
 
 		// Initialisation du "tiroir"
