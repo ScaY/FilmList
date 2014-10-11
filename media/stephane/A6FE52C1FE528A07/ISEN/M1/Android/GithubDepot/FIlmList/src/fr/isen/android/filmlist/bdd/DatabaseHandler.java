@@ -1,4 +1,4 @@
-package fr.isen.android.filmlist;
+package fr.isen.android.filmlist.bdd;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

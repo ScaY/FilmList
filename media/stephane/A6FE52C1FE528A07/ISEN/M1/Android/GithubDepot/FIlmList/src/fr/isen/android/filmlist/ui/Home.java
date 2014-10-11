@@ -1,4 +1,4 @@
-package fr.isen.android.filmlist;
+package fr.isen.android.filmlist.ui;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,13 +10,13 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
@@ -24,6 +24,9 @@ import android.widget.SearchView.OnQueryTextListener;
 import android.widget.ShareActionProvider;
 
 import com.example.filmlist.R;
+
+import fr.isen.android.filmlist.bdd.Film;
+import fr.isen.android.filmlist.bdd.FilmDAO;
 
 public class Home extends FragmentActivity {
 	private String[] navigationArray;
@@ -35,21 +38,25 @@ public class Home extends FragmentActivity {
 	private CharSequence mTitle;
 
 	private ShareActionProvider mShareActionProvider;
+
 	private android.app.Fragment filmListFragment;
-	
+	private android.app.Fragment filmDetailsFragment;
+
+	public static final String LIST_KEY = "keyHomeActivity";
+
 	private FilmDAO dao;
 
-	public Home(){
+	public Home() {
 		super();
 	}
-	 
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
 		this.dao = new FilmDAO(this);
 
-		// Initialisation du "tiroir"
+		// Initialization of the drawer
 		navigationArray = getResources().getStringArray(
 				R.array.navigation_array);
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -87,7 +94,7 @@ public class Home extends FragmentActivity {
 
 		// Set the drawer toggle as the DrawerListener
 		drawerLayout.setDrawerListener(drawerToggle);
-		
+
 		dao.open();
 		final List<Film> films = dao.getAllFilms();
 		dao.close();
@@ -97,14 +104,17 @@ public class Home extends FragmentActivity {
 		for (Film film : films) {
 			list.add(film.getName());
 		}
-		
+
+		// Set the fragment of the list of movies
 		filmListFragment = new FilmListFragment();
 		Bundle args = new Bundle();
-	    args.putStringArrayList(FilmListFragment.LIST_KEY, list);
-	    filmListFragment.setArguments(args);
-	    FragmentManager fragmentManager = getFragmentManager();
-		fragmentManager.beginTransaction().replace(R.id.film_list_fragment, filmListFragment).commit();
-	    
+		args.putStringArrayList(FilmListFragment.LIST_KEY, list);
+		filmListFragment.setArguments(args);
+		FragmentManager fragmentManager = getFragmentManager();
+		fragmentManager.beginTransaction()
+				.replace(R.id.film_list_fragment, filmListFragment).commit();
+
+		additemListener( ((FilmListFragment)filmListFragment).getListView());
 	}
 
 	public void handleSearch(String query) {
@@ -139,20 +149,21 @@ public class Home extends FragmentActivity {
 				dao.open();
 				Film film = dao.insert(query);
 				dao.close();
-				FilmListFragment fL = (FilmListFragment) filmListFragment;
-				fL.refresh(film.getName());
+				FilmListFragment fl = (FilmListFragment) filmListFragment;
+				fl.refresh(film.getName());
 				searchMenuItem.collapseActionView();
 				searchView.setQuery("", false);
+				additemListener( fl.getListView());
 				return true;
 			}
 		});
 
-		// Localisation du menu item avec  ShareActionProvider
+		// Localisation du menu item avec ShareActionProvider
 		MenuItem item = menu.findItem(R.id.action_share);
 		// Ajout du listener
 		mShareActionProvider = (ShareActionProvider) item.getActionProvider();
 		mShareActionProvider.setShareIntent(getDefaultShareIntent());
-		
+
 		return true;
 	}
 
@@ -204,7 +215,6 @@ public class Home extends FragmentActivity {
 		drawerList.setItemChecked(position, true);
 		setTitle(navigationArray[position]);
 		drawerLayout.closeDrawer(drawerList);
-		setTitle("BOuyachka");
 	}
 
 	/* Called whenever we call invalidateOptionsMenu() */
@@ -247,5 +257,24 @@ public class Home extends FragmentActivity {
 			return true;
 		}
 
+	}
+	
+	public void additemListener(ListView listFl){
+		if (listFl != null) {
+			listFl.setOnItemClickListener(new OnItemClickListener() {
+				@Override
+				public void onItemClick(AdapterView<?> arg0, View arg1,
+						int position, long arg3) {
+
+					filmDetailsFragment = new FilmDetailsFragment();
+
+					getFragmentManager()
+							.beginTransaction()
+							.replace(R.id.film_list_fragment,
+									filmDetailsFragment).commit();
+
+				}
+			});
+		}
 	}
 }

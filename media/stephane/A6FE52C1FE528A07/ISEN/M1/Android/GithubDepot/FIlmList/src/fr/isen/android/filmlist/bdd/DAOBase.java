@@ -1,13 +1,13 @@
-package fr.isen.android.filmlist;
+package fr.isen.android.filmlist.bdd;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 public abstract class DAOBase {
-	  // Nous sommes à la première version de la base
-	  // Si je décide de la mettre à jour, il faudra changer cet attribut
+	  // Nous sommes ï¿½ la premiï¿½re version de la base
+	  // Si je dï¿½cide de la mettre ï¿½ jour, il faudra changer cet attribut
 	  protected final static int VERSION = 1;
-	  // Le nom du fichier qui représente ma base
+	  // Le nom du fichier qui reprï¿½sente ma base
 	  protected final static String NOM = "film_list.db";
 	    
 	  protected SQLiteDatabase mDb = null;
@@ -18,7 +18,7 @@ public abstract class DAOBase {
 	  }
 	    
 	  public void open() {
-	    // Pas besoin de fermer la dernière base puisque getWritableDatabase s'en charge
+	    // Pas besoin de fermer la derniï¿½re base puisque getWritableDatabase s'en charge
 	    mDb = mHandler.getWritableDatabase();
 	  }
 	    

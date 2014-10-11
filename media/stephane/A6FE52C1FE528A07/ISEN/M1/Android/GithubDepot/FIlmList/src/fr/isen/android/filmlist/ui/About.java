@@ -1,4 +1,4 @@
-package fr.isen.android.filmlist;
+package fr.isen.android.filmlist.ui;
 
 import android.app.Fragment;
 import android.os.Bundle;

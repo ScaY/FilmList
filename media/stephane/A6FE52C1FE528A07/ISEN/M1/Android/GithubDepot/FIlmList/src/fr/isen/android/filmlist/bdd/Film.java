@@ -1,4 +1,4 @@
-package fr.isen.android.filmlist;
+package fr.isen.android.filmlist.bdd;
 
 public class Film {
 	  // Notez que l'identifiant est un long

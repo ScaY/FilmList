@@ -1,4 +1,4 @@
-package fr.isen.android.filmlist;
+package fr.isen.android.filmlist.bdd;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ public class FilmDAO extends DAOBase {
 	  }
 	  
 	  /**
-	   * @param m le film à ajouter à la base
+	   * @param m le film ï¿½ ajouter ï¿½ la base
 	   */
 	  public Film insert(String filmName) {
 		  ContentValues value = new ContentValues();
@@ -30,7 +30,7 @@ public class FilmDAO extends DAOBase {
 	  }
 
 	  /**
-	   * @param id l'identifiant du film à supprimer
+	   * @param id l'identifiant du film ï¿½ supprimer
 	   */
 	  public void delete(Film film) {
 		  mDb.delete(DatabaseHandler.FILM_TABLE_NAME, DatabaseHandler.FILM_KEY + " = ?", new String[] {String.valueOf(film.getId())});
@@ -41,7 +41,7 @@ public class FilmDAO extends DAOBase {
 	  }
 
 	  /**
-	   * @param m le film modifié
+	   * @param m le film modifiï¿½
 	   */
 	  public void edit(Film f) {
 		  ContentValues value = new ContentValues();
@@ -50,7 +50,7 @@ public class FilmDAO extends DAOBase {
 	  }
 
 	  /**
-	   * @param id l'identifiant du film à récupérer
+	   * @param id l'identifiant du film ï¿½ rï¿½cupï¿½rer
 	   */
 	  public Film select(long id) {
 		  String columns[] = {DatabaseHandler.FILM_NAME};

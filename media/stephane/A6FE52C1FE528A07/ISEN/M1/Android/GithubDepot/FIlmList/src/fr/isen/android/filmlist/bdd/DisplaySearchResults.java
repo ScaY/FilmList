@@ -1,4 +1,4 @@
-package fr.isen.android.filmlist;
+package fr.isen.android.filmlist.bdd;
 
 import android.app.ListActivity;
 import android.app.LoaderManager;

@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="fr.isen.android.filmlist.Home"
+            android:name="fr.isen.android.filmlist.ui.Home"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,7 +31,7 @@
             android:label="@string/title_activity_apropos" >
         </activity>
         <activity
-            android:name="fr.isen.android.filmlist.DisplaySearchResults"
+            android:name="fr.isen.android.filmlist.bdd.DisplaySearchResults"
             android:label="@string/title_activity_display_search_results" >
         </activity>
         <activity android:name=".SearchableActivity" >
@@ -44,7 +44,7 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name="fr.isen.android.filmlist.FilmDetails"
+            android:name="fr.isen.android.filmlist.ui.FilmDetailsFragment"
             android:label="@string/title_activity_film_details" >
         </activity>
     </application>
