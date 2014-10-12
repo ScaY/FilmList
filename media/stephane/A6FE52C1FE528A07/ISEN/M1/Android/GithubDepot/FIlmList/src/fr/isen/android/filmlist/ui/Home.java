@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -110,11 +111,17 @@ public class Home extends FragmentActivity {
 		Bundle args = new Bundle();
 		args.putStringArrayList(FilmListFragment.LIST_KEY, list);
 		filmListFragment.setArguments(args);
+
 		FragmentManager fragmentManager = getFragmentManager();
 		fragmentManager.beginTransaction()
 				.replace(R.id.film_list_fragment, filmListFragment).commit();
+		FragmentTransaction ft = fragmentManager.beginTransaction();
+		ft.replace(R.id.film_list_fragment, filmListFragment,
+				"filmListFragment");
+		ft.addToBackStack("filmListFragment");
+		ft.commit();
 
-		additemListener( ((FilmListFragment)filmListFragment).getListView());
+		additemListener(((FilmListFragment) filmListFragment).getListView());
 	}
 
 	public void handleSearch(String query) {
@@ -153,7 +160,8 @@ public class Home extends FragmentActivity {
 				fl.refresh(film.getName());
 				searchMenuItem.collapseActionView();
 				searchView.setQuery("", false);
-				additemListener( fl.getListView());
+				additemListener(fl.getListView());
+
 				return true;
 			}
 		});
@@ -182,7 +190,6 @@ public class Home extends FragmentActivity {
 		if (drawerToggle.onOptionsItemSelected(item)) {
 			return true;
 		}
-
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -204,17 +211,27 @@ public class Home extends FragmentActivity {
 	private void selectItem(int position) {
 		// Create a new fragment and specify the planet to show based on
 		// position
-		android.app.Fragment fragment = new About();
+		switch (position) {
+		case 4:
+			android.app.Fragment fragment = new About();
 
-		// Insert the fragment by replacing any existing fragment
-		FragmentManager fragmentManager = getFragmentManager();
-		fragmentManager.beginTransaction()
-				.replace(R.id.film_list_fragment, fragment).commit();
+			// Insert the fragment by replacing any existing fragment
+			FragmentManager fragmentManager = getFragmentManager();
+			fragmentManager.beginTransaction()
+					.replace(R.id.film_list_fragment, fragment).commit();
+			FragmentTransaction ft = fragmentManager.beginTransaction();
+			ft.replace(R.id.film_list_fragment, fragment, "about");
+			ft.addToBackStack("about");
+			ft.commit();
+			setTitle(navigationArray[position]);
+			break;
+		}
 
-		// Highlight the selected item, update the title, and close the drawer
+		// Highlight the selected item, update the title, and close the
+		// drawer
 		drawerList.setItemChecked(position, true);
-		setTitle(navigationArray[position]);
 		drawerLayout.closeDrawer(drawerList);
+
 	}
 
 	/* Called whenever we call invalidateOptionsMenu() */
@@ -258,8 +275,8 @@ public class Home extends FragmentActivity {
 		}
 
 	}
-	
-	public void additemListener(ListView listFl){
+
+	public void additemListener(ListView listFl) {
 		if (listFl != null) {
 			listFl.setOnItemClickListener(new OnItemClickListener() {
 				@Override
@@ -268,10 +285,16 @@ public class Home extends FragmentActivity {
 
 					filmDetailsFragment = new FilmDetailsFragment();
 
-					getFragmentManager()
+					FragmentManager fragmentManager = getFragmentManager();
+					fragmentManager
 							.beginTransaction()
 							.replace(R.id.film_list_fragment,
 									filmDetailsFragment).commit();
+					FragmentTransaction ft = fragmentManager.beginTransaction();
+					ft.replace(R.id.film_list_fragment, filmDetailsFragment,
+							"filmDetailsFragment");
+					ft.addToBackStack("filmDetailsFragment");
+					ft.commit();
 
 				}
 			});

@@ -1,6 +1,7 @@
 package fr.isen.android.filmlist.ui;
 
-import android.app.Fragment;
+import android.app.Fragment
+;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,8 @@ import com.example.filmlist.R;
 
 public class About extends Fragment{
 
+	public static final String LIST_KEY = "keyAbout";
+	
 	public About(){
 		super();
 	}
@@ -17,7 +20,7 @@ public class About extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
-    	View view = inflater.inflate(R.layout.fragment_film_list, container, false);
+    	View view = inflater.inflate(R.layout.fragment_about, container, false);
     	
     	return view;
     }
