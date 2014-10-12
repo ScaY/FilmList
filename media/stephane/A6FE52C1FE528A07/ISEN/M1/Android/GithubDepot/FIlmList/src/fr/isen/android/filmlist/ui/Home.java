@@ -77,6 +77,7 @@ public class Home extends FragmentActivity {
 
 		mTitle = drawerTitle = getTitle();
 
+		// Set the up button
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
 
@@ -186,6 +187,7 @@ public class Home extends FragmentActivity {
 		if (drawerToggle.onOptionsItemSelected(item)) {
 			return true;
 		}
+		
 		return super.onOptionsItemSelected(item);
 	}
 
