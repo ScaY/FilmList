@@ -40,7 +40,7 @@ public class Home extends FragmentActivity {
 
 	private ShareActionProvider mShareActionProvider;
 
-	private android.app.Fragment filmListFragment;
+	private android.app.Fragment filmToSeeFragment;
 	private android.app.Fragment filmDetailsFragment;
 
 	public static final String LIST_KEY = "keyHomeActivity";
@@ -67,7 +67,13 @@ public class Home extends FragmentActivity {
 		drawerList.setAdapter(new ArrayAdapter<String>(this,
 				R.layout.drawer_list_item, navigationArray));
 		// Set the list's click listener
-		drawerList.setOnItemClickListener(new DrawerItemClickListener());
+		drawerList.setOnItemClickListener(new ListView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView parent, View view,
+					int position, long id) {
+				selectItem(position);
+			}
+		});
 
 		mTitle = drawerTitle = getTitle();
 
@@ -107,25 +113,15 @@ public class Home extends FragmentActivity {
 		}
 
 		// Set the fragment of the list of movies
-		filmListFragment = new FilmListFragment();
+		filmToSeeFragment = new FilmToSeeListFragment();
 		Bundle args = new Bundle();
-		args.putStringArrayList(FilmListFragment.LIST_KEY, list);
-		filmListFragment.setArguments(args);
+		args.putStringArrayList(FilmToSeeListFragment.LIST_KEY, list);
+		filmToSeeFragment.setArguments(args);
+		setFragment(filmToSeeFragment, "FilmToSeeFragment");
 
-		FragmentManager fragmentManager = getFragmentManager();
-		fragmentManager.beginTransaction()
-				.replace(R.id.film_list_fragment, filmListFragment).commit();
-		FragmentTransaction ft = fragmentManager.beginTransaction();
-		ft.replace(R.id.film_list_fragment, filmListFragment,
-				"filmListFragment");
-		ft.addToBackStack("filmListFragment");
-		ft.commit();
-
-		additemListener(((FilmListFragment) filmListFragment).getListView());
-	}
-
-	public void handleSearch(String query) {
-		selectItem(2);
+		// Add the listeners on the item (Does not work)
+		additemListener(((FilmToSeeListFragment) filmToSeeFragment)
+				.getListView());
 	}
 
 	@Override
@@ -156,7 +152,7 @@ public class Home extends FragmentActivity {
 				dao.open();
 				Film film = dao.insert(query);
 				dao.close();
-				FilmListFragment fl = (FilmListFragment) filmListFragment;
+				FilmToSeeListFragment fl = (FilmToSeeListFragment) filmToSeeFragment;
 				fl.refresh(film.getName());
 				searchMenuItem.collapseActionView();
 				searchView.setQuery("", false);
@@ -193,15 +189,6 @@ public class Home extends FragmentActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	private class DrawerItemClickListener implements
-			ListView.OnItemClickListener {
-		@Override
-		public void onItemClick(AdapterView parent, View view, int position,
-				long id) {
-			selectItem(position);
-		}
-	}
-
 	public void setTitle(CharSequence title) {
 		mTitle = title;
 		getActionBar().setTitle(mTitle);
@@ -211,18 +198,19 @@ public class Home extends FragmentActivity {
 	private void selectItem(int position) {
 		// Create a new fragment and specify the planet to show based on
 		// position
-		switch (position) {
-		case 4:
-			android.app.Fragment fragment = new About();
 
-			// Insert the fragment by replacing any existing fragment
-			FragmentManager fragmentManager = getFragmentManager();
-			fragmentManager.beginTransaction()
-					.replace(R.id.film_list_fragment, fragment).commit();
-			FragmentTransaction ft = fragmentManager.beginTransaction();
-			ft.replace(R.id.film_list_fragment, fragment, "about");
-			ft.addToBackStack("about");
-			ft.commit();
+		android.app.Fragment fragment = null;
+
+		switch (position) {
+
+		case About.position:
+			fragment = new About();
+			setFragment(fragment, "about");
+			setTitle(navigationArray[position]);
+			break;
+
+		case FilmToSeeListFragment.position:
+			setFragment(filmToSeeFragment, "FilmToSeeFragment");
 			setTitle(navigationArray[position]);
 			break;
 		}
@@ -283,21 +271,20 @@ public class Home extends FragmentActivity {
 				public void onItemClick(AdapterView<?> arg0, View arg1,
 						int position, long arg3) {
 
-					filmDetailsFragment = new FilmDetailsFragment();
-
-					FragmentManager fragmentManager = getFragmentManager();
-					fragmentManager
-							.beginTransaction()
-							.replace(R.id.film_list_fragment,
-									filmDetailsFragment).commit();
-					FragmentTransaction ft = fragmentManager.beginTransaction();
-					ft.replace(R.id.film_list_fragment, filmDetailsFragment,
+					setFragment(new FilmDetailsFragment(),
 							"filmDetailsFragment");
-					ft.addToBackStack("filmDetailsFragment");
-					ft.commit();
-
 				}
 			});
 		}
+	}
+
+	public void setFragment(android.app.Fragment fragment, String name) {
+		FragmentManager fragmentManager = getFragmentManager();
+		fragmentManager.beginTransaction()
+				.replace(R.id.film_list_fragment, fragment).commit();
+		FragmentTransaction ft = fragmentManager.beginTransaction();
+		ft.replace(R.id.film_list_fragment, fragment, name);
+		ft.addToBackStack(name);
+		ft.commit();
 	}
 }

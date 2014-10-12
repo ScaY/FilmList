@@ -2,25 +2,25 @@ package fr.isen.android.filmlist.ui;
 
 import java.util.ArrayList;
 
-import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.filmlist.R;
 
-public class FilmListFragment extends Fragment {
+public class FilmToSeeListFragment extends Fragment {
 	private ArrayList<String> list;
 	private ArrayAdapter<String> adapter;
 	private ListView listview;
 
 	public static final String LIST_KEY = "keyFilmList";
-
-	public FilmListFragment() {
+	public static final int position = 1;
+	
+	public FilmToSeeListFragment() {
 		super();
 	}
 	
@@ -36,8 +36,8 @@ public class FilmListFragment extends Fragment {
 
 		Bundle args = getArguments();
 
-		if (args != null && args.containsKey(FilmListFragment.LIST_KEY)) {
-			list = args.getStringArrayList(FilmListFragment.LIST_KEY);
+		if (args != null && args.containsKey(FilmToSeeListFragment.LIST_KEY)) {
+			list = args.getStringArrayList(FilmToSeeListFragment.LIST_KEY);
 		} else {
 			list = new ArrayList<String>();
 		}
@@ -47,8 +47,8 @@ public class FilmListFragment extends Fragment {
 				android.R.layout.simple_list_item_1, list);
 		listview = (ListView) view.findViewById(R.id.listview);
 		listview.setAdapter(adapter);
-		//adapter.notifyDataSetChanged();
-
+		adapter.notifyDataSetChanged();
+		
 		return view;
 	}
 	

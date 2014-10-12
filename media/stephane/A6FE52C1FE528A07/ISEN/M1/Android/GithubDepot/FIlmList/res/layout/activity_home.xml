@@ -15,7 +15,7 @@
 
     <fragment
         android:id="@+id/film_list_fragment"
-        android:name="fr.isen.android.filmlist.ui.FilmListFragment"
+        android:name="fr.isen.android.filmlist.ui.FilmToSeeListFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1" />

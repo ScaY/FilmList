@@ -12,7 +12,7 @@ import com.example.filmlist.R;
 public class About extends Fragment{
 
 	public static final String LIST_KEY = "keyAbout";
-	
+	public static final int position = 4;
 	public About(){
 		super();
 	}
