@@ -85,14 +85,14 @@ public class Home extends FragmentActivity {
 				R.drawable.ic_drawer, R.string.drawer_open,
 				R.string.drawer_close) {
 
-			/** Called when a drawer has settled in a completely closed state. */
+			/** Called when a drawer has settled in a completely closed state. **/
 			public void onDrawerClosed(View view) {
 				super.onDrawerClosed(view);
 				getActionBar().setTitle(mTitle);
 				invalidateOptionsMenu();
 			}
 
-			/** Called when a drawer has settled in a completely open state. */
+			/** Called when a drawer has settled in a completely open state. **/
 			public void onDrawerOpened(View drawerView) {
 				super.onDrawerOpened(drawerView);
 				getActionBar().setTitle(drawerTitle);
@@ -118,7 +118,7 @@ public class Home extends FragmentActivity {
 		Bundle args = new Bundle();
 		args.putStringArrayList(FilmToSeeListFragment.LIST_KEY, list);
 		filmToSeeFragment.setArguments(args);
-		setFragment(filmToSeeFragment, "FilmToSeeFragment");
+		setFragment(filmToSeeFragment, "FilmToSeeFragment", false);
 
 		// Add the listeners on the item (Does not work)
 		additemListener(((FilmToSeeListFragment) filmToSeeFragment)
@@ -130,7 +130,7 @@ public class Home extends FragmentActivity {
 		super.onConfigurationChanged(newConfig);
 		drawerToggle.onConfigurationChanged(newConfig);
 	}
-
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -187,7 +187,11 @@ public class Home extends FragmentActivity {
 		if (drawerToggle.onOptionsItemSelected(item)) {
 			return true;
 		}
-		
+		if(item.getItemId() == android.R.id.home)
+		{
+			getFragmentManager().popBackStack();
+			drawerToggle.setDrawerIndicatorEnabled(true);
+		}
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -207,12 +211,12 @@ public class Home extends FragmentActivity {
 
 		case About.position:
 			fragment = new About();
-			setFragment(fragment, "about");
+			setFragment(fragment, "about", true);
 			setTitle(navigationArray[position]);
 			break;
 
 		case FilmToSeeListFragment.position:
-			setFragment(filmToSeeFragment, "FilmToSeeFragment");
+			setFragment(filmToSeeFragment, "FilmToSeeFragment", true);
 			setTitle(navigationArray[position]);
 			break;
 		}
@@ -274,19 +278,21 @@ public class Home extends FragmentActivity {
 						int position, long arg3) {
 
 					setFragment(new FilmDetailsFragment(),
-							"filmDetailsFragment");
+							"filmDetailsFragment", true);
 				}
 			});
 		}
 	}
 
-	public void setFragment(android.app.Fragment fragment, String name) {
+	public void setFragment(android.app.Fragment fragment, String name,
+			boolean disableDrawer) {
+		if (disableDrawer) {
+			drawerToggle.setDrawerIndicatorEnabled(false);
+		}
 		FragmentManager fragmentManager = getFragmentManager();
-		fragmentManager.beginTransaction()
-				.replace(R.id.film_list_fragment, fragment).commit();
 		FragmentTransaction ft = fragmentManager.beginTransaction();
-		ft.replace(R.id.film_list_fragment, fragment, name);
 		ft.addToBackStack(name);
+		ft.replace(R.id.film_list_fragment, fragment, name);
 		ft.commit();
 	}
 }

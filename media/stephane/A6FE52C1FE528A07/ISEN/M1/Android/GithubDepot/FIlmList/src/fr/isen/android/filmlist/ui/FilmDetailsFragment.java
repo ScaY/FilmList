@@ -22,7 +22,6 @@ public class FilmDetailsFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_film_details, container,
 				false);
-
 		return view;
 	}
 
