@@ -1,28 +1,61 @@
 package fr.isen.android.filmlist.ui;
 
-import android.app.Fragment;
+import java.util.GregorianCalendar;
 
+import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.CalendarContract;
+import android.provider.CalendarContract.Events;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.filmlist.R;
 
 public class FilmDetailsFragment extends Fragment {
 
 	public static final String LIST_KEY = "keyFilmDetails";
+	public String filmName;
 
 	public FilmDetailsFragment() {
 		super();
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_film_details, container,
-				false);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.fragment_film_details, container, false);
+		
+		//à faire : récupérer le titre du film à partir du bundle;
+		
+		getActivity().setTitle(filmName);
+		
+		final Button button = (Button) view.findViewById(R.id.button_add_film_calendar);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+            	Intent intent = new Intent(Intent.ACTION_INSERT);
+                intent.setType("vnd.android.cursor.item/event");
+                intent.putExtra(Events.TITLE, filmName);
+                intent.putExtra(Events.EVENT_LOCATION, "Home");
+                intent.putExtra(Events.DESCRIPTION, "Watch this movie.");
+
+                // Setting dates
+                GregorianCalendar calDate = new GregorianCalendar();
+                intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+                  calDate.getTimeInMillis());
+                intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
+                  calDate.getTimeInMillis());
+
+                // Making it private and shown as busy
+                intent.putExtra(Events.ACCESS_LEVEL, Events.ACCESS_PRIVATE);
+                
+                intent.setData(CalendarContract.Events.CONTENT_URI);
+                startActivity(intent); 
+            }
+        });
+
+		
 		return view;
 	}
-
 }

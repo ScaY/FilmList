@@ -28,5 +28,6 @@
     <string name="action_share">Share</string>
     <string name="title_activity_film_details">FilmDetails</string>
     <string name="title_activity_main">Main</string>
-
+    
+    <string name="button_add_film_calendar">Add film to calendar</string>
 </resources>
