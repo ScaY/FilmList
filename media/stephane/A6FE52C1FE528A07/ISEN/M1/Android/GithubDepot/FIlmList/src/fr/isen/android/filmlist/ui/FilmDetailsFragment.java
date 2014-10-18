@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.filmlist.R;
 
@@ -37,6 +38,7 @@ public class FilmDetailsFragment extends Fragment {
 		}
 		
 		getActivity().setTitle(filmName);
+		((TextView) view.findViewById(R.id.film_title)).setText(filmName);
 		
 		final Button button = (Button) view.findViewById(R.id.button_add_film_calendar);
         button.setOnClickListener(new View.OnClickListener() {

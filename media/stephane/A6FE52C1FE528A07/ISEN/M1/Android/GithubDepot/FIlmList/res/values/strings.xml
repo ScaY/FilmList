@@ -29,5 +29,8 @@
     <string name="title_activity_film_details">FilmDetails</string>
     <string name="title_activity_main">Main</string>
     
+    <!-- FilmDetails -->
+    <string name="image_text">Film cover</string>
     <string name="button_add_film_calendar">Add film to calendar</string>
+    <string name="button_add_film_favourite">Add film to favourites</string>
 </resources>
