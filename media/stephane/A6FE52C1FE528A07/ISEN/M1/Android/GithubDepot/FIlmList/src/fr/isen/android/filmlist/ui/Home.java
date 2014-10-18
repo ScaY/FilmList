@@ -57,6 +57,7 @@ public class Home extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
+
 		this.dao = new FilmDAO(this);
 
 		// Initialization of the drawer
@@ -115,12 +116,18 @@ public class Home extends FragmentActivity {
 			list.add(film.getName());
 		}
 
-		// Set the fragment of the list of movies
+		// Initialize filmToSeeFragment 
 		filmToSeeFragment = new FilmToSeeListFragment();
 		Bundle args = new Bundle();
 		args.putStringArrayList(FilmToSeeListFragment.LIST_KEY, list);
 		filmToSeeFragment.setArguments(args);
-		setFragment(filmToSeeFragment, "FilmToSeeFragment", false);
+
+		// Check if there is already a instance (for screen rotation)
+		if (savedInstanceState == null) {
+			// Set the fragment of the list of movies
+			setFragment(filmToSeeFragment, "FilmToSeeFragment", false);
+		}
+
 	}
 
 	@Override

@@ -22,6 +22,9 @@ public class FilmToSeeListFragment extends Fragment {
 	public static final String LIST_KEY = "keyFilmList";
 	public static final int position = 1;
 	
+	private int mCurrentPosition = -1;
+	final static String ARG_POSITION = "position";
+	
 	public FilmToSeeListFragment() {
 		super();
 	}
@@ -33,6 +36,14 @@ public class FilmToSeeListFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		
+		 // If activity recreated (such as from screen rotate), restore
+        // the previous article selection set by onSaveInstanceState().
+        // This is primarily necessary when in the two-pane layout.
+        if (savedInstanceState != null) {
+            mCurrentPosition = savedInstanceState.getInt(ARG_POSITION);
+        }
+        
 		View view = inflater.inflate(R.layout.fragment_film_list, container,
 				false);
 
@@ -78,4 +89,12 @@ public class FilmToSeeListFragment extends Fragment {
 		list.add(film);
 		adapter.notifyDataSetChanged();
 	}
+	
+	@Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // Save the current article selection in case we need to recreate the fragment
+        outState.putInt(ARG_POSITION, mCurrentPosition);
+    }
 }
