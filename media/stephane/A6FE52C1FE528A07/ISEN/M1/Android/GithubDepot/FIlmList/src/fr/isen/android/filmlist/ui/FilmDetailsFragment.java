@@ -16,7 +16,7 @@ import com.example.filmlist.R;
 
 public class FilmDetailsFragment extends Fragment {
 
-	public static final String LIST_KEY = "keyFilmDetails";
+	public static final String MOVIE_KEY = "fr.isen.android.filmlist.ui.filmdetailsfragment.moviekey";
 	public String filmName;
 
 	public FilmDetailsFragment() {
@@ -27,7 +27,14 @@ public class FilmDetailsFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_film_details, container, false);
 		
-		//à faire : récupérer le titre du film à partir du bundle;
+		Bundle args = getArguments();
+		
+		if(args != null && args.containsKey(MOVIE_KEY)){
+			filmName = args.getString(MOVIE_KEY);
+		}
+		else{
+			filmName = "FilmList";
+		}
 		
 		getActivity().setTitle(filmName);
 		

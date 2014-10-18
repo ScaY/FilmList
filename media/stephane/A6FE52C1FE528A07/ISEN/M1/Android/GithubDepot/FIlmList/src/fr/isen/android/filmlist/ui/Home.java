@@ -43,6 +43,8 @@ public class Home extends FragmentActivity {
 	private android.app.Fragment filmToSeeFragment;
 	private android.app.Fragment filmDetailsFragment;
 
+	private ArrayList<String> list;
+
 	public static final String LIST_KEY = "keyHomeActivity";
 
 	private FilmDAO dao;
@@ -107,7 +109,7 @@ public class Home extends FragmentActivity {
 		final List<Film> films = dao.getAllFilms();
 		dao.close();
 
-		ArrayList<String> list = new ArrayList<String>();
+		list = new ArrayList<String>();
 
 		for (Film film : films) {
 			list.add(film.getName());
@@ -130,7 +132,7 @@ public class Home extends FragmentActivity {
 		super.onConfigurationChanged(newConfig);
 		drawerToggle.onConfigurationChanged(newConfig);
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -187,8 +189,7 @@ public class Home extends FragmentActivity {
 		if (drawerToggle.onOptionsItemSelected(item)) {
 			return true;
 		}
-		if(item.getItemId() == android.R.id.home)
-		{
+		if (item.getItemId() == android.R.id.home) {
 			getFragmentManager().popBackStack();
 			drawerToggle.setDrawerIndicatorEnabled(true);
 		}
@@ -277,7 +278,11 @@ public class Home extends FragmentActivity {
 				public void onItemClick(AdapterView<?> arg0, View arg1,
 						int position, long arg3) {
 
-					setFragment(new FilmDetailsFragment(),
+					filmDetailsFragment = new FilmDetailsFragment();
+					Bundle args = new Bundle();
+					args.putString(FilmDetailsFragment.MOVIE_KEY, list.get(position));
+					filmDetailsFragment.setArguments(args);
+					setFragment(filmDetailsFragment,
 							"filmDetailsFragment", true);
 				}
 			});
