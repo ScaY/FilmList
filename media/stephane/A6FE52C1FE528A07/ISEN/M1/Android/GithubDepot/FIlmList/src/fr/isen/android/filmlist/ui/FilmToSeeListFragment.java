@@ -21,29 +21,35 @@ public class FilmToSeeListFragment extends Fragment {
 
 	public static final String LIST_KEY = "keyFilmList";
 	public static final int position = 1;
-	
-	private int mCurrentPosition = -1;
-	final static String ARG_POSITION = "position";
-	
+
 	public FilmToSeeListFragment() {
 		super();
 	}
-	
-	public ListView getListView(){
+
+	public ListView getListView() {
 		return listview;
+	}
+
+	public void setList(ArrayList<String> list_){
+		list = list_;
+	}
+	
+	public void setAdapter(ArrayAdapter<String> adapter_){
+		adapter = adapter_;
+	}
+	
+	public void setListview(ListView listview_){
+		listview = listview_;
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		
-		 // If activity recreated (such as from screen rotate), restore
-        // the previous article selection set by onSaveInstanceState().
-        // This is primarily necessary when in the two-pane layout.
-        if (savedInstanceState != null) {
-            mCurrentPosition = savedInstanceState.getInt(ARG_POSITION);
-        }
-        
+
+		// If activity recreated (such as from screen rotate), restore
+		// the previous article selection set by onSaveInstanceState().
+		// This is primarily necessary when in the two-pane layout.
+
 		View view = inflater.inflate(R.layout.fragment_film_list, container,
 				false);
 
@@ -55,7 +61,6 @@ public class FilmToSeeListFragment extends Fragment {
 			list = new ArrayList<String>();
 		}
 
-
 		adapter = new ArrayAdapter<String>(getActivity(),
 				android.R.layout.simple_list_item_1, list);
 		listview = (ListView) view.findViewById(R.id.listview);
@@ -63,9 +68,10 @@ public class FilmToSeeListFragment extends Fragment {
 		// Add the listeners on the item (Does not work)
 		additemListener(listview);
 		adapter.notifyDataSetChanged();
-		
+
 		return view;
 	}
+
 	
 	public void additemListener(ListView listFl) {
 		if (listFl != null) {
@@ -76,25 +82,18 @@ public class FilmToSeeListFragment extends Fragment {
 
 					FilmDetailsFragment filmDetailsFragment = new FilmDetailsFragment();
 					Bundle args = new Bundle();
-					args.putString(FilmDetailsFragment.MOVIE_KEY, list.get(position));
+					args.putString(FilmDetailsFragment.MOVIE_KEY,
+							list.get(position));
 					filmDetailsFragment.setArguments(args);
-					((Home)getActivity()).setFragment(filmDetailsFragment,
-							"filmDetailsFragment", true);
+					((Home) getActivity()).setFragment(filmDetailsFragment,
+							"fragment", true);
 				}
 			});
 		}
 	}
-	
+
 	public void refresh(String film) {
 		list.add(film);
 		adapter.notifyDataSetChanged();
 	}
-	
-	@Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        // Save the current article selection in case we need to recreate the fragment
-        outState.putInt(ARG_POSITION, mCurrentPosition);
-    }
 }

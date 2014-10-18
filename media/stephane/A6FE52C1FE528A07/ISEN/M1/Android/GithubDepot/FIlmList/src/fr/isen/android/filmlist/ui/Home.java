@@ -116,16 +116,31 @@ public class Home extends FragmentActivity {
 			list.add(film.getName());
 		}
 
-		// Initialize filmToSeeFragment 
+		// Initialize filmToSeeFragment
 		filmToSeeFragment = new FilmToSeeListFragment();
 		Bundle args = new Bundle();
 		args.putStringArrayList(FilmToSeeListFragment.LIST_KEY, list);
 		filmToSeeFragment.setArguments(args);
-
-		// Check if there is already a instance (for screen rotation)
-		if (savedInstanceState == null) {
+		
+		FilmToSeeListFragment fl = (FilmToSeeListFragment)filmToSeeFragment;
+		fl.setList(list);
+		fl.setAdapter(new ArrayAdapter<String>(this,
+				android.R.layout.simple_list_item_1, list));
+		fl.setListview((ListView) findViewById(R.id.listview));
+		
+		if (savedInstanceState != null) {
+			android.app.Fragment fragment = getFragmentManager()
+					.findFragmentByTag("fragment");
+			if(fragment instanceof FilmDetailsFragment){
+				setFragment(filmToSeeFragment, "fragment", true);
+				setFragment(fragment, "fragment", true);
+				
+			}else{
+				setFragment(fragment, "fragment", false);
+			}
+		} else {
 			// Set the fragment of the list of movies
-			setFragment(filmToSeeFragment, "FilmToSeeFragment", false);
+			setFragment(filmToSeeFragment, "fragment", false);
 		}
 
 	}
@@ -143,8 +158,8 @@ public class Home extends FragmentActivity {
 
 		// Ajout du listener sur la barre de recherche
 		final SearchView searchView = (SearchView) menu.findItem(
-				R.id.action_search).getActionView();
-		final MenuItem searchMenuItem = menu.findItem(R.id.action_search);
+				R.id.action_new).getActionView();
+		final MenuItem searchMenuItem = menu.findItem(R.id.action_new);
 		searchView.setOnQueryTextListener(new OnQueryTextListener() {
 
 			@Override
@@ -158,8 +173,10 @@ public class Home extends FragmentActivity {
 				dao.open();
 				Film film = dao.insert(query);
 				dao.close();
+
 				FilmToSeeListFragment fl = (FilmToSeeListFragment) filmToSeeFragment;
 				fl.refresh(film.getName());
+
 				searchMenuItem.collapseActionView();
 				searchView.setQuery("", false);
 
@@ -214,12 +231,12 @@ public class Home extends FragmentActivity {
 
 		case About.position:
 			fragment = new About();
-			setFragment(fragment, "about", true);
+			setFragment(fragment, "fragment", true);
 			setTitle(navigationArray[position]);
 			break;
 
 		case FilmToSeeListFragment.position:
-			setFragment(filmToSeeFragment, "FilmToSeeFragment", true);
+			setFragment(filmToSeeFragment, "fragment", true);
 			setTitle(navigationArray[position]);
 			break;
 		}
