@@ -121,10 +121,6 @@ public class Home extends FragmentActivity {
 		args.putStringArrayList(FilmToSeeListFragment.LIST_KEY, list);
 		filmToSeeFragment.setArguments(args);
 		setFragment(filmToSeeFragment, "FilmToSeeFragment", false);
-
-		// Add the listeners on the item (Does not work)
-		additemListener(((FilmToSeeListFragment) filmToSeeFragment)
-				.getListView());
 	}
 
 	@Override
@@ -159,7 +155,6 @@ public class Home extends FragmentActivity {
 				fl.refresh(film.getName());
 				searchMenuItem.collapseActionView();
 				searchView.setQuery("", false);
-				additemListener(fl.getListView());
 
 				return true;
 			}
@@ -269,24 +264,6 @@ public class Home extends FragmentActivity {
 			return true;
 		}
 
-	}
-
-	public void additemListener(ListView listFl) {
-		if (listFl != null) {
-			listFl.setOnItemClickListener(new OnItemClickListener() {
-				@Override
-				public void onItemClick(AdapterView<?> arg0, View arg1,
-						int position, long arg3) {
-
-					filmDetailsFragment = new FilmDetailsFragment();
-					Bundle args = new Bundle();
-					args.putString(FilmDetailsFragment.MOVIE_KEY, list.get(position));
-					filmDetailsFragment.setArguments(args);
-					setFragment(filmDetailsFragment,
-							"filmDetailsFragment", true);
-				}
-			});
-		}
 	}
 
 	public void setFragment(android.app.Fragment fragment, String name,
