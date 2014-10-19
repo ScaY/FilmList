@@ -85,11 +85,11 @@ public class FilmDAO extends DAOBase {
 	  private ContentValues filmToValues(Film f) {
 		  ContentValues value = new ContentValues();
 		  value.put(DatabaseHandler.FILM_NAME, f.getName());
-		  value.put(DatabaseHandler.FILM_YEAR, f.getYear());
+		  /*value.put(DatabaseHandler.FILM_YEAR, f.getYear());
 		  value.put(DatabaseHandler.FILM_RELEASE_DATE, f.getReleaseDate().toString());
 		  value.put(DatabaseHandler.FILM_RUNTIME, f.getRuntime());
 		  value.put(DatabaseHandler.FILM_DIRECTOR, f.getDirector());
-		  value.put(DatabaseHandler.FILM_STORY, f.getStory());
+		  value.put(DatabaseHandler.FILM_STORY, f.getStory());*/
 		  
 		  return value;
 	  }

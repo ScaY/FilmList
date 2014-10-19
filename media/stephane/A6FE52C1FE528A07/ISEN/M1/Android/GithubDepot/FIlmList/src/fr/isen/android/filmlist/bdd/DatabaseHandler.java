@@ -13,7 +13,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	  public static final String FILM_RUNTIME = "runtime";
 	  public static final String FILM_DIRECTOR = "director";
 	  public static final String FILM_STORY = "story";
-	  public static final String FILM_ALL_COLUMNS[] = {DatabaseHandler.FILM_KEY, DatabaseHandler.FILM_NAME, FILM_YEAR, FILM_RELEASE_DATE, FILM_RUNTIME, FILM_DIRECTOR, FILM_STORY};
+	  //public static final String FILM_ALL_COLUMNS[] = {DatabaseHandler.FILM_KEY, DatabaseHandler.FILM_NAME, FILM_YEAR, FILM_RELEASE_DATE, FILM_RUNTIME, FILM_DIRECTOR, FILM_STORY};
+	  public static final String FILM_ALL_COLUMNS[] = {DatabaseHandler.FILM_KEY, DatabaseHandler.FILM_NAME};
 	  public static final String FILM_TABLE_NAME = "film";
 	  public static final String FILM_TABLE_CREATE =
 	    "CREATE TABLE " + FILM_TABLE_NAME + " (" +
