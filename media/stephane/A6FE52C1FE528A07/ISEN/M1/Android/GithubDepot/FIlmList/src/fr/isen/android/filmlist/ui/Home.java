@@ -27,8 +27,10 @@ import android.widget.ShareActionProvider;
 
 import com.example.filmlist.R;
 
+import fr.isen.android.filmlist.bdd.FavouriteFilmsDAO;
 import fr.isen.android.filmlist.bdd.Film;
 import fr.isen.android.filmlist.bdd.FilmDAO;
+import fr.isen.android.filmlist.bdd.ToSeeFilmsDAO;
 
 public class Home extends FragmentActivity {
 	private String[] navigationArray;
@@ -41,28 +43,25 @@ public class Home extends FragmentActivity {
 
 	private ShareActionProvider mShareActionProvider;
 
-	private android.app.Fragment filmToSeeFragment;
-	private android.app.Fragment filmDetailsFragment;
+	private android.app.Fragment fragment;
 
 	private ArrayList<String> list;
 
 	public static final String LIST_KEY = "keyHomeActivity";
 
 	public static final String fragmentStack = "fragmentStack";
-	private FilmDAO dao;
-
-	// public static final String fragmentStack = "fragmentStack";
-
-	public Home() {
-		super();
-	}
+	private FilmDAO filmDAO;
+	private FavouriteFilmsDAO favouriteDAO;
+	private ToSeeFilmsDAO toSeeDAO;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
-
-		this.dao = new FilmDAO(this);
+		
+		this.filmDAO = new FilmDAO(this);
+		this.favouriteDAO = new FavouriteFilmsDAO(this);
+		this.toSeeDAO = new ToSeeFilmsDAO(this);
 
 		// Initialization of the drawer
 		navigationArray = getResources().getStringArray(
@@ -109,10 +108,10 @@ public class Home extends FragmentActivity {
 
 		// Set the drawer toggle as the DrawerListener
 		drawerLayout.setDrawerListener(drawerToggle);
-
-		dao.open();
-		final List<Film> films = dao.getAllFilms();
-		dao.close();
+		
+		filmDAO.open();
+		final List<Film> films = filmDAO.getAllFilms();
+		filmDAO.close();
 
 		list = new ArrayList<String>();
 
@@ -121,11 +120,13 @@ public class Home extends FragmentActivity {
 		}
 
 		// Initialize filmToSeeFragment
-		filmToSeeFragment = new FilmToSeeListFragment();
+		fragment = new FilmToSeeListFragment();
 		Bundle args = new Bundle();
-		args.putStringArrayList(FilmToSeeListFragment.LIST_KEY, list);
-		filmToSeeFragment.setArguments(args);
-		FilmToSeeListFragment fl = (FilmToSeeListFragment) filmToSeeFragment;
+		args.putStringArrayList(FilmListFragment.LIST_KEY, list);
+		fragment.setArguments(args);
+		
+		setFragment(fragment, fragmentStack, false);
+		/*FilmToSeeListFragment fl = (FilmToSeeListFragment) filmToSeeFragment;
 		fl.setList(list);
 		fl.setAdapter(new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1, list));
@@ -157,7 +158,7 @@ public class Home extends FragmentActivity {
 			// initialized
 			setFragment(filmToSeeFragment, fragmentStack, false);
 
-		}
+		}*/
 	}
 
 	@Override
@@ -185,12 +186,14 @@ public class Home extends FragmentActivity {
 
 			@Override
 			public boolean onQueryTextSubmit(String query) {
-				dao.open();
-				Film film = dao.insert(query);
-				dao.close();
+				filmDAO.open();
+				Film film = filmDAO.insert(query);
+				filmDAO.close();
 
-				FilmToSeeListFragment fl = (FilmToSeeListFragment) filmToSeeFragment;
-				fl.refresh(film.getName());
+				if(fragment instanceof FilmListFragment) {
+					FilmToSeeListFragment fl = (FilmToSeeListFragment) fragment;
+					fl.refresh(film.getName());
+				}
 
 				searchMenuItem.collapseActionView();
 				searchView.setQuery("", false);
@@ -240,21 +243,74 @@ public class Home extends FragmentActivity {
 		// Create a new fragment and specify the planet to show based on
 		// position
 
-		android.app.Fragment fragment = null;
+		List<Film> films = null;
+		Bundle args = null;
 
 		switch (position) {
 
-		case About.position:
-			fragment = new About();
-			setFragment(fragment, fragmentStack, false);
-			setTitle(navigationArray[position]);
-			break;
+			case About.position:
+				fragment = new About();
+				break;
+	
+			case FilmToSeeListFragment.position:
+				fragment = new FilmToSeeListFragment();
+				toSeeDAO.open();
+				films = toSeeDAO.getAllFilms();
+				toSeeDAO.close();
 
-		case FilmToSeeListFragment.position:
-			setFragment(filmToSeeFragment, fragmentStack, false);
-			setTitle(navigationArray[position]);
-			break;
+				list = new ArrayList<String>();
+
+				for (Film film : films) {
+					list.add(film.getName());
+				}
+
+				// Initialize filmToSeeFragment
+				fragment = new FilmToSeeListFragment();
+				args = new Bundle();
+				args.putStringArrayList(FilmListFragment.LIST_KEY, list);
+				fragment.setArguments(args);
+				break;
+				
+			case FilmAllListFragment.position:
+				fragment = new FilmAllListFragment();
+				filmDAO.open();
+				films = filmDAO.getAllFilms();
+				filmDAO.close();
+
+				list = new ArrayList<String>();
+
+				for (Film film : films) {
+					list.add(film.getName());
+				}
+
+				// Initialize filmToSeeFragment
+				fragment = new FilmAllListFragment();
+				args = new Bundle();
+				args.putStringArrayList(FilmListFragment.LIST_KEY, list);
+				fragment.setArguments(args);
+				break;
+				
+			case FilmFavouriteListFragment.position:
+				fragment = new FilmFavouriteListFragment();
+				favouriteDAO.open();
+				films = favouriteDAO.getAllFilms();
+				favouriteDAO.close();
+
+				list = new ArrayList<String>();
+
+				for (Film film : films) {
+					list.add(film.getName());
+				}
+
+				// Initialize filmToSeeFragment
+				fragment = new FilmFavouriteListFragment();
+				args = new Bundle();
+				args.putStringArrayList(FilmListFragment.LIST_KEY, list);
+				fragment.setArguments(args);
+				break;
 		}
+		
+		setFragment(fragment, fragmentStack, false);
 
 		// Highlight the selected item, update the title, and close the
 		// drawer

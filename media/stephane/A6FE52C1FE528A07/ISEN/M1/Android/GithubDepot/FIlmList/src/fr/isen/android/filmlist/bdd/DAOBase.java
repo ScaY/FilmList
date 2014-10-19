@@ -4,10 +4,10 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 public abstract class DAOBase {
-	  // Nous sommes ï¿½ la premiï¿½re version de la base
-	  // Si je dï¿½cide de la mettre ï¿½ jour, il faudra changer cet attribut
+	  // Nous sommes à la première version de la base
+	  // Si je décide de la mettre à jour, il faudra changer cet attribut
 	  protected final static int VERSION = 1;
-	  // Le nom du fichier qui reprï¿½sente ma base
+	  // Le nom du fichier qui représente ma base
 	  protected final static String NOM = "film_list.db";
 	    
 	  protected SQLiteDatabase mDb = null;
