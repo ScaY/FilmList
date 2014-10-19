@@ -13,7 +13,7 @@ public class FilmDAO extends DAOBase {
 	  }
 	  
 	  /**
-	   * @param m le film ï¿½ ajouter ï¿½ la base
+	   * @param m le film à ajouter à la base
 	   */
 	  public Film insert(String filmName) {
 		  ContentValues value = new ContentValues();
@@ -24,16 +24,20 @@ public class FilmDAO extends DAOBase {
 		        DatabaseHandler.FILM_ALL_COLUMNS, DatabaseHandler.FILM_KEY + " = " + insertId, null,
 		        null, null, null);
 		  cursor.moveToFirst();
-		  Film newComment = cursorToFilm(cursor);
+		  Film film = cursorToFilm(cursor);
 		  cursor.close();
-		  return newComment;
+		  return film;
+	  }
+	  
+	  public Film insert(Film f) {
+		  return insert(f.getName());
 	  }
 
 	  /**
-	   * @param id l'identifiant du film ï¿½ supprimer
+	   * @param id l'identifiant du film à supprimer
 	   */
 	  public void delete(Film film) {
-		  mDb.delete(DatabaseHandler.FILM_TABLE_NAME, DatabaseHandler.FILM_KEY + " = ?", new String[] {String.valueOf(film.getId())});
+		  delete(film.getName());
 	  }
 	  
 	  public void delete(String filmName) {
@@ -41,16 +45,15 @@ public class FilmDAO extends DAOBase {
 	  }
 
 	  /**
-	   * @param m le film modifiï¿½
+	   * @param m le film modifié
 	   */
 	  public void edit(Film f) {
-		  ContentValues value = new ContentValues();
-		  value.put(DatabaseHandler.FILM_NAME, f.getName());
+		  ContentValues value = filmToValues(f);
 		  mDb.update(DatabaseHandler.FILM_TABLE_NAME, value, DatabaseHandler.FILM_KEY  + " = ?", new String[] {String.valueOf(f.getId())});
 	  }
 
 	  /**
-	   * @param id l'identifiant du film ï¿½ rï¿½cupï¿½rer
+	   * @param id l'identifiant du film à récupérer
 	   */
 	  public Film select(long id) {
 		  String columns[] = {DatabaseHandler.FILM_NAME};
@@ -76,6 +79,18 @@ public class FilmDAO extends DAOBase {
 	  }
 	  
 	  private Film cursorToFilm(Cursor cursor) {
-		    return new Film(cursor.getLong(0), cursor.getString(1));
-		  }
+		  return new Film(cursor.getLong(0), cursor.getString(1));
+	  }
+	  
+	  private ContentValues filmToValues(Film f) {
+		  ContentValues value = new ContentValues();
+		  value.put(DatabaseHandler.FILM_NAME, f.getName());
+		  value.put(DatabaseHandler.FILM_YEAR, f.getYear());
+		  value.put(DatabaseHandler.FILM_RELEASE_DATE, f.getReleaseDate().toString());
+		  value.put(DatabaseHandler.FILM_RUNTIME, f.getRuntime());
+		  value.put(DatabaseHandler.FILM_DIRECTOR, f.getDirector());
+		  value.put(DatabaseHandler.FILM_STORY, f.getStory());
+		  
+		  return value;
+	  }
 	}
