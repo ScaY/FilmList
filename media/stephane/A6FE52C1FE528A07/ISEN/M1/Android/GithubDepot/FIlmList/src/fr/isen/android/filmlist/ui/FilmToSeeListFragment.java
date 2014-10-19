@@ -84,9 +84,10 @@ public class FilmToSeeListFragment extends Fragment {
 					Bundle args = new Bundle();
 					args.putString(FilmDetailsFragment.MOVIE_KEY,
 							list.get(position));
+					args.putString(FilmDetailsFragment.TYPE_KEY, FilmToSeeListFragment.class.getSimpleName().toString());
 					filmDetailsFragment.setArguments(args);
 					((Home) getActivity()).setFragment(filmDetailsFragment,
-							"fragment", true);
+							Home.fragmentStack, true);
 				}
 			});
 		}

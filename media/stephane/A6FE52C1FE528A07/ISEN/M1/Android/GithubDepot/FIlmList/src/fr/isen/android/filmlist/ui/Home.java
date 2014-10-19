@@ -12,6 +12,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -47,7 +48,10 @@ public class Home extends FragmentActivity {
 
 	public static final String LIST_KEY = "keyHomeActivity";
 
+	public static final String fragmentStack = "fragmentStack";
 	private FilmDAO dao;
+
+	// public static final String fragmentStack = "fragmentStack";
 
 	public Home() {
 		super();
@@ -121,28 +125,39 @@ public class Home extends FragmentActivity {
 		Bundle args = new Bundle();
 		args.putStringArrayList(FilmToSeeListFragment.LIST_KEY, list);
 		filmToSeeFragment.setArguments(args);
-		
-		FilmToSeeListFragment fl = (FilmToSeeListFragment)filmToSeeFragment;
+		FilmToSeeListFragment fl = (FilmToSeeListFragment) filmToSeeFragment;
 		fl.setList(list);
 		fl.setAdapter(new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1, list));
 		fl.setListview((ListView) findViewById(R.id.listview));
-		
+
 		if (savedInstanceState != null) {
+			// Retrieve the previous fragment
 			android.app.Fragment fragment = getFragmentManager()
-					.findFragmentByTag("fragment");
-			if(fragment instanceof FilmDetailsFragment){
-				setFragment(filmToSeeFragment, "fragment", true);
-				setFragment(fragment, "fragment", true);
-				
-			}else{
-				setFragment(fragment, "fragment", false);
+					.findFragmentByTag(fragmentStack);
+
+			// Case where the fragment is the detail about a film
+			if (fragment instanceof FilmDetailsFragment) {
+				FilmDetailsFragment fd = (FilmDetailsFragment) fragment;
+
+				// Check where the fragment has been lunched (From FilmVarite or
+				// FilmToSee)
+				if (fd.getType().equals(
+						FilmToSeeListFragment.class.getSimpleName().toString())) {
+					// Initialize the stack
+					setFragment(filmToSeeFragment, fragmentStack, true);
+					setFragment(fragment, fragmentStack, true);
+				}
+
+			} else {
+				setFragment(fragment, fragmentStack, false);
 			}
 		} else {
-			// Set the fragment of the list of movies
-			setFragment(filmToSeeFragment, "fragment", false);
-		}
+			// Case where it is the first time that the application is
+			// initialized
+			setFragment(filmToSeeFragment, fragmentStack, false);
 
+		}
 	}
 
 	@Override
@@ -231,12 +246,12 @@ public class Home extends FragmentActivity {
 
 		case About.position:
 			fragment = new About();
-			setFragment(fragment, "fragment", true);
+			setFragment(fragment, fragmentStack, false);
 			setTitle(navigationArray[position]);
 			break;
 
 		case FilmToSeeListFragment.position:
-			setFragment(filmToSeeFragment, "fragment", true);
+			setFragment(filmToSeeFragment, fragmentStack, false);
 			setTitle(navigationArray[position]);
 			break;
 		}
