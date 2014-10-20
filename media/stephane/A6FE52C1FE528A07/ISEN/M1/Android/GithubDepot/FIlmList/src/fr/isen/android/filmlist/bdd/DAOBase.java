@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 public abstract class DAOBase {
 	  // Nous sommes à la première version de la base
 	  // Si je décide de la mettre à jour, il faudra changer cet attribut
-	  protected final static int VERSION = 1;
+	  protected final static int VERSION = 3;
 	  // Le nom du fichier qui représente ma base
 	  protected final static String NOM = "film_list.db";
 	    
@@ -18,7 +18,7 @@ public abstract class DAOBase {
 	  }
 	    
 	  public void open() {
-	    // Pas besoin de fermer la derniï¿½re base puisque getWritableDatabase s'en charge
+	    // Pas besoin de fermer la dernière base puisque getWritableDatabase s'en charge
 	    mDb = mHandler.getWritableDatabase();
 	  }
 	    
