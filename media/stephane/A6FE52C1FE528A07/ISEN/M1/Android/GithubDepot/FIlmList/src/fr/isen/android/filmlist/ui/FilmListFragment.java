@@ -32,6 +32,10 @@ public class FilmListFragment extends Fragment {
 		list = list_;
 	}
 	
+	public ArrayList<String> getList(){
+		return list;
+	}
+	
 	public void setAdapter(ArrayAdapter<String> adapter_){
 		adapter = adapter_;
 	}
@@ -63,15 +67,13 @@ public class FilmListFragment extends Fragment {
 				android.R.layout.simple_list_item_1, list);
 		listview = (ListView) view.findViewById(R.id.listview);
 		listview.setAdapter(adapter);
-		// Add the listeners on the item (Does not work)
-		additemListener(listview);
 		adapter.notifyDataSetChanged();
 
 		return view;
 	}
 
-	
-	public void additemListener(ListView listFl) {
+
+	public void additemListener(ListView listFl, final String typeKey_) {
 		if (listFl != null) {
 			listFl.setOnItemClickListener(new OnItemClickListener() {
 				@Override
@@ -82,7 +84,7 @@ public class FilmListFragment extends Fragment {
 					Bundle args = new Bundle();
 					args.putString(FilmDetailsFragment.MOVIE_KEY,
 							list.get(position));
-					args.putString(FilmDetailsFragment.TYPE_KEY, FilmListFragment.class.getSimpleName().toString());
+					args.putString(FilmDetailsFragment.TYPE_KEY, typeKey_);
 					filmDetailsFragment.setArguments(args);
 					((Home) getActivity()).setFragment(filmDetailsFragment,
 							Home.fragmentStack, true);

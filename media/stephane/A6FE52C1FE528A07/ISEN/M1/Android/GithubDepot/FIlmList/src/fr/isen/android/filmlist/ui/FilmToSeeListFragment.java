@@ -12,6 +12,8 @@ public class FilmToSeeListFragment extends FilmListFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		getActivity().setTitle("Films to see");
-		return super.onCreateView(inflater, container, savedInstanceState);
+		View view = super.onCreateView(inflater, container, savedInstanceState);
+		additemListener(getListView(), this.getClass().getSimpleName().toString());
+		return view;
 	}
 }

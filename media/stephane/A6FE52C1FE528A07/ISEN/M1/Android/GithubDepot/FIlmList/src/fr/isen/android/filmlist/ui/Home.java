@@ -59,7 +59,7 @@ public class Home extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
-		
+
 		this.filmDAO = new FilmDAO(this);
 		this.favouriteDAO = new FavouriteFilmsDAO(this);
 		this.toSeeDAO = new ToSeeFilmsDAO(this);
@@ -109,7 +109,7 @@ public class Home extends FragmentActivity {
 
 		// Set the drawer toggle as the DrawerListener
 		drawerLayout.setDrawerListener(drawerToggle);
-		
+
 		filmDAO.open();
 		final List<Film> films = filmDAO.getAllFilms();
 		filmDAO.close();
@@ -125,15 +125,23 @@ public class Home extends FragmentActivity {
 		Bundle args = new Bundle();
 		args.putStringArrayList(FilmListFragment.LIST_KEY, list);
 		fragment.setArguments(args);
-		
+
 		filmToSeeFragment = new FilmToSeeListFragment();
-		
+
 		FilmToSeeListFragment fl = (FilmToSeeListFragment) filmToSeeFragment;
 		fl.setList(list);
 		fl.setAdapter(new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1, list));
 		fl.setListview((ListView) findViewById(R.id.listview));
-		
+
+		android.app.Fragment filmAllListFragment = new FilmAllListFragment();
+
+		FilmAllListFragment fa = (FilmAllListFragment) filmAllListFragment;
+		fa.setList(list);
+		fa.setAdapter(new ArrayAdapter<String>(this,
+				android.R.layout.simple_list_item_1, list));
+		fa.setListview((ListView) findViewById(R.id.listview));
+
 		if (savedInstanceState != null) {
 			// Retrieve the previous fragment
 			android.app.Fragment fragment = getFragmentManager()
@@ -150,15 +158,16 @@ public class Home extends FragmentActivity {
 					// Initialize the stack
 					setFragment(filmToSeeFragment, fragmentStack, true);
 					setFragment(fragment, fragmentStack, true);
-				}/*else if(fd.getType().equals(
-						FilmAllListFragment.class.getSimpleName().toString())){
+				} else if (fd.getType().equals(
+						FilmAllListFragment.class.getSimpleName().toString())) {
 					// Initialize the stack
-					setFragment(filmToSeeFragment, fragmentStack, true);
+					setFragment(filmAllListFragment, fragmentStack, true);
 					setFragment(fragment, fragmentStack, true);
-				}*/
-
+				}
+				setTitle(fd.getType());
 			} else {
 				setFragment(fragment, fragmentStack, false);
+				setTitle("TestTest");
 			}
 		} else {
 			// Case where it is the first time that the application is
