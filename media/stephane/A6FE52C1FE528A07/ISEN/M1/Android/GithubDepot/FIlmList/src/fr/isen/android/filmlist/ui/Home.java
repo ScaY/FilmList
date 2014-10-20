@@ -207,7 +207,7 @@ public class Home extends FragmentActivity {
 				filmDAO.close();
 
 				if (fragment instanceof FilmListFragment) {
-					FilmToSeeListFragment fl = (FilmToSeeListFragment) fragment;
+					FilmListFragment fl = (FilmListFragment) fragment;
 					fl.refresh(film.getName());
 				}
 
