@@ -15,12 +15,16 @@ import android.widget.TextView;
 
 import com.example.filmlist.R;
 
+import fr.isen.android.filmlist.bdd.FavouriteFilmsDAO;
+import fr.isen.android.filmlist.bdd.Film;
+import fr.isen.android.filmlist.bdd.FilmDAO;
+
 public class FilmDetailsFragment extends Fragment {
 
 	public static final String MOVIE_KEY = "fr.isen.android.filmlist.ui.filmdetailsfragment.moviekey";
 	public static final String TYPE_KEY = "fr.isen.android.filmlist.ui.filmdetailsfragment.typekey";
 
-	public String filmName;
+	public Film film;
 	public String type;
 
 	public FilmDetailsFragment() {
@@ -39,19 +43,23 @@ public class FilmDetailsFragment extends Fragment {
 
 		Bundle args = getArguments();
 
-		filmName = retrieveStringArgs(MOVIE_KEY, args);
+		String filmName = retrieveStringArgs(MOVIE_KEY, args);
 		type = retrieveStringArgs(TYPE_KEY, args);
 		setRetainInstance(true);
 		getActivity().setTitle(type);
 		((TextView) view.findViewById(R.id.film_title)).setText(filmName);
 
-		final Button button = (Button) view
-				.findViewById(R.id.button_add_film_calendar);
+		FilmDAO filmDAO = new FilmDAO(getActivity());
+		filmDAO.open();
+		film = filmDAO.select(filmName);
+		filmDAO.close();
+		
+		final Button button = (Button) view.findViewById(R.id.button_add_film_calendar);
 		button.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				Intent intent = new Intent(Intent.ACTION_INSERT);
 				intent.setType("vnd.android.cursor.item/event");
-				intent.putExtra(Events.TITLE, filmName);
+				intent.putExtra(Events.TITLE, film.getName());
 				intent.putExtra(Events.EVENT_LOCATION, "Home");
 				intent.putExtra(Events.DESCRIPTION, "Watch this movie.");
 
@@ -67,6 +75,33 @@ public class FilmDetailsFragment extends Fragment {
 
 				intent.setData(CalendarContract.Events.CONTENT_URI);
 				startActivity(intent);
+			}
+		});
+		
+		final Button favourite = (Button) view.findViewById(R.id.button_add_film_favourites);
+		FavouriteFilmsDAO favouriteDAO = new FavouriteFilmsDAO(getActivity());
+		favouriteDAO.open();
+		if(favouriteDAO.select(film.getId()) != null) {
+			favourite.setText("Remove film from favourites");
+		}
+		favouriteDAO.close();
+		
+		favourite.setOnClickListener(new View.OnClickListener() {			
+			@Override
+			public void onClick(View v) {			
+				FavouriteFilmsDAO favouriteDAO = new FavouriteFilmsDAO(getActivity());
+				favouriteDAO.open();
+				
+				if(favouriteDAO.select(film.getId()) != null) {
+					favouriteDAO.delete(film);
+					favourite.setText("Add films to favourites");
+				}
+				else {
+					favouriteDAO.insert(film);
+					favourite.setText("Remove film from favourites");
+				}
+				
+				favouriteDAO.close();
 			}
 		});
 

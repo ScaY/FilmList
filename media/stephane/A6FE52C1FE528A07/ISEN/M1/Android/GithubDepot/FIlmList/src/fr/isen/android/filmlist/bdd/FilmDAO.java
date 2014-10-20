@@ -56,11 +56,19 @@ public class FilmDAO extends DAOBase {
 	   * @param id l'identifiant du film à récupérer
 	   */
 	  public Film select(long id) {
-		  String columns[] = {DatabaseHandler.FILM_NAME};
+		  String columns[] = DatabaseHandler.FILM_ALL_COLUMNS;
 		  String args[] = {String.valueOf(id)};
 		  Cursor c = mDb.query(DatabaseHandler.FILM_TABLE_NAME, columns, DatabaseHandler.FILM_KEY + " = ?", args, "", "", "");
 		  c.moveToFirst();
-		  return new Film(id, c.getString(0));
+		  return cursorToFilm(c);
+	  }
+	  
+	  public Film select(String name) {
+		  String columns[] = DatabaseHandler.FILM_ALL_COLUMNS;
+		  String args[] = {name};
+		  Cursor c = mDb.query(DatabaseHandler.FILM_TABLE_NAME, columns, DatabaseHandler.FILM_NAME + " = ?", args, "", "", "");
+		  c.moveToFirst();
+		  return cursorToFilm(c);
 	  }
 	  
 	  public List<Film> getAllFilms() {
