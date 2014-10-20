@@ -44,6 +44,7 @@ public class Home extends FragmentActivity {
 	private ShareActionProvider mShareActionProvider;
 
 	private android.app.Fragment fragment;
+	private android.app.Fragment filmToSeeFragment;
 
 	private ArrayList<String> list;
 
@@ -125,13 +126,14 @@ public class Home extends FragmentActivity {
 		args.putStringArrayList(FilmListFragment.LIST_KEY, list);
 		fragment.setArguments(args);
 		
-		setFragment(fragment, fragmentStack, false);
-		/*FilmToSeeListFragment fl = (FilmToSeeListFragment) filmToSeeFragment;
+		filmToSeeFragment = new FilmToSeeListFragment();
+		
+		FilmToSeeListFragment fl = (FilmToSeeListFragment) filmToSeeFragment;
 		fl.setList(list);
 		fl.setAdapter(new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1, list));
 		fl.setListview((ListView) findViewById(R.id.listview));
-
+		
 		if (savedInstanceState != null) {
 			// Retrieve the previous fragment
 			android.app.Fragment fragment = getFragmentManager()
@@ -148,7 +150,12 @@ public class Home extends FragmentActivity {
 					// Initialize the stack
 					setFragment(filmToSeeFragment, fragmentStack, true);
 					setFragment(fragment, fragmentStack, true);
-				}
+				}/*else if(fd.getType().equals(
+						FilmAllListFragment.class.getSimpleName().toString())){
+					// Initialize the stack
+					setFragment(filmToSeeFragment, fragmentStack, true);
+					setFragment(fragment, fragmentStack, true);
+				}*/
 
 			} else {
 				setFragment(fragment, fragmentStack, false);
@@ -158,7 +165,7 @@ public class Home extends FragmentActivity {
 			// initialized
 			setFragment(filmToSeeFragment, fragmentStack, false);
 
-		}*/
+		}
 	}
 
 	@Override
@@ -190,7 +197,7 @@ public class Home extends FragmentActivity {
 				Film film = filmDAO.insert(query);
 				filmDAO.close();
 
-				if(fragment instanceof FilmListFragment) {
+				if (fragment instanceof FilmListFragment) {
 					FilmToSeeListFragment fl = (FilmToSeeListFragment) fragment;
 					fl.refresh(film.getName());
 				}
@@ -248,68 +255,68 @@ public class Home extends FragmentActivity {
 
 		switch (position) {
 
-			case About.position:
-				fragment = new About();
-				break;
-	
-			case FilmToSeeListFragment.position:
-				fragment = new FilmToSeeListFragment();
-				toSeeDAO.open();
-				films = toSeeDAO.getAllFilms();
-				toSeeDAO.close();
+		case About.position:
+			fragment = new About();
+			break;
 
-				list = new ArrayList<String>();
+		case FilmToSeeListFragment.position:
+			fragment = new FilmToSeeListFragment();
+			toSeeDAO.open();
+			films = toSeeDAO.getAllFilms();
+			toSeeDAO.close();
 
-				for (Film film : films) {
-					list.add(film.getName());
-				}
+			list = new ArrayList<String>();
 
-				// Initialize filmToSeeFragment
-				fragment = new FilmToSeeListFragment();
-				args = new Bundle();
-				args.putStringArrayList(FilmListFragment.LIST_KEY, list);
-				fragment.setArguments(args);
-				break;
-				
-			case FilmAllListFragment.position:
-				fragment = new FilmAllListFragment();
-				filmDAO.open();
-				films = filmDAO.getAllFilms();
-				filmDAO.close();
+			for (Film film : films) {
+				list.add(film.getName());
+			}
 
-				list = new ArrayList<String>();
+			// Initialize filmToSeeFragment
+			fragment = new FilmToSeeListFragment();
+			args = new Bundle();
+			args.putStringArrayList(FilmListFragment.LIST_KEY, list);
+			fragment.setArguments(args);
+			break;
 
-				for (Film film : films) {
-					list.add(film.getName());
-				}
+		case FilmAllListFragment.position:
+			fragment = new FilmAllListFragment();
+			filmDAO.open();
+			films = filmDAO.getAllFilms();
+			filmDAO.close();
 
-				// Initialize filmToSeeFragment
-				fragment = new FilmAllListFragment();
-				args = new Bundle();
-				args.putStringArrayList(FilmListFragment.LIST_KEY, list);
-				fragment.setArguments(args);
-				break;
-				
-			case FilmFavouriteListFragment.position:
-				fragment = new FilmFavouriteListFragment();
-				favouriteDAO.open();
-				films = favouriteDAO.getAllFilms();
-				favouriteDAO.close();
+			list = new ArrayList<String>();
 
-				list = new ArrayList<String>();
+			for (Film film : films) {
+				list.add(film.getName());
+			}
 
-				for (Film film : films) {
-					list.add(film.getName());
-				}
+			// Initialize filmToSeeFragment
+			fragment = new FilmAllListFragment();
+			args = new Bundle();
+			args.putStringArrayList(FilmListFragment.LIST_KEY, list);
+			fragment.setArguments(args);
+			break;
 
-				// Initialize filmToSeeFragment
-				fragment = new FilmFavouriteListFragment();
-				args = new Bundle();
-				args.putStringArrayList(FilmListFragment.LIST_KEY, list);
-				fragment.setArguments(args);
-				break;
+		case FilmFavouriteListFragment.position:
+			fragment = new FilmFavouriteListFragment();
+			favouriteDAO.open();
+			films = favouriteDAO.getAllFilms();
+			favouriteDAO.close();
+
+			list = new ArrayList<String>();
+
+			for (Film film : films) {
+				list.add(film.getName());
+			}
+
+			// Initialize filmToSeeFragment
+			fragment = new FilmFavouriteListFragment();
+			args = new Bundle();
+			args.putStringArrayList(FilmListFragment.LIST_KEY, list);
+			fragment.setArguments(args);
+			break;
 		}
-		
+
 		setFragment(fragment, fragmentStack, false);
 
 		// Highlight the selected item, update the title, and close the
