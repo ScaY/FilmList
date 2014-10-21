@@ -42,7 +42,7 @@ public class FilmDetailsFragment extends Fragment {
 		filmName = retrieveStringArgs(MOVIE_KEY, args);
 		type = retrieveStringArgs(TYPE_KEY, args);
 		setRetainInstance(true);
-		getActivity().setTitle(type);
+		getActivity().setTitle(filmName);
 		((TextView) view.findViewById(R.id.film_title)).setText(filmName);
 
 		final Button button = (Button) view

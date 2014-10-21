@@ -2,10 +2,13 @@ package fr.isen.android.filmlist.ui;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.ListFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -31,6 +34,7 @@ import fr.isen.android.filmlist.bdd.FavouriteFilmsDAO;
 import fr.isen.android.filmlist.bdd.Film;
 import fr.isen.android.filmlist.bdd.FilmDAO;
 import fr.isen.android.filmlist.bdd.ToSeeFilmsDAO;
+import fr.isen.android.filmlist.fragments.FragFilmList;
 
 public class Home extends FragmentActivity {
 	private String[] navigationArray;
@@ -43,11 +47,11 @@ public class Home extends FragmentActivity {
 
 	private ShareActionProvider mShareActionProvider;
 
-	private android.app.Fragment fragment;
-	private android.app.Fragment filmToSeeFragment;
-
 	private ArrayList<String> list;
+	public static ArrayAdapter<String> adapter;
+	public static ListView listview;
 
+	private android.app.Fragment fragment;
 	public static final String LIST_KEY = "keyHomeActivity";
 
 	public static final String fragmentStack = "fragmentStack";
@@ -110,48 +114,43 @@ public class Home extends FragmentActivity {
 		// Set the drawer toggle as the DrawerListener
 		drawerLayout.setDrawerListener(drawerToggle);
 
-		filmDAO.open();
-		final List<Film> films = filmDAO.getAllFilms();
-		filmDAO.close();
-
 		list = new ArrayList<String>();
+		adapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_list_item_1, list);
+		listview = (ListView) findViewById(R.id.listview);
+		
+		// Set the DAO for the FragListFragment singleton
+		FragFilmList fgl = FragFilmList.getInstance();
+		fgl.setFavouriteFIlmDAO(favouriteDAO);
+		fgl.setFilmDAO(filmDAO);
+		fgl.setToSeeFilmDAO(toSeeDAO);
 
-		for (Film film : films) {
-			list.add(film.getName());
-		}
-
-		// Initialize filmToSeeFragment
-		fragment = new FilmToSeeListFragment();
-		Bundle args = new Bundle();
-		args.putStringArrayList(FilmListFragment.LIST_KEY, list);
-		fragment.setArguments(args);
-
-		filmToSeeFragment = new FilmToSeeListFragment();
-
-		FilmToSeeListFragment fl = (FilmToSeeListFragment) filmToSeeFragment;
-		fl.setList(list);
-		fl.setAdapter(new ArrayAdapter<String>(this,
+		// Initialize the fragment of movies to see
+		FilmToSeeListFragment filmToSeeFragment = (FilmToSeeListFragment) fgl
+				.getFragment(FilmToSeeListFragment.class.getSimpleName()
+						.toString());
+		filmToSeeFragment.setList(list);
+		filmToSeeFragment.setAdapter(new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1, list));
-		fl.setListview((ListView) findViewById(R.id.listview));
+		filmToSeeFragment.setListview((ListView) findViewById(R.id.listview));
 
-		android.app.Fragment filmAllListFragment = new FilmAllListFragment();
+		// Initialize the fragment of all movies
+		FilmAllListFragment filmAllListFragment = (FilmAllListFragment) fgl
+				.getFragment(FilmAllListFragment.class.getSimpleName()
+						.toString());
 
-		FilmAllListFragment fa = (FilmAllListFragment) filmAllListFragment;
-		fa.setList(list);
-		fa.setAdapter(new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, list));
-		fa.setListview((ListView) findViewById(R.id.listview));
-
+		// Case where there is a screen rotation
 		if (savedInstanceState != null) {
 			// Retrieve the previous fragment
-			android.app.Fragment fragment = getFragmentManager()
+			fragment = getFragmentManager()
 					.findFragmentByTag(fragmentStack);
 
 			// Case where the fragment is the detail about a film
 			if (fragment instanceof FilmDetailsFragment) {
 				FilmDetailsFragment fd = (FilmDetailsFragment) fragment;
 
-				// Check where the fragment has been lunched (From FilmVarite or
+				// Check where the fragment has been lunched (From FilmFavorite
+				// or
 				// FilmToSee)
 				if (fd.getType().equals(
 						FilmToSeeListFragment.class.getSimpleName().toString())) {
@@ -167,7 +166,6 @@ public class Home extends FragmentActivity {
 				setTitle(fd.getType());
 			} else {
 				setFragment(fragment, fragmentStack, false);
-				setTitle("TestTest");
 			}
 		} else {
 			// Case where it is the first time that the application is
@@ -192,6 +190,7 @@ public class Home extends FragmentActivity {
 		final SearchView searchView = (SearchView) menu.findItem(
 				R.id.action_new).getActionView();
 		final MenuItem searchMenuItem = menu.findItem(R.id.action_new);
+
 		searchView.setOnQueryTextListener(new OnQueryTextListener() {
 
 			@Override
@@ -205,6 +204,16 @@ public class Home extends FragmentActivity {
 				filmDAO.open();
 				Film film = filmDAO.insert(query);
 				filmDAO.close();
+				String keyFimAllList = FilmAllListFragment.class
+						.getSimpleName().toString();
+				/*
+				 * if (FragFilmList.getInstance().getFragments()
+				 * .containsKey(keyFimAllList)) { filmDAO.open(); Film film =
+				 * filmDAO.insert(query); filmDAO.close(); FilmAllListFragment
+				 * fl = (FilmAllListFragment) FragFilmList
+				 * .getInstance().getFragment(keyFimAllList);
+				 * fl.refresh(film.getName()); }
+				 */
 
 				if (fragment instanceof FilmListFragment) {
 					FilmListFragment fl = (FilmListFragment) fragment;
@@ -256,11 +265,6 @@ public class Home extends FragmentActivity {
 
 	/** Swaps fragments in the main content view */
 	private void selectItem(int position) {
-		// Create a new fragment and specify the planet to show based on
-		// position
-
-		List<Film> films = null;
-		Bundle args = null;
 
 		switch (position) {
 
@@ -269,67 +273,41 @@ public class Home extends FragmentActivity {
 			break;
 
 		case FilmToSeeListFragment.position:
-			fragment = new FilmToSeeListFragment();
-			toSeeDAO.open();
-			films = toSeeDAO.getAllFilms();
-			toSeeDAO.close();
-
-			list = new ArrayList<String>();
-
-			for (Film film : films) {
-				list.add(film.getName());
-			}
-
-			// Initialize filmToSeeFragment
-			fragment = new FilmToSeeListFragment();
-			args = new Bundle();
-			args.putStringArrayList(FilmListFragment.LIST_KEY, list);
-			fragment.setArguments(args);
+			/*
+			 * setFragment( FragFilmList.getInstance().getFragment(
+			 * FilmToSeeListFragment.class.getSimpleName() .toString()),
+			 * fragmentStack, false);
+			 */
+			fragment = FragFilmList.getInstance().getFragment(
+					FilmToSeeListFragment.class.getSimpleName().toString());
 			break;
 
 		case FilmAllListFragment.position:
-			fragment = new FilmAllListFragment();
-			filmDAO.open();
-			films = filmDAO.getAllFilms();
-			filmDAO.close();
-
-			list = new ArrayList<String>();
-
-			for (Film film : films) {
-				list.add(film.getName());
-			}
-
-			// Initialize filmToSeeFragment
-			fragment = new FilmAllListFragment();
-			args = new Bundle();
-			args.putStringArrayList(FilmListFragment.LIST_KEY, list);
-			fragment.setArguments(args);
+			/*
+			 * setFragment( FragFilmList.getInstance().getFragment(
+			 * FilmAllListFragment.class.getSimpleName() .toString()),
+			 * fragmentStack, false);
+			 */
+			fragment = FragFilmList.getInstance().getFragment(
+					FilmAllListFragment.class.getSimpleName().toString());
 			break;
 
 		case FilmFavouriteListFragment.position:
-			fragment = new FilmFavouriteListFragment();
-			favouriteDAO.open();
-			films = favouriteDAO.getAllFilms();
-			favouriteDAO.close();
-
-			list = new ArrayList<String>();
-
-			for (Film film : films) {
-				list.add(film.getName());
-			}
-
-			// Initialize filmToSeeFragment
-			fragment = new FilmFavouriteListFragment();
-			args = new Bundle();
-			args.putStringArrayList(FilmListFragment.LIST_KEY, list);
-			fragment.setArguments(args);
+			/*
+			 * setFragment( FragFilmList.getInstance().getFragment(
+			 * FilmFavouriteListFragment.class.getSimpleName() .toString()),
+			 * fragmentStack, false);
+			 */
+			fragment = FragFilmList.getInstance().getFragment(
+					FilmFavouriteListFragment.class.getSimpleName().toString());
 			break;
 		}
 
-		setFragment(fragment, fragmentStack, false);
+		if (fragment != null) {
+			setFragment(fragment, fragmentStack, false);
+		}
 
-		// Highlight the selected item, update the title, and close the
-		// drawer
+		// Highlight the selected item and close the drawer
 		drawerList.setItemChecked(position, true);
 		drawerLayout.closeDrawer(drawerList);
 
@@ -352,31 +330,6 @@ public class Home extends FragmentActivity {
 		drawerToggle.syncState();
 	}
 
-	private class StableArrayAdapter extends ArrayAdapter<String> {
-
-		HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
-
-		public StableArrayAdapter(Context context, int textViewResourceId,
-				List<String> objects) {
-			super(context, textViewResourceId, objects);
-			for (int i = 0; i < objects.size(); ++i) {
-				mIdMap.put(objects.get(i), i);
-			}
-		}
-
-		@Override
-		public long getItemId(int position) {
-			String item = getItem(position);
-			return mIdMap.get(item);
-		}
-
-		@Override
-		public boolean hasStableIds() {
-			return true;
-		}
-
-	}
-
 	public void setFragment(android.app.Fragment fragment, String name,
 			boolean disableDrawer) {
 		if (disableDrawer) {
@@ -388,4 +341,5 @@ public class Home extends FragmentActivity {
 		ft.replace(R.id.film_list_fragment, fragment, name);
 		ft.commit();
 	}
+
 }

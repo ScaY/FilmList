@@ -20,4 +20,9 @@ public class FilmAllListFragment extends FilmListFragment {
 		return view;
 	}
 
+	@Override
+	public int getPosition() {
+		return position;
+	}
+
 }

@@ -16,4 +16,9 @@ public class FilmFavouriteListFragment extends FilmListFragment {
 		additemListener(getListView(), this.getClass().getSimpleName().toString());
 		return view;
 	}
+	
+	@Override
+	public int getPosition() {
+		return position;
+	}
 }

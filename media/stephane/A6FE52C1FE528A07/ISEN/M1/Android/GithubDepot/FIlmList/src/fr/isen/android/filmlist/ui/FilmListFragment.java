@@ -14,7 +14,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.example.filmlist.R;
 
-public class FilmListFragment extends Fragment {
+public abstract class FilmListFragment extends Fragment {
 	private ArrayList<String> list;
 	private ArrayAdapter<String> adapter;
 	private ListView listview;
@@ -28,22 +28,24 @@ public class FilmListFragment extends Fragment {
 		return listview;
 	}
 
-	public void setList(ArrayList<String> list_){
+	public void setList(ArrayList<String> list_) {
 		list = list_;
 	}
-	
-	public ArrayList<String> getList(){
+
+	public ArrayList<String> getList() {
 		return list;
 	}
-	
-	public void setAdapter(ArrayAdapter<String> adapter_){
-		adapter = adapter_;
+
+	public void setAdapter(ArrayAdapter<String> adapter_) {
+		this.adapter = adapter_;
 	}
-	
-	public void setListview(ListView listview_){
+
+	public void setListview(ListView listview_) {
 		listview = listview_;
 	}
-	
+
+	public abstract int getPosition();
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -71,7 +73,6 @@ public class FilmListFragment extends Fragment {
 
 		return view;
 	}
-
 
 	public void additemListener(ListView listFl, final String typeKey_) {
 		if (listFl != null) {
