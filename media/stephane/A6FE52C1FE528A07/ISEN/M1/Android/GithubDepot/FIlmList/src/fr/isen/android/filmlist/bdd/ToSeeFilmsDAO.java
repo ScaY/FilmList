@@ -31,6 +31,24 @@ public class ToSeeFilmsDAO extends DAOBase {
 		delete(film.getId());
 	}
 	
+	public Film select(long id) {
+		Film film = null;
+		String selection = DatabaseHandler.TOSEE_FILM_KEY + " = ?";
+		String[] selectionArgs = {Long.toString(id)};
+		Cursor c = mDb.query(DatabaseHandler.TOSEE_TABLE_NAME, DatabaseHandler.TOSEE_ALL_COLUMNS, selection, selectionArgs, null, null, null);
+		
+		if(c.moveToFirst()) {
+			selection = DatabaseHandler.FILM_KEY + " = ?";
+			Cursor c2 = mDb.query(DatabaseHandler.FILM_TABLE_NAME, DatabaseHandler.FILM_ALL_COLUMNS, selection, selectionArgs, null, null, null);
+			
+			if(c2.moveToFirst()) {
+				film = cursorToFilm(c2);
+			}
+		}
+		
+		return film;
+	}
+	
 	public List<Film> getAllFilms() {
 		List<Film> films = new ArrayList<Film>();
 		  

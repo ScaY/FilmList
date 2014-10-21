@@ -18,6 +18,7 @@ import com.example.filmlist.R;
 import fr.isen.android.filmlist.bdd.FavouriteFilmsDAO;
 import fr.isen.android.filmlist.bdd.Film;
 import fr.isen.android.filmlist.bdd.FilmDAO;
+import fr.isen.android.filmlist.bdd.ToSeeFilmsDAO;
 
 public class FilmDetailsFragment extends Fragment {
 
@@ -57,6 +58,20 @@ public class FilmDetailsFragment extends Fragment {
 		final Button button = (Button) view.findViewById(R.id.button_add_film_calendar);
 		button.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
+				ToSeeFilmsDAO toSeeDAO = new ToSeeFilmsDAO(getActivity());
+				toSeeDAO.open();
+				
+				if(toSeeDAO.select(film.getId()) != null) {
+					toSeeDAO.delete(film);
+					button.setText("Add film to planning");
+				}
+				else {
+					toSeeDAO.insert(film);
+					button.setText("Remove film from planning");
+				}
+				
+				toSeeDAO.close();
+				
 				Intent intent = new Intent(Intent.ACTION_INSERT);
 				intent.setType("vnd.android.cursor.item/event");
 				intent.putExtra(Events.TITLE, film.getName());
@@ -94,7 +109,7 @@ public class FilmDetailsFragment extends Fragment {
 				
 				if(favouriteDAO.select(film.getId()) != null) {
 					favouriteDAO.delete(film);
-					favourite.setText("Add films to favourites");
+					favourite.setText("Add film to favourites");
 				}
 				else {
 					favouriteDAO.insert(film);
