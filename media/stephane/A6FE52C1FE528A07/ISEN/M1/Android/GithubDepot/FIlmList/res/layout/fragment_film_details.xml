@@ -52,4 +52,13 @@
         android:layout_below="@+id/button_add_film_calendar"
         android:text="@string/button_add_film_favourite" />
 
+    <Button
+        android:id="@+id/button_delete_film"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button_add_film_favourites"
+        android:layout_alignRight="@+id/button_add_film_favourites"
+        android:layout_below="@+id/button_add_film_favourites"
+        android:text="@string/button_delete_film" />
+
 </RelativeLayout>

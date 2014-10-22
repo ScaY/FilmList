@@ -34,4 +34,5 @@
     <string name="button_add_film_calendar">Add film to planning</string>
     <string name="button_add_film_favourite">Add film to favourites</string>
     <string name="button_remove_film_favourite">Remove film from favourites</string>
+    <string name="button_delete_film">Delete film</string>
 </resources>

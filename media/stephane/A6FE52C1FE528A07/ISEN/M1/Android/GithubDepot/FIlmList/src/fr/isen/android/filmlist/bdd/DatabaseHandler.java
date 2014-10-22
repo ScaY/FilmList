@@ -31,7 +31,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	  public static final String FAVOURITE_TABLE_NAME = "favouriteFilms";
 	  public static final String FAVOURITE_TABLE_CREATE =
 			    "CREATE TABLE " + FAVOURITE_TABLE_NAME + " (" +
-			    		FAVOURITE_FILM_KEY + " INTEGER);";
+			    		DatabaseHandler.FAVOURITE_FILM_KEY + " INTEGER," +
+			    		"FOREIGN KEY(" + DatabaseHandler.FAVOURITE_FILM_KEY + ") REFERENCES " + DatabaseHandler.FILM_TABLE_NAME + "(" + DatabaseHandler.FILM_KEY + "));";
 	  public static final String FAVOURITE_TABLE_DROP = "DROP TABLE IF EXISTS " + FAVOURITE_TABLE_NAME + ";";
 	  
 	  public static final String TOSEE_FILM_KEY = "filmId";
@@ -39,7 +40,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	  public static final String TOSEE_TABLE_NAME = "toSeeFilms";
 	  public static final String TOSEE_TABLE_CREATE =
 			    "CREATE TABLE " + TOSEE_TABLE_NAME + " (" +
-			    		TOSEE_FILM_KEY + " INTEGER);";
+			    		DatabaseHandler.TOSEE_FILM_KEY + " INTEGER," +
+			    		"FOREIGN KEY(" + DatabaseHandler.TOSEE_FILM_KEY + ") REFERENCES " + DatabaseHandler.FILM_TABLE_NAME + "(" + DatabaseHandler.FILM_KEY + "));";
 	  public static final String TOSEE_TABLE_DROP = "DROP TABLE IF EXISTS " + TOSEE_TABLE_NAME + ";";
 
 	  public DatabaseHandler(Context context, String name, CursorFactory factory, int version) {

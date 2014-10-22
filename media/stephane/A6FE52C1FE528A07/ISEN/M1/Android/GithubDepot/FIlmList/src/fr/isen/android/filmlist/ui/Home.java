@@ -215,9 +215,17 @@ public class Home extends FragmentActivity {
 				 * fl.refresh(film.getName()); }
 				 */
 
-				if (fragment instanceof FilmListFragment) {
+				if (fragment instanceof FilmAllListFragment) {
 					FilmListFragment fl = (FilmListFragment) fragment;
 					fl.refresh(film.getName());
+				}
+				else {
+					fragment = FragFilmList.getInstance().getFragment(
+							FilmAllListFragment.class.getSimpleName().toString());
+					
+					if (fragment != null) {
+						setFragment(fragment, fragmentStack, false);
+					}
 				}
 
 				searchMenuItem.collapseActionView();

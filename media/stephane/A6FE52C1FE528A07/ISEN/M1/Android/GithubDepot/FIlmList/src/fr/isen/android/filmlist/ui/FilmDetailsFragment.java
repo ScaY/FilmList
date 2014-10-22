@@ -19,6 +19,7 @@ import fr.isen.android.filmlist.bdd.FavouriteFilmsDAO;
 import fr.isen.android.filmlist.bdd.Film;
 import fr.isen.android.filmlist.bdd.FilmDAO;
 import fr.isen.android.filmlist.bdd.ToSeeFilmsDAO;
+import fr.isen.android.filmlist.fragments.FragFilmList;
 
 public class FilmDetailsFragment extends Fragment {
 
@@ -68,28 +69,30 @@ public class FilmDetailsFragment extends Fragment {
 				else {
 					toSeeDAO.insert(film);
 					button.setText("Remove film from planning");
+					
+					Intent intent = new Intent(Intent.ACTION_INSERT);
+					intent.setType("vnd.android.cursor.item/event");
+					intent.putExtra(Events.TITLE, film.getName());
+					intent.putExtra(Events.EVENT_LOCATION, "Home");
+					intent.putExtra(Events.DESCRIPTION, "Watch this movie.");
+
+					// Setting dates
+					GregorianCalendar calDate = new GregorianCalendar();
+					intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+							calDate.getTimeInMillis());
+					intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
+							calDate.getTimeInMillis());
+
+					// Making it private and shown as busy
+					intent.putExtra(Events.ACCESS_LEVEL, Events.ACCESS_PRIVATE);
+
+					intent.setData(CalendarContract.Events.CONTENT_URI);
+					startActivity(intent);
 				}
 				
 				toSeeDAO.close();
 				
-				Intent intent = new Intent(Intent.ACTION_INSERT);
-				intent.setType("vnd.android.cursor.item/event");
-				intent.putExtra(Events.TITLE, film.getName());
-				intent.putExtra(Events.EVENT_LOCATION, "Home");
-				intent.putExtra(Events.DESCRIPTION, "Watch this movie.");
-
-				// Setting dates
-				GregorianCalendar calDate = new GregorianCalendar();
-				intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-						calDate.getTimeInMillis());
-				intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
-						calDate.getTimeInMillis());
-
-				// Making it private and shown as busy
-				intent.putExtra(Events.ACCESS_LEVEL, Events.ACCESS_PRIVATE);
-
-				intent.setData(CalendarContract.Events.CONTENT_URI);
-				startActivity(intent);
+				
 			}
 		});
 		
@@ -117,6 +120,23 @@ public class FilmDetailsFragment extends Fragment {
 				}
 				
 				favouriteDAO.close();
+			}
+		});
+		
+		final Button deleteButton = (Button) view.findViewById(R.id.button_delete_film);
+		deleteButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FilmDAO filmDAO = new FilmDAO(getActivity());
+				filmDAO.open();
+				filmDAO.delete(film);
+				filmDAO.close();
+				
+				if(getActivity() instanceof Home) {
+					Home home = (Home)getActivity();
+					Fragment fragment = FragFilmList.getInstance().getFragment(FilmAllListFragment.class.getSimpleName().toString());
+					home.setFragment(fragment, Home.fragmentStack, false);
+				}
 			}
 		});
 

@@ -37,11 +37,14 @@ public class FilmDAO extends DAOBase {
 	   * @param id l'identifiant du film à supprimer
 	   */
 	  public void delete(Film film) {
-		  delete(film.getName());
+		  delete(film.getId());
 	  }
 	  
-	  public void delete(String filmName) {
-		  mDb.delete(DatabaseHandler.FILM_TABLE_NAME, DatabaseHandler.FILM_NAME + " = ?", new String[] {filmName});
+	  public void delete(long id) {
+		  String[] args = {Long.toString(id)};
+		  mDb.delete(DatabaseHandler.TOSEE_TABLE_NAME, DatabaseHandler.TOSEE_FILM_KEY + " = ?", args);
+		  mDb.delete(DatabaseHandler.FAVOURITE_TABLE_NAME, DatabaseHandler.FAVOURITE_FILM_KEY + " = ?", args);
+		  mDb.delete(DatabaseHandler.FILM_TABLE_NAME, DatabaseHandler.FILM_KEY + " = ?", args);
 	  }
 
 	  /**
@@ -92,12 +95,13 @@ public class FilmDAO extends DAOBase {
 	  
 	  private ContentValues filmToValues(Film f) {
 		  ContentValues value = new ContentValues();
+		  value.put(DatabaseHandler.FILM_KEY, f.getId());
 		  value.put(DatabaseHandler.FILM_NAME, f.getName());
-		  /*value.put(DatabaseHandler.FILM_YEAR, f.getYear());
+		  value.put(DatabaseHandler.FILM_YEAR, f.getYear());
 		  value.put(DatabaseHandler.FILM_RELEASE_DATE, f.getReleaseDate().toString());
 		  value.put(DatabaseHandler.FILM_RUNTIME, f.getRuntime());
 		  value.put(DatabaseHandler.FILM_DIRECTOR, f.getDirector());
-		  value.put(DatabaseHandler.FILM_STORY, f.getStory());*/
+		  value.put(DatabaseHandler.FILM_STORY, f.getStory());
 		  
 		  return value;
 	  }
