@@ -1,16 +1,20 @@
 package fr.isen.android.filmlist.ui;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.app.Fragment;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.AdapterView.OnItemClickListener;
 
 import com.example.filmlist.R;
 
@@ -18,10 +22,13 @@ public abstract class FilmListFragment extends Fragment {
 	private ArrayList<String> list;
 	private ArrayAdapter<String> adapter;
 	private ListView listview;
-
+	private HashMap<String, View> itemSelected;
+	private Drawable b;
+	
 	public static final String LIST_KEY = "keyFilmList";
 
 	public FilmListFragment() {
+		itemSelected = new HashMap<String, View>();
 	}
 
 	public ListView getListView() {
@@ -89,6 +96,27 @@ public abstract class FilmListFragment extends Fragment {
 					filmDetailsFragment.setArguments(args);
 					((Home) getActivity()).setFragment(filmDetailsFragment,
 							Home.fragmentStack, true);
+				}
+			});
+		}
+	}
+
+	public void addItemLongClick(ListView list) {
+		if (list != null) {
+			list.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+				public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+						int position, long id) {
+					if (!itemSelected.containsKey(Integer.toString(position))) {
+						itemSelected.put(Integer.toString(position), arg1);
+						b = getListView().getChildAt(position).getBackground();
+						getListView().getChildAt(position).setBackgroundColor(
+								Color.CYAN);
+					} else {
+						itemSelected.remove(Integer.toString(position));
+						getListView().getChildAt(position).setBackground(b);
+					}
+					return true;
 				}
 			});
 		}

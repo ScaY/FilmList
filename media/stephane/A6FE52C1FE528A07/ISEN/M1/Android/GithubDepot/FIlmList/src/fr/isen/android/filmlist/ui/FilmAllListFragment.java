@@ -17,6 +17,7 @@ public class FilmAllListFragment extends FilmListFragment {
 		getActivity().setTitle("All films");
 		View view = super.onCreateView(inflater, container, savedInstanceState);
 		additemListener(getListView(), this.getClass().getSimpleName().toString());
+		addItemLongClick(getListView());
 		return view;
 	}
 
