@@ -2,6 +2,8 @@ package fr.isen.android.filmlist.bdd;
 
 import java.sql.Date;
 
+import org.json.JSONObject;
+
 public class Film {
 	// Notez que l'identifiant est un long
 	private long id;
@@ -16,6 +18,10 @@ public class Film {
 	  super();
 	  this.id = id;
 	  this.name = name;
+	}
+	
+	public Film(JSONObject jsonFIlm) {
+		
 	}
 	
 	public long getId() {

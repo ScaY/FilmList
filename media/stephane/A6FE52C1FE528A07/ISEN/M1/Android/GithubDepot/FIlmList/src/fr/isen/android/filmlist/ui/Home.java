@@ -12,7 +12,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -24,10 +23,10 @@ import android.widget.ShareActionProvider;
 import com.example.filmlist.R;
 
 import fr.isen.android.filmlist.bdd.FavouriteFilmsDAO;
-import fr.isen.android.filmlist.bdd.Film;
 import fr.isen.android.filmlist.bdd.FilmDAO;
 import fr.isen.android.filmlist.bdd.ToSeeFilmsDAO;
 import fr.isen.android.filmlist.fragments.FragFilmList;
+import fr.isen.android.filmlist.utils.SearchFilmTask;
 
 public class Home extends FragmentActivity {
 	private String[] navigationArray;
@@ -183,9 +182,9 @@ public class Home extends FragmentActivity {
 		final SearchView searchView = (SearchView) menu.findItem(
 				R.id.action_new).getActionView();
 		final MenuItem searchMenuItem = menu.findItem(R.id.action_new);
-
+		final Home home = this;
+		
 		searchView.setOnQueryTextListener(new OnQueryTextListener() {
-
 			@Override
 			public boolean onQueryTextChange(String newText) {
 
@@ -194,19 +193,9 @@ public class Home extends FragmentActivity {
 
 			@Override
 			public boolean onQueryTextSubmit(String query) {
-				filmDAO.open();
+				/*filmDAO.open();
 				Film film = filmDAO.insert(query);
 				filmDAO.close();
-				String keyFimAllList = FilmAllListFragment.class
-						.getSimpleName().toString();
-				/*
-				 * if (FragFilmList.getInstance().getFragments()
-				 * .containsKey(keyFimAllList)) { filmDAO.open(); Film film =
-				 * filmDAO.insert(query); filmDAO.close(); FilmAllListFragment
-				 * fl = (FilmAllListFragment) FragFilmList
-				 * .getInstance().getFragment(keyFimAllList);
-				 * fl.refresh(film.getName()); }
-				 */
 
 				if (fragment instanceof FilmAllListFragment) {
 					FilmListFragment fl = (FilmListFragment) fragment;
@@ -219,8 +208,10 @@ public class Home extends FragmentActivity {
 					if (fragment != null) {
 						setFragment(fragment, fragmentStack, false);
 					}
-				}
-
+				}*/
+				
+				SearchFilmTask retriever = new SearchFilmTask(home);
+				retriever.execute(query);
 				searchMenuItem.collapseActionView();
 				searchView.setQuery("", false);
 
