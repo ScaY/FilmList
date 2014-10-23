@@ -135,7 +135,7 @@ public class FilmDetailsFragment extends Fragment {
 				if(getActivity() instanceof Home) {
 					Home home = (Home)getActivity();
 					Fragment fragment = FragFilmList.getInstance().getFragment(FilmAllListFragment.class.getSimpleName().toString());
-					home.setFragment(fragment, Home.fragmentStack, false);
+					home.setFragment(fragment, Home.fragmentStack, true);
 				}
 			}
 		});
