@@ -7,6 +7,7 @@ import android.app.Fragment;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +25,7 @@ public abstract class FilmListFragment extends Fragment {
 	private ListView listview;
 	private HashMap<String, View> itemSelected;
 	private Drawable b;
-	
+	private ActionMode mActionMode; 
 	public static final String LIST_KEY = "keyFilmList";
 
 	public FilmListFragment() {
@@ -111,10 +112,12 @@ public abstract class FilmListFragment extends Fragment {
 						itemSelected.put(Integer.toString(position), arg1);
 						b = getListView().getChildAt(position).getBackground();
 						getListView().getChildAt(position).setBackgroundColor(
-								Color.CYAN);
+								Color.GRAY);
+						mActionMode = ((Home) getActivity()).startActionMode(new ActionBarCallBack());
 					} else {
 						itemSelected.remove(Integer.toString(position));
 						getListView().getChildAt(position).setBackground(b);
+						mActionMode.finish();
 					}
 					return true;
 				}

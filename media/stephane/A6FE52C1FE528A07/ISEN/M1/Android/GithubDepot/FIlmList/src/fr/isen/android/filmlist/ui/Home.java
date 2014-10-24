@@ -263,7 +263,6 @@ public class Home extends FragmentActivity {
 		case About.position:
 			fragment = new About();
 			break;
-
 		case FilmToSeeListFragment.position:
 			/*
 			 * setFragment( FragFilmList.getInstance().getFragment(
