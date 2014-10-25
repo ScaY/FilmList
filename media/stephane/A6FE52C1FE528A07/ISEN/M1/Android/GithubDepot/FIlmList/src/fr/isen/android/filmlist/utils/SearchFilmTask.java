@@ -23,7 +23,7 @@ import fr.isen.android.filmlist.ui.LoadingFragment;
 import fr.isen.android.filmlist.ui.SearchResultsFragment;
 
 public class SearchFilmTask extends AsyncTask<String, Void, JSONObject> {
-	private static String URL = "http://www.omdbapi.com/";
+	private static final String URL = "http://www.omdbapi.com/?s=";
 	private HttpClient client;
 	private Home home;
 	
@@ -35,7 +35,7 @@ public class SearchFilmTask extends AsyncTask<String, Void, JSONObject> {
 	
 	public JSONObject doInBackground(String... filmNames) {
 		JSONObject jsonResponse = null;
-		String urlWithArguments = URL + "?s=" + filmNames[0];
+		String urlWithArguments = URL + filmNames[0];
 		
 		try {
 			HttpGet request = new HttpGet(urlWithArguments);
@@ -66,19 +66,18 @@ public class SearchFilmTask extends AsyncTask<String, Void, JSONObject> {
     protected void onPostExecute(JSONObject result) {		
 		try {
 			Fragment fragment = new SearchResultsFragment();
-	    	ArrayList<String> list;
+	    	ArrayList<FilmSearchResult> list = new ArrayList<FilmSearchResult>();
 			Bundle args = null;
 			JSONArray searchArray = result.getJSONArray("Search");
-			list = new ArrayList<String>();
 
 			for(int i = 0; i < searchArray.length(); i++) {
 				JSONObject searchResult = searchArray.getJSONObject(i);
 				FilmSearchResult film = new FilmSearchResult(searchResult);
-				list.add(film.getTitle());
+				list.add(film);
 			}
 			
 			args = new Bundle();
-			args.putStringArrayList(FilmListFragment.LIST_KEY, list);
+			args.putSerializable(SearchResultsFragment.LIST_KEY, list);
 			fragment.setArguments(args);
 			
 			if (fragment != null) {

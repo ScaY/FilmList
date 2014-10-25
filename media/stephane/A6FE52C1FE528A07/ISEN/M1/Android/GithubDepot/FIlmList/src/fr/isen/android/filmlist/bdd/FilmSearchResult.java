@@ -1,8 +1,10 @@
 package fr.isen.android.filmlist.bdd;
 
+import java.io.Serializable;
+
 import org.json.JSONObject;
 
-public class FilmSearchResult {
+public class FilmSearchResult implements Serializable {
 	private String title;
 	private int year;
 	private String imdbID;
