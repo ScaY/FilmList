@@ -35,7 +35,7 @@ public class SearchFilmTask extends AsyncTask<String, Void, JSONObject> {
 	
 	public JSONObject doInBackground(String... filmNames) {
 		JSONObject jsonResponse = null;
-		String urlWithArguments = URL + filmNames[0];
+		String urlWithArguments = URL + filmNames[0].replace(" ", "+");
 		
 		try {
 			HttpGet request = new HttpGet(urlWithArguments);
