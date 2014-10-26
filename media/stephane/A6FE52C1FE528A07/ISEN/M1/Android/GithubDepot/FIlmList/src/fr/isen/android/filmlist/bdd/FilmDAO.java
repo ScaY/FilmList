@@ -1,5 +1,6 @@
 package fr.isen.android.filmlist.bdd;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,22 +16,9 @@ public class FilmDAO extends DAOBase {
 	  /**
 	   * @param m le film à ajouter à la base
 	   */
-	  public Film insert(String filmName) {
-		  ContentValues value = new ContentValues();
-		  value.put(DatabaseHandler.FILM_NAME, filmName);
-		  long insertId = mDb.insert(DatabaseHandler.FILM_TABLE_NAME, null, value);
-		  
-		  Cursor cursor = mDb.query(DatabaseHandler.FILM_TABLE_NAME,
-		        DatabaseHandler.FILM_ALL_COLUMNS, DatabaseHandler.FILM_KEY + " = " + insertId, null,
-		        null, null, null);
-		  cursor.moveToFirst();
-		  Film film = cursorToFilm(cursor);
-		  cursor.close();
-		  return film;
-	  }
-	  
-	  public Film insert(Film f) {
-		  return insert(f.getName());
+	  public long insert(Film f) {
+		  ContentValues value = filmToValues(f);
+		  return mDb.insert(DatabaseHandler.FILM_TABLE_NAME, null, value);
 	  }
 
 	  /**
@@ -61,17 +49,36 @@ public class FilmDAO extends DAOBase {
 	  public Film select(long id) {
 		  String columns[] = DatabaseHandler.FILM_ALL_COLUMNS;
 		  String args[] = {String.valueOf(id)};
+		  Film film = null;
 		  Cursor c = mDb.query(DatabaseHandler.FILM_TABLE_NAME, columns, DatabaseHandler.FILM_KEY + " = ?", args, "", "", "");
-		  c.moveToFirst();
-		  return cursorToFilm(c);
+		  if(c.moveToFirst()) {
+			  film =  cursorToFilm(c);
+		  }
+		  return film;
+	  }
+	  
+	  public long getFilmId(Film film) {
+		  long id = -1;
+		  
+		  String columns[] = {DatabaseHandler.FILM_KEY};
+		  String selectArgs = DatabaseHandler.FILM_NAME + " = ?";
+		  String args[] = {film.getName()};
+		  Cursor c = mDb.query(DatabaseHandler.FILM_TABLE_NAME, columns, selectArgs, args, "", "", "");
+		  if(c.moveToFirst()) {
+			  id =  c.getLong(0);
+		  }
+		  return id;
 	  }
 	  
 	  public Film select(String name) {
 		  String columns[] = DatabaseHandler.FILM_ALL_COLUMNS;
 		  String args[] = {name};
+		  Film film = null;
 		  Cursor c = mDb.query(DatabaseHandler.FILM_TABLE_NAME, columns, DatabaseHandler.FILM_NAME + " = ?", args, "", "", "");
-		  c.moveToFirst();
-		  return cursorToFilm(c);
+		  if(c.moveToFirst()) {
+			  film =  cursorToFilm(c);
+		  }
+		  return film;
 	  }
 	  
 	  public List<Film> getAllFilms() {
@@ -90,7 +97,7 @@ public class FilmDAO extends DAOBase {
 	  }
 	  
 	  private Film cursorToFilm(Cursor cursor) {
-		  return new Film(cursor.getLong(0), cursor.getString(1));
+		  return new Film(cursor.getLong(0), cursor.getString(1), cursor.getString(2), new Date(0), cursor.getString(4), cursor.getString(5), cursor.getString(6));
 	  }
 	  
 	  private ContentValues filmToValues(Film f) {
@@ -98,7 +105,7 @@ public class FilmDAO extends DAOBase {
 		  value.put(DatabaseHandler.FILM_KEY, f.getId());
 		  value.put(DatabaseHandler.FILM_NAME, f.getName());
 		  value.put(DatabaseHandler.FILM_YEAR, f.getYear());
-		  value.put(DatabaseHandler.FILM_RELEASE_DATE, f.getReleaseDate().toString());
+		  //value.put(DatabaseHandler.FILM_RELEASE_DATE, new SimpleDateFormat("yyyy-MM-ddTHH:mm:ss.sss").format(f.getReleaseDate()));
 		  value.put(DatabaseHandler.FILM_RUNTIME, f.getRuntime());
 		  value.put(DatabaseHandler.FILM_DIRECTOR, f.getDirector());
 		  value.put(DatabaseHandler.FILM_STORY, f.getStory());

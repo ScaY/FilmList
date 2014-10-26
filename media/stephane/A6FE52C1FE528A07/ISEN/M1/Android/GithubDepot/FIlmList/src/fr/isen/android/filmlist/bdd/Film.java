@@ -8,20 +8,38 @@ public class Film {
 	// Notez que l'identifiant est un long
 	private long id;
 	private String name;
-	private int year;
+	private String year;
 	private Date releaseDate;
-	private int runtime;
+	private String runtime;
 	private String director;
 	private String story;
   
 	public Film(long id, String name) {
-	  super();
 	  this.id = id;
 	  this.name = name;
 	}
 	
-	public Film(JSONObject jsonFIlm) {
-		
+	public Film(long id, String name, String year, Date releaseDate, String runtime, String director, String story) {
+	  this.id = id;
+	  this.name = name;
+	  this.year = year;
+	  //this.releaseDate = releaseDate;
+	  this.runtime = runtime;
+	  this.director = director;
+	  this.story = story;
+	}
+	
+	public Film(JSONObject jsonFilm) {
+		try {
+			id = -1;
+			name = jsonFilm.getString("Title");
+			year = jsonFilm.getString("Year");
+			//releaseDate = Date.valueOf(jsonFilm.getString("Released"));
+			runtime = jsonFilm.getString("Type");
+			director = jsonFilm.getString("Type");
+			story = jsonFilm.getString("Type");
+		}
+		catch(Exception e) {}
 	}
 	
 	public long getId() {
@@ -40,11 +58,11 @@ public class Film {
 	  this.name = name;
 	}
 	
-	public int getYear() {
+	public String getYear() {
 		return year;
 	}
 	
-	public void setYear(int year) {
+	public void setYear(String year) {
 		this.year = year;
 	}
 	
@@ -56,11 +74,11 @@ public class Film {
 		this.releaseDate = releaseDate;
 	}
 	
-	public int getRuntime() {
+	public String getRuntime() {
 		return runtime;
 	}
 	
-	public void setRuntime(int runtime) {
+	public void setRuntime(String runtime) {
 		this.runtime = runtime;
 	}
 	

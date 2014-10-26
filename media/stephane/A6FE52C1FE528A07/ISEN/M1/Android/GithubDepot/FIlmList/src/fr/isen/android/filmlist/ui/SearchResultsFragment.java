@@ -62,7 +62,7 @@ public class SearchResultsFragment extends Fragment implements OnItemClickListen
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		FilmDetailsFragment filmDetailsFragment = new FilmResultDetailsFragment();
+		FilmDetailsFragment filmDetailsFragment = new FilmDetailsAPIFragment();
 		Bundle args = new Bundle();
 		args.putSerializable(FilmDetailsFragment.MOVIE_KEY,
 				list.get(position));

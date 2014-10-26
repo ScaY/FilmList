@@ -132,7 +132,7 @@ public abstract class FilmListFragment extends Fragment {
 				public void onItemClick(AdapterView<?> arg0, View arg1,
 						int position, long arg3) {
 
-					FilmDetailsFragment filmDetailsFragment = new FilmDetailsFragment();
+					FilmDetailsFragment filmDetailsFragment = new FilmDetailsDBFragment();
 					Bundle args = new Bundle();
 					args.putString(FilmDetailsFragment.MOVIE_KEY,
 							list.get(position));

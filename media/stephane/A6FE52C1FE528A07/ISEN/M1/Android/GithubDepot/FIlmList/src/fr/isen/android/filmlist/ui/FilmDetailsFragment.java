@@ -21,7 +21,7 @@ import fr.isen.android.filmlist.bdd.FilmDAO;
 import fr.isen.android.filmlist.bdd.ToSeeFilmsDAO;
 import fr.isen.android.filmlist.fragments.FragFilmList;
 
-public class FilmDetailsFragment extends Fragment {
+public abstract class FilmDetailsFragment extends Fragment {
 
 	public static final String MOVIE_KEY = "fr.isen.android.filmlist.ui.filmdetailsfragment.moviekey";
 	public static final String TYPE_KEY = "fr.isen.android.filmlist.ui.filmdetailsfragment.typekey";
@@ -42,23 +42,10 @@ public class FilmDetailsFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_film_details, container,
 				false);
-
-		Bundle args = getArguments();
-
-		String filmName = retrieveStringArgs(MOVIE_KEY, args);
-		type = retrieveStringArgs(TYPE_KEY, args);
-		setRetainInstance(true);
-		getActivity().setTitle(filmName);
-		((TextView) view.findViewById(R.id.film_title)).setText(filmName);
-
-		FilmDAO filmDAO = new FilmDAO(getActivity());
-		filmDAO.open();
-		film = filmDAO.select(filmName);
-		filmDAO.close();
-		
 		final Button button = (Button) view.findViewById(R.id.button_add_film_calendar);
 		button.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
+				addFilmToDB();
 				ToSeeFilmsDAO toSeeDAO = new ToSeeFilmsDAO(getActivity());
 				toSeeDAO.open();
 				
@@ -97,16 +84,11 @@ public class FilmDetailsFragment extends Fragment {
 		});
 		
 		final Button favourite = (Button) view.findViewById(R.id.button_add_film_favourites);
-		FavouriteFilmsDAO favouriteDAO = new FavouriteFilmsDAO(getActivity());
-		favouriteDAO.open();
-		if(favouriteDAO.select(film.getId()) != null) {
-			favourite.setText("Remove film from favourites");
-		}
-		favouriteDAO.close();
 		
 		favourite.setOnClickListener(new View.OnClickListener() {			
 			@Override
-			public void onClick(View v) {			
+			public void onClick(View v) {	
+				addFilmToDB();
 				FavouriteFilmsDAO favouriteDAO = new FavouriteFilmsDAO(getActivity());
 				favouriteDAO.open();
 				
@@ -149,5 +131,23 @@ public class FilmDetailsFragment extends Fragment {
 			value = args.getString(key);
 		}
 		return value;
+	}
+	
+	private void addFilmToDB() {
+		if(film != null && film.getId() == -1) {
+			FilmDAO dao = new FilmDAO(getActivity());
+			dao.open();
+			long id = dao.getFilmId(film);
+			if(id == -1) {
+				id = dao.insert(film);
+			}
+			film.setId(id);
+			dao.close();
+		}
+	}
+	
+	public void setFilmView(View view) {
+		getActivity().setTitle(film.getName());
+		((TextView) view.findViewById(R.id.film_title)).setText(film.getName());
 	}
 }

@@ -1,5 +1,6 @@
 package fr.isen.android.filmlist.bdd;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,6 +71,6 @@ public class FavouriteFilmsDAO extends DAOBase {
 	}
 	
 	private Film cursorToFilm(Cursor cursor) {
-		return new Film(cursor.getLong(0), cursor.getString(1));
-	}
+	  return new Film(cursor.getLong(0), cursor.getString(1), cursor.getString(2), new Date(0), cursor.getString(4), cursor.getString(5), cursor.getString(6));
+  }
 }

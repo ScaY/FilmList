@@ -19,9 +19,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	    "CREATE TABLE " + FILM_TABLE_NAME + " (" +
 	    		FILM_KEY + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
 	    		FILM_NAME + " TEXT NOT NULL, " +
-	    		FILM_YEAR + " INTEGER, " +
+	    		FILM_YEAR + " TEXT, " +
 	    		FILM_RELEASE_DATE + " DATETIME DEFAULT CURRENT_TIMESTAMP, " +
-	    		FILM_RUNTIME + " INTEGER, " +
+	    		FILM_RUNTIME + " TEXT, " +
 	    		FILM_DIRECTOR + " TEXT, " +
 	    		FILM_STORY + " TEXT);";
 	  public static final String FILM_TABLE_DROP = "DROP TABLE IF EXISTS " + FILM_TABLE_NAME + ";";

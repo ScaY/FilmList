@@ -12,14 +12,21 @@ import org.apache.http.params.CoreProtocolPNames;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
+import android.view.View;
+import fr.isen.android.filmlist.bdd.Film;
+import fr.isen.android.filmlist.ui.FilmDetailsFragment;
 
 public class GetFilmDetailsTask extends AsyncTask<String, Void, JSONObject> {
-	private static final String URL = "http://www.omdbapi.com/?s=";
+	private static final String URL = "http://www.omdbapi.com/?i=";
 	private HttpClient client;
+	private FilmDetailsFragment fragment;
+	private View view;
 	
-	public GetFilmDetailsTask() {
+	public GetFilmDetailsTask(FilmDetailsFragment _fragment, View _view) {
 		client = new DefaultHttpClient();
 		client.getParams().setParameter(CoreProtocolPNames.USER_AGENT, "android");
+		fragment = _fragment;
+		view = _view;
 	}
 	
 	public JSONObject doInBackground(String... imdbId) {
@@ -46,5 +53,10 @@ public class GetFilmDetailsTask extends AsyncTask<String, Void, JSONObject> {
 		}
         
         return jsonResponse;
+	}
+	
+	public void onPostExecute(JSONObject result) {
+		fragment.film = new Film(result);
+		fragment.setFilmView(view);
 	}
 }
