@@ -1,5 +1,6 @@
 package fr.isen.android.filmlist.ui;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.graphics.drawable.Drawable;
@@ -16,12 +17,19 @@ public class ActionBarCallBack implements ActionMode.Callback {
 	private ListView listview;
 	private Drawable defaultBackground;
 	private HashMap<String, View> itemSelected;
-
+	private String typeKey;
+	private Home activity;
+	private ArrayList<String> list;
+	
+	
 	public ActionBarCallBack(ListView listview,
-			HashMap<String, View> itemSelected, Drawable background) {
+			HashMap<String, View> itemSelected, Drawable background, Home activity, ArrayList<String> list) {
 		this.listview = listview;
 		this.defaultBackground = background;
 		this.itemSelected = itemSelected;
+		this.typeKey = FilmAllListFragment.class.getSimpleName().toString(); // To avoid null reference
+		this.activity = activity;
+		this.list = list;
 	}
 
 	@Override
@@ -49,6 +57,7 @@ public class ActionBarCallBack implements ActionMode.Callback {
 			listview.getChildAt(Integer.parseInt(i)).setBackground(defaultBackground);
 		}
 		itemSelected.clear();
+		FilmListFragment.additemListener(listview, typeKey, list, activity);
 	}
 
 	@Override

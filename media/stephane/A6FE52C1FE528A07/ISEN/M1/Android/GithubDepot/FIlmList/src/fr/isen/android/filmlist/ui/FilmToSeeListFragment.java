@@ -7,16 +7,19 @@ import android.view.ViewGroup;
 
 public class FilmToSeeListFragment extends FilmListFragment {
 	public static final int position = 1;
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		getActivity().setTitle("Films to see");
 		View view = super.onCreateView(inflater, container, savedInstanceState);
-		additemListener(getListView(), this.getClass().getSimpleName().toString());
+		additemListener(getListView(), this.getClass().getSimpleName()
+				.toString(), getList(), (Home) getActivity());
+		addItemLongClick(getListView(), this.getClass().getSimpleName()
+				.toString());
 		return view;
 	}
-	
+
 	@Override
 	public int getPosition() {
 		return position;
