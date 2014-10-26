@@ -24,12 +24,17 @@ public abstract class FilmListFragment extends Fragment {
 	private ArrayAdapter<String> adapter;
 	private ListView listview;
 	private HashMap<String, View> itemSelected;
-	private Drawable b;
-	private ActionMode mActionMode; 
-	public static final String LIST_KEY = "keyFilmList";
+
+	private Drawable defaultBackground;
+
+	private ActionMode mActionMode;
+	private ActionBarCallBack actionBarCallBack;
+
+	public static final String LIST_KEY = "fr.isen.android.filmlist.ui.filmlistfragment.filmlistkey";
 
 	public FilmListFragment() {
 		itemSelected = new HashMap<String, View>();
+		mActionMode = null;
 	}
 
 	public ListView getListView() {
@@ -53,6 +58,14 @@ public abstract class FilmListFragment extends Fragment {
 	}
 
 	public abstract int getPosition();
+
+	public void checkSelectionMode() {
+		// Set the background color
+		for (int i = 0; i < 3; i++) {
+			listview.getChildAt(0).setBackgroundColor(Color.RED);
+		}
+
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -78,6 +91,10 @@ public abstract class FilmListFragment extends Fragment {
 		listview = (ListView) view.findViewById(R.id.listview);
 		listview.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
+		defaultBackground = listview.getBackground();
+		actionBarCallBack = new ActionBarCallBack(listview, itemSelected,
+				defaultBackground);
+		setRetainInstance(true);
 
 		return view;
 	}
@@ -102,7 +119,7 @@ public abstract class FilmListFragment extends Fragment {
 		}
 	}
 
-	public void addItemLongClick(ListView list) {
+	public void addItemLongClick(ListView list, final String typeKey) {
 		if (list != null) {
 			list.setOnItemLongClickListener(new OnItemLongClickListener() {
 
@@ -110,14 +127,26 @@ public abstract class FilmListFragment extends Fragment {
 						int position, long id) {
 					if (!itemSelected.containsKey(Integer.toString(position))) {
 						itemSelected.put(Integer.toString(position), arg1);
-						b = getListView().getChildAt(position).getBackground();
 						getListView().getChildAt(position).setBackgroundColor(
 								Color.GRAY);
-						mActionMode = ((Home) getActivity()).startActionMode(new ActionBarCallBack());
+
+						if (itemSelected.size() == 1) {
+							mActionMode = ((Home) getActivity())
+									.startActionMode(actionBarCallBack);
+							getListView().setOnItemClickListener(null);
+						}
+
 					} else {
 						itemSelected.remove(Integer.toString(position));
-						getListView().getChildAt(position).setBackground(b);
-						mActionMode.finish();
+						getListView().getChildAt(position).setBackground(
+								defaultBackground);
+
+						if (itemSelected.isEmpty()) {
+							itemSelected.clear();
+							mActionMode.finish();
+							additemListener(getListView(), typeKey);
+
+						}
 					}
 					return true;
 				}

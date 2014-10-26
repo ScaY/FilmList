@@ -5,8 +5,16 @@
         android:id="@+id/item_delete"
         android:icon="@android:drawable/ic_menu_delete"
         android:showAsAction="ifRoom|withText"
-        android:title="Delete"
+        android:title="@string/delete_text"
         android:titleCondensed="Delete">
+    </item>
+    
+    <item
+        android:id="@+id/item_share"
+        android:icon="@drawable/ic_action_share"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/share_text"
+        android:titleCondensed="Share">
     </item>
 
 </menu>

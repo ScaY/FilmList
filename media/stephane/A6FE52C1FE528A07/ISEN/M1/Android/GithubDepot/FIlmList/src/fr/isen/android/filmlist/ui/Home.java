@@ -23,10 +23,10 @@ import android.widget.ShareActionProvider;
 import com.example.filmlist.R;
 
 import fr.isen.android.filmlist.bdd.FavouriteFilmsDAO;
+import fr.isen.android.filmlist.bdd.Film;
 import fr.isen.android.filmlist.bdd.FilmDAO;
 import fr.isen.android.filmlist.bdd.ToSeeFilmsDAO;
 import fr.isen.android.filmlist.fragments.FragFilmList;
-import fr.isen.android.filmlist.utils.SearchFilmTask;
 
 public class Home extends FragmentActivity {
 	private String[] navigationArray;
@@ -156,7 +156,8 @@ public class Home extends FragmentActivity {
 					setFragment(fragment, fragmentStack, true);
 				}
 				setTitle(fd.getType());
-			} else {
+			} else if(fragment instanceof FilmListFragment){
+				((FilmListFragment) fragment).checkSelectionMode();
 				setFragment(fragment, fragmentStack, false);
 			}
 		} else {
@@ -193,7 +194,7 @@ public class Home extends FragmentActivity {
 
 			@Override
 			public boolean onQueryTextSubmit(String query) {
-				/*filmDAO.open();
+				filmDAO.open();
 				Film film = filmDAO.insert(query);
 				filmDAO.close();
 
@@ -208,13 +209,13 @@ public class Home extends FragmentActivity {
 					if (fragment != null) {
 						setFragment(fragment, fragmentStack, false);
 					}
-				}*/
-				
+				}
+				/*
 				SearchFilmTask retriever = new SearchFilmTask(home);
 				retriever.execute(query);
 				searchMenuItem.collapseActionView();
 				searchView.setQuery("", false);
-
+*/
 				return true;
 			}
 		});
