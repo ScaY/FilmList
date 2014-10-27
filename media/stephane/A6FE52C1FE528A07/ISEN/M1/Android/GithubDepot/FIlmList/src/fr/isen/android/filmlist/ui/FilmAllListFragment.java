@@ -12,11 +12,12 @@ public class FilmAllListFragment extends FilmListFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		getActivity().setTitle("All films");
+		String typeKey = this.getClass().getSimpleName().toString();
 		View view = super.onCreateView(inflater, container, savedInstanceState);
-		additemListener(getListView(), this.getClass().getSimpleName()
-				.toString(), getList(), (Home) getActivity());
-		addItemLongClick(getListView(), this.getClass().getSimpleName()
-				.toString());
+		additemListener(getListView(), typeKey.toString(), getList(),
+				(Home) getActivity());
+		addItemLongClick(getListView(), typeKey);
+		getActionBarCallBack().setTypeKey(typeKey);
 
 		return view;
 	}

@@ -157,7 +157,6 @@ public class Home extends FragmentActivity {
 				}
 				setTitle(fd.getType());
 			} else if(fragment instanceof FilmListFragment){
-				((FilmListFragment) fragment).checkSelectionMode();
 				setFragment(fragment, fragmentStack, false);
 			}
 		} else {

@@ -1,43 +1,77 @@
 package fr.isen.android.filmlist.ui;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 
-import android.graphics.drawable.Drawable;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ListView;
 
 import com.example.filmlist.R;
 
-public class ActionBarCallBack implements ActionMode.Callback {
+import fr.isen.android.filmlist.bdd.FavouriteFilmsDAO;
+import fr.isen.android.filmlist.bdd.Film;
+import fr.isen.android.filmlist.bdd.FilmDAO;
+import fr.isen.android.filmlist.bdd.ToSeeFilmsDAO;
 
-	private ListView listview;
-	private Drawable defaultBackground;
-	private HashMap<String, View> itemSelected;
+public class ActionBarCallBack implements ActionMode.Callback {
+	
 	private String typeKey;
 	private Home activity;
-	private ArrayList<String> list;
-	
-	
-	public ActionBarCallBack(ListView listview,
-			HashMap<String, View> itemSelected, Drawable background, Home activity, ArrayList<String> list) {
-		this.listview = listview;
-		this.defaultBackground = background;
-		this.itemSelected = itemSelected;
-		this.typeKey = FilmAllListFragment.class.getSimpleName().toString(); // To avoid null reference
+	private FilmListFragment filmListFragment;
+
+	public ActionBarCallBack(Home activity, FilmListFragment filmListFragment) {
+		this.typeKey = FilmAllListFragment.class.getSimpleName().toString();
 		this.activity = activity;
-		this.list = list;
+		this.filmListFragment = filmListFragment;
 	}
 
+	public void setTypeKey(String typeKey){
+		this.typeKey = typeKey;
+	}
+	
 	@Override
 	public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.item_share:
 			break;
 		case R.id.item_delete:
+			for (String i : filmListFragment.getItemSelected().keySet()) {
+				filmListFragment.getListView().getChildAt(Integer.parseInt(i))
+						.setBackground(filmListFragment.getDefaultBackground());
+				String nameFilm = filmListFragment.getList().remove(
+						Integer.parseInt(i));
+
+				List<Film> films = null;
+				if (typeKey.equals(FilmFavouriteListFragment.class
+						.getSimpleName().toString())) {
+					FavouriteFilmsDAO bdd = new FavouriteFilmsDAO(activity);
+					bdd.open();
+					films = bdd.getAllFilms();
+					long idFilm = getIdFilm(nameFilm, films);
+					bdd.delete(idFilm);
+					bdd.close();
+				}else if(typeKey.equals(FilmAllListFragment.class
+						.getSimpleName().toString())) {
+					FilmDAO bdd = new FilmDAO(activity);
+					bdd.open();
+					films = bdd.getAllFilms();
+					long idFilm = getIdFilm(nameFilm, films);
+					bdd.delete(idFilm);
+					bdd.close();
+				}else  if(typeKey.equals(FilmToSeeListFragment.class
+						.getSimpleName().toString())) {
+					ToSeeFilmsDAO bdd = new ToSeeFilmsDAO(activity);
+					bdd.open();
+					films = bdd.getAllFilms();
+					long idFilm = getIdFilm(nameFilm, films);
+					bdd.delete(idFilm);
+					bdd.close();
+				}
+
+				filmListFragment.getAdapter().notifyDataSetChanged();
+			}
+			filmListFragment.getItemSelected().clear();
+			filmListFragment.getActionMode().finish();
 			break;
 		}
 		return false;
@@ -52,12 +86,14 @@ public class ActionBarCallBack implements ActionMode.Callback {
 
 	@Override
 	public void onDestroyActionMode(ActionMode mode) {
-		
-		for (String i : itemSelected.keySet()) {
-			listview.getChildAt(Integer.parseInt(i)).setBackground(defaultBackground);
+
+		for (String i : filmListFragment.getItemSelected().keySet()) {
+			filmListFragment.getListView().getChildAt(Integer.parseInt(i))
+					.setBackground(filmListFragment.getDefaultBackground());
 		}
-		itemSelected.clear();
-		FilmListFragment.additemListener(listview, typeKey, list, activity);
+		filmListFragment.getItemSelected().clear();
+		FilmListFragment.additemListener(filmListFragment.getListView(),
+				typeKey, filmListFragment.getList(), activity);
 	}
 
 	@Override
@@ -66,6 +102,22 @@ public class ActionBarCallBack implements ActionMode.Callback {
 
 		mode.setTitle("Movie is selected");
 		return false;
+	}
+
+	public long getIdFilm(String nameFilm, List<Film> films) {
+		boolean found = false;
+		long result = 0;
+		int i = 0;
+		while (!found && i < films.size()) {
+			Film tmp = films.get(i);
+			if(tmp.getName().equals(nameFilm)){
+				result = tmp.getId();
+			}
+			i++;
+		}
+
+		return result;
+
 	}
 
 }

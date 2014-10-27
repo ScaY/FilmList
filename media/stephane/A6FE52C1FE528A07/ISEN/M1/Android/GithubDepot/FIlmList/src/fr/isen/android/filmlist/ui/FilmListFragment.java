@@ -41,6 +41,7 @@ public abstract class FilmListFragment extends Fragment {
 		return listview;
 	}
 
+	
 	public void setList(ArrayList<String> list_) {
 		list = list_;
 	}
@@ -56,16 +57,28 @@ public abstract class FilmListFragment extends Fragment {
 	public void setListview(ListView listview_) {
 		listview = listview_;
 	}
+	
+	public HashMap<String, View> getItemSelected(){
+		return this.itemSelected;
+	}
 
 	public ActionMode getActionMode() {
 		return this.mActionMode;
 	}
 
-	public abstract int getPosition();
-
-	public void checkSelectionMode(){
-		// TO delete
+	public Drawable getDefaultBackground(){
+		return this.defaultBackground;
 	}
+	
+	public ArrayAdapter<String> getAdapter(){
+		return this.adapter;
+	}
+	
+	public ActionBarCallBack getActionBarCallBack(){
+		return this.actionBarCallBack;
+	}
+	
+	public abstract int getPosition();
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -92,8 +105,7 @@ public abstract class FilmListFragment extends Fragment {
 		listview.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
 		defaultBackground = listview.getBackground();
-		actionBarCallBack = new ActionBarCallBack(listview, itemSelected,
-				defaultBackground, (Home)getActivity(), list);
+		actionBarCallBack = new ActionBarCallBack((Home)getActivity(), this);
 
 		// Check for the rotation screen
 		listview.post(new Runnable() {
