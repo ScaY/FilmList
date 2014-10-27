@@ -149,5 +149,9 @@ public abstract class FilmDetailsFragment extends Fragment {
 	public void setFilmView(View view) {
 		getActivity().setTitle(film.getName());
 		((TextView) view.findViewById(R.id.film_title)).setText(film.getName());
+		((TextView) view.findViewById(R.id.film_director)).setText(film.getDirector());
+		((TextView) view.findViewById(R.id.film_year)).setText(film.getYear());
+		((TextView) view.findViewById(R.id.film_runtime)).setText(film.getRuntime());
+		//((TextView) view.findViewById(R.id.film_story)).setText(film.getStory());
 	}
 }

@@ -1,7 +1,5 @@
 package fr.isen.android.filmlist.ui;
 
-import com.example.filmlist.R;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +22,7 @@ public class FilmDetailsDBFragment extends FilmDetailsFragment {
 			dao.open();
 			film = dao.select(filmName);
 			dao.close();
-			setFilmView(inflater.inflate(R.layout.fragment_film_details, container, false));
+			setFilmView(view);
 		}
 		
 		return view;

@@ -102,7 +102,6 @@ public class FilmDAO extends DAOBase {
 	  
 	  private ContentValues filmToValues(Film f) {
 		  ContentValues value = new ContentValues();
-		  value.put(DatabaseHandler.FILM_KEY, f.getId());
 		  value.put(DatabaseHandler.FILM_NAME, f.getName());
 		  value.put(DatabaseHandler.FILM_YEAR, f.getYear());
 		  //value.put(DatabaseHandler.FILM_RELEASE_DATE, new SimpleDateFormat("yyyy-MM-ddTHH:mm:ss.sss").format(f.getReleaseDate()));

@@ -35,9 +35,9 @@ public class Film {
 			name = jsonFilm.getString("Title");
 			year = jsonFilm.getString("Year");
 			//releaseDate = Date.valueOf(jsonFilm.getString("Released"));
-			runtime = jsonFilm.getString("Type");
-			director = jsonFilm.getString("Type");
-			story = jsonFilm.getString("Type");
+			runtime = jsonFilm.getString("Runtime");
+			director = jsonFilm.getString("Director");
+			story = jsonFilm.getString("Plot");
 		}
 		catch(Exception e) {}
 	}

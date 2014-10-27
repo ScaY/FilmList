@@ -27,15 +27,34 @@
 
             <TextView
                 android:id="@+id/film_title"
-                android:layout_width="180dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textStyle="bold"
+                android:text=""
                 android:textSize="20sp"
+                android:textStyle="bold" />
+            
+            <TextView
+                android:id="@+id/film_director"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:text="" />
+            
+            <TextView
+                android:id="@+id/film_year"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="" />
+            
+            <TextView
+                android:id="@+id/film_runtime"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="" />
+
         </LinearLayout>
 
     </LinearLayout>
-
+    
     <Button
         android:id="@+id/button_add_film_calendar"
         android:layout_width="match_parent"
