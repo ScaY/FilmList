@@ -200,22 +200,7 @@ public class Home extends FragmentActivity {
 				return true;
 			}
 		});
-
-		// Localisation du menu item avec ShareActionProvider
-		MenuItem item = menu.findItem(R.id.action_share);
-		// Ajout du listener
-		mShareActionProvider = (ShareActionProvider) item.getActionProvider();
-		mShareActionProvider.setShareIntent(getDefaultShareIntent());
-
 		return true;
-	}
-
-	private Intent getDefaultShareIntent() {
-		Intent intent = new Intent(Intent.ACTION_SEND);
-		intent.setType("text/plain");
-		intent.putExtra(Intent.EXTRA_SUBJECT, "SUBJECT");
-		intent.putExtra(Intent.EXTRA_TEXT, "Extra Text");
-		return intent;
 	}
 
 	@Override

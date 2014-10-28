@@ -2,9 +2,13 @@ package fr.isen.android.filmlist.ui;
 
 import java.util.List;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ShareActionProvider;
+import android.widget.Toast;
 
 import com.example.filmlist.R;
 
@@ -14,7 +18,7 @@ import fr.isen.android.filmlist.bdd.FilmDAO;
 import fr.isen.android.filmlist.bdd.ToSeeFilmsDAO;
 
 public class ActionBarCallBack implements ActionMode.Callback {
-	
+
 	private String typeKey;
 	private Home activity;
 	private FilmListFragment filmListFragment;
@@ -25,16 +29,17 @@ public class ActionBarCallBack implements ActionMode.Callback {
 		this.filmListFragment = filmListFragment;
 	}
 
-	public void setTypeKey(String typeKey){
+	public void setTypeKey(String typeKey) {
 		this.typeKey = typeKey;
 	}
-	
+
 	@Override
 	public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.item_share:
-			break;
 		case R.id.item_delete:
+
+			Toast.makeText(activity, "Click to delete", Toast.LENGTH_SHORT)
+					.show();
 			for (String i : filmListFragment.getItemSelected().keySet()) {
 				filmListFragment.getListView().getChildAt(Integer.parseInt(i))
 						.setBackground(filmListFragment.getDefaultBackground());
@@ -50,7 +55,7 @@ public class ActionBarCallBack implements ActionMode.Callback {
 					long idFilm = getIdFilm(nameFilm, films);
 					bdd.delete(idFilm);
 					bdd.close();
-				}else if(typeKey.equals(FilmAllListFragment.class
+				} else if (typeKey.equals(FilmAllListFragment.class
 						.getSimpleName().toString())) {
 					FilmDAO bdd = new FilmDAO(activity);
 					bdd.open();
@@ -58,7 +63,7 @@ public class ActionBarCallBack implements ActionMode.Callback {
 					long idFilm = getIdFilm(nameFilm, films);
 					bdd.delete(idFilm);
 					bdd.close();
-				}else  if(typeKey.equals(FilmToSeeListFragment.class
+				} else if (typeKey.equals(FilmToSeeListFragment.class
 						.getSimpleName().toString())) {
 					ToSeeFilmsDAO bdd = new ToSeeFilmsDAO(activity);
 					bdd.open();
@@ -101,6 +106,13 @@ public class ActionBarCallBack implements ActionMode.Callback {
 		// TODO Auto-generated method stub
 
 		mode.setTitle("Movie is selected");
+		
+		// Initialize the listener for the share button
+		MenuItem item = menu.findItem(R.id.item_share);
+		ShareActionProvider shareActionProvider = (ShareActionProvider) item
+				.getActionProvider();
+		shareActionProvider.setShareIntent(getDefaultShareIntent());
+		
 		return false;
 	}
 
@@ -110,7 +122,7 @@ public class ActionBarCallBack implements ActionMode.Callback {
 		int i = 0;
 		while (!found && i < films.size()) {
 			Film tmp = films.get(i);
-			if(tmp.getName().equals(nameFilm)){
+			if (tmp.getName().equals(nameFilm)) {
 				result = tmp.getId();
 			}
 			i++;
@@ -118,6 +130,14 @@ public class ActionBarCallBack implements ActionMode.Callback {
 
 		return result;
 
+	}
+
+	private Intent getDefaultShareIntent() {
+		Intent intent = new Intent(Intent.ACTION_SEND);
+		intent.setType("text/plain");
+		intent.putExtra(Intent.EXTRA_SUBJECT, "SUBJECT");
+		intent.putExtra(Intent.EXTRA_TEXT, "Extra Text");
+		return intent;
 	}
 
 }

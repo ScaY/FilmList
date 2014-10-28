@@ -10,14 +10,6 @@
         android:queryHint="@string/search_hint"
         android:showAsAction="collapseActionView|ifRoom|withText"
         android:title="@string/action_search"/>
-    <item
-        android:id="@+id/action_share"
-        android:actionProviderClass="android.widget.ShareActionProvider"
-        android:showAsAction="ifRoom"
-        android:title="@string/action_share"
-        android:icon="@drawable/ic_action_share"
-        />
-
     <!-- Settings, should always be in the overflow -->
     <item
         android:id="@+id/action_settings"
