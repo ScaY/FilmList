@@ -35,7 +35,6 @@ public class FilmDetailsAPIFragment extends FilmDetailsFragment {
 			GetFilmDetailsTask task = new GetFilmDetailsTask(this, inflater.inflate(R.layout.fragment_film_details, container, false));
 			task.execute(filmSearchResult.getImdbID());
 		}
-		
 		return view;
 	}
 }

@@ -17,6 +17,7 @@ public class Film {
 	public Film(long id, String name) {
 	  this.id = id;
 	  this.name = name;
+	  this.director = "";
 	}
 	
 	public Film(long id, String name, String year, Date releaseDate, String runtime, String director, String story) {

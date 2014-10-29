@@ -1,5 +1,6 @@
 package fr.isen.android.filmlist.ui;
 
+import java.io.Serializable;
 import java.util.GregorianCalendar;
 
 import android.app.Fragment;
@@ -18,8 +19,10 @@ import com.example.filmlist.R;
 import fr.isen.android.filmlist.bdd.FavouriteFilmsDAO;
 import fr.isen.android.filmlist.bdd.Film;
 import fr.isen.android.filmlist.bdd.FilmDAO;
+import fr.isen.android.filmlist.bdd.FilmSearchResult;
 import fr.isen.android.filmlist.bdd.ToSeeFilmsDAO;
 import fr.isen.android.filmlist.fragments.FragFilmList;
+import fr.isen.android.filmlist.utils.GetFilmDetailsTask;
 
 public abstract class FilmDetailsFragment extends Fragment {
 
@@ -42,6 +45,8 @@ public abstract class FilmDetailsFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_film_details, container,
 				false);
+		
+		// Set the button to add the movie to the calendar
 		final Button button = (Button) view.findViewById(R.id.button_add_film_calendar);
 		button.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -105,7 +110,7 @@ public abstract class FilmDetailsFragment extends Fragment {
 			}
 		});
 		
-		final Button deleteButton = (Button) view.findViewById(R.id.button_delete_film);
+		/*final Button deleteButton = (Button) view.findViewById(R.id.button_delete_film);
 		deleteButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -120,8 +125,7 @@ public abstract class FilmDetailsFragment extends Fragment {
 					home.setFragment(fragment, Home.fragmentStack, true);
 				}
 			}
-		});
-
+		});*/
 		return view;
 	}
 

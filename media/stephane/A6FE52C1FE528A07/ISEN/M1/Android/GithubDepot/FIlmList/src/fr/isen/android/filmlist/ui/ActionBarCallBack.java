@@ -1,8 +1,8 @@
 package fr.isen.android.filmlist.ui;
 
 import java.util.List;
+import java.util.Set;
 
-import android.content.Context;
 import android.content.Intent;
 import android.view.ActionMode;
 import android.view.Menu;
@@ -38,8 +38,6 @@ public class ActionBarCallBack implements ActionMode.Callback {
 		switch (item.getItemId()) {
 		case R.id.item_delete:
 
-			Toast.makeText(activity, "Click to delete", Toast.LENGTH_SHORT)
-					.show();
 			for (String i : filmListFragment.getItemSelected().keySet()) {
 				filmListFragment.getListView().getChildAt(Integer.parseInt(i))
 						.setBackground(filmListFragment.getDefaultBackground());
@@ -103,16 +101,13 @@ public class ActionBarCallBack implements ActionMode.Callback {
 
 	@Override
 	public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-		// TODO Auto-generated method stub
 
-		mode.setTitle("Movie is selected");
-		
 		// Initialize the listener for the share button
 		MenuItem item = menu.findItem(R.id.item_share);
 		ShareActionProvider shareActionProvider = (ShareActionProvider) item
 				.getActionProvider();
 		shareActionProvider.setShareIntent(getDefaultShareIntent());
-		
+
 		return false;
 	}
 
@@ -135,8 +130,46 @@ public class ActionBarCallBack implements ActionMode.Callback {
 	private Intent getDefaultShareIntent() {
 		Intent intent = new Intent(Intent.ACTION_SEND);
 		intent.setType("text/plain");
-		intent.putExtra(Intent.EXTRA_SUBJECT, "SUBJECT");
-		intent.putExtra(Intent.EXTRA_TEXT, "Extra Text");
+		intent.putExtra(Intent.EXTRA_SUBJECT, "FilmList");
+		String msg = "";
+		Set<String> nameFilms = filmListFragment.getItemSelected().keySet();
+
+		if (typeKey.equals(FilmToSeeListFragment.class.getSimpleName()
+				.toString())) {
+			msg = "I'm going to see: ";
+		} else if (typeKey.equals(FilmFavouriteListFragment.class
+				.getSimpleName().toString())) {
+			if (nameFilms.size() == 1) {
+				msg = "My favorite movie: ";
+			} else {
+				msg = "My favorite movie: ";
+			}
+		} else if (typeKey.equals(FilmAllListFragment.class.getSimpleName()
+				.toString())) {
+			if (nameFilms.size() == 1) {
+				msg = "My movie from FilmList: ";
+			} else {
+				msg = "My movies from FilmList: ";
+			}
+		}
+
+		activity.setTitle("Taillle : " + Integer.toString(nameFilms.size()));
+		
+		for (String i : filmListFragment.getItemSelected().keySet()) {
+
+			String filmName = filmListFragment.getList().get(
+					Integer.parseInt(i));
+			if (nameFilms.size() == 1) {
+				msg += filmName + " ";
+			} else if (Integer.parseInt(i) == nameFilms.size() - 1) {
+				msg += filmName + " ";
+			} else {
+				msg += filmName + ", ";
+			}
+
+		}
+
+		intent.putExtra(Intent.EXTRA_TEXT, msg + "!");
 		return intent;
 	}
 

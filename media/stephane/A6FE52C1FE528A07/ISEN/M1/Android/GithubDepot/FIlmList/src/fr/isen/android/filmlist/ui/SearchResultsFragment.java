@@ -10,8 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.filmlist.R;
 
@@ -62,12 +62,13 @@ public class SearchResultsFragment extends Fragment implements OnItemClickListen
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		FilmDetailsFragment filmDetailsFragment = new FilmDetailsAPIFragment();
+		FilmDetailsAPIFragment filmDetailsFragment = new FilmDetailsAPIFragment();
 		Bundle args = new Bundle();
 		args.putSerializable(FilmDetailsFragment.MOVIE_KEY,
 				list.get(position));
 		filmDetailsFragment.setArguments(args);
 		((Home) getActivity()).setFragment(filmDetailsFragment,
-				Home.fragmentStack, true);		
+				Home.fragmentStack, true);
+		
 	}
 }
