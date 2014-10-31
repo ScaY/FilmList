@@ -1,13 +1,10 @@
 package fr.isen.android.filmlist.ui;
 
-import java.io.InputStream;
-import java.net.URL;
 import java.util.GregorianCalendar;
 
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.provider.CalendarContract.Events;
@@ -42,28 +39,32 @@ public abstract class FilmDetailsFragment extends Fragment {
 		return type;
 	}
 
+	public void setType(String type_) {
+		this.type = type_;
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_film_details, container,
 				false);
-		
+
 		// Set the button to add the movie to the calendar
-		final Button button = (Button) view.findViewById(R.id.button_add_film_calendar);
+		final Button button = (Button) view
+				.findViewById(R.id.button_add_film_calendar);
 		button.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				addFilmToDB();
 				ToSeeFilmsDAO toSeeDAO = new ToSeeFilmsDAO(getActivity());
 				toSeeDAO.open();
-				
-				if(toSeeDAO.select(film.getId()) != null) {
+
+				if (toSeeDAO.select(film.getId()) != null) {
 					toSeeDAO.delete(film);
 					button.setText("Add film to planning");
-				}
-				else {
+				} else {
 					toSeeDAO.insert(film);
 					button.setText("Remove film from planning");
-					
+
 					Intent intent = new Intent(Intent.ACTION_INSERT);
 					intent.setType("vnd.android.cursor.item/event");
 					intent.putExtra(Events.TITLE, film.getName());
@@ -83,51 +84,39 @@ public abstract class FilmDetailsFragment extends Fragment {
 					intent.setData(CalendarContract.Events.CONTENT_URI);
 					startActivity(intent);
 				}
-				
+
 				toSeeDAO.close();
-				
-				
+
 			}
 		});
-		
-		final Button favourite = (Button) view.findViewById(R.id.button_add_film_favourites);
-		
-		favourite.setOnClickListener(new View.OnClickListener() {			
+
+		final Button favourite = (Button) view
+				.findViewById(R.id.button_add_film_favourites);
+
+		favourite.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v) {	
+			public void onClick(View v) {
 				addFilmToDB();
-				FavouriteFilmsDAO favouriteDAO = new FavouriteFilmsDAO(getActivity());
+				FavouriteFilmsDAO favouriteDAO = new FavouriteFilmsDAO(
+						getActivity());
 				favouriteDAO.open();
-				
-				if(favouriteDAO.select(film.getId()) != null) {
+
+				if (favouriteDAO.select(film.getId()) != null) {
 					favouriteDAO.delete(film);
 					favourite.setText("Add film to favourites");
-				}
-				else {
+				} else {
 					favouriteDAO.insert(film);
 					favourite.setText("Remove film from favourites");
 				}
-				
+
 				favouriteDAO.close();
 			}
 		});
+
+		Bundle args = getArguments();
+		setRetainInstance(true);
+		setType(retrieveStringArgs(TYPE_KEY, args));
 		
-		/*final Button deleteButton = (Button) view.findViewById(R.id.button_delete_film);
-		deleteButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				FilmDAO filmDAO = new FilmDAO(getActivity());
-				filmDAO.open();
-				filmDAO.delete(film);
-				filmDAO.close();
-				
-				if(getActivity() instanceof Home) {
-					Home home = (Home)getActivity();
-					Fragment fragment = FragFilmList.getInstance().getFragment(FilmAllListFragment.class.getSimpleName().toString());
-					home.setFragment(fragment, Home.fragmentStack, true);
-				}
-			}
-		});*/
 		return view;
 	}
 
@@ -138,29 +127,34 @@ public abstract class FilmDetailsFragment extends Fragment {
 		}
 		return value;
 	}
-	
+
 	private void addFilmToDB() {
-		if(film != null && film.getId() == -1) {
+		if (film != null && film.getId() == -1) {
 			FilmDAO dao = new FilmDAO(getActivity());
 			dao.open();
 			long id = dao.getFilmId(film);
-			if(id == -1) {
+			if (id == -1) {
 				id = dao.insert(film);
 			}
 			film.setId(id);
 			dao.close();
 		}
 	}
-	
+
 	public void setFilmView() {
 		Activity activity = getActivity();
 		getActivity().setTitle(film.getName());
-		((TextView) activity.findViewById(R.id.film_title)).setText(film.getName());
-		((TextView) activity.findViewById(R.id.film_director)).setText(film.getDirector());
-		((TextView) activity.findViewById(R.id.film_year)).setText(film.getYear());
-		((TextView) activity.findViewById(R.id.film_runtime)).setText(film.getRuntime());
-		//((TextView) view.findViewById(R.id.film_story)).setText(film.getStory());
-		
+		((TextView) activity.findViewById(R.id.film_title)).setText(film
+				.getName());
+		((TextView) activity.findViewById(R.id.film_director)).setText(film
+				.getDirector());
+		((TextView) activity.findViewById(R.id.film_year)).setText(film
+				.getYear());
+		((TextView) activity.findViewById(R.id.film_runtime)).setText(film
+				.getRuntime());
+		// ((TextView)
+		// view.findViewById(R.id.film_story)).setText(film.getStory());
+
 		ImageView image = (ImageView) activity.findViewById(R.id.imageView1);
 		DownloadImageTask task = new DownloadImageTask(image);
 		task.execute(film.getImageUrl());

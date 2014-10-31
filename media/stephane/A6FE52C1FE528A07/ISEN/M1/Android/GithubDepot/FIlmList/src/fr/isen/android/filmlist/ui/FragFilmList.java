@@ -1,4 +1,4 @@
-package fr.isen.android.filmlist.fragments;
+package fr.isen.android.filmlist.ui;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -10,21 +10,16 @@ import fr.isen.android.filmlist.bdd.FavouriteFilmsDAO;
 import fr.isen.android.filmlist.bdd.Film;
 import fr.isen.android.filmlist.bdd.FilmDAO;
 import fr.isen.android.filmlist.bdd.ToSeeFilmsDAO;
-import fr.isen.android.filmlist.ui.FilmAllListFragment;
-import fr.isen.android.filmlist.ui.FilmFavouriteListFragment;
-import fr.isen.android.filmlist.ui.FilmListFragment;
-import fr.isen.android.filmlist.ui.FilmToSeeListFragment;
-import fr.isen.android.filmlist.ui.Home;
 
 public class FragFilmList {
 	private static FragFilmList instance = null;
-	private Hashtable<String, FilmListFragment> fragments;
+	private Hashtable<String, Fragment> fragments;
 	private FilmDAO filmDAO;
 	private FavouriteFilmsDAO favouriteDAO;
 	private ToSeeFilmsDAO toSeeDAO;
 
 	private FragFilmList() {
-		fragments = new Hashtable<String, FilmListFragment>();
+		fragments = new Hashtable<String, Fragment>();
 	}
 
 	public static FragFilmList getInstance() {
@@ -47,45 +42,32 @@ public class FragFilmList {
 		this.toSeeDAO = f;
 	}
 
-	public Hashtable<String, FilmListFragment> getFragments() {
+	public Hashtable<String, Fragment> getFragments() {
 		return fragments;
 	}
 
-	public FilmListFragment getFragment(String fragmentWanted) {
+	public Fragment getFragment(String fragmentWanted) {
 
-		if (fragments == null) {
+		if (fragments == null || fragmentWanted == "" || fragmentWanted == null) {
 			return null;
 		}
 
-		String key = "";
-
-		if (fragmentWanted.equals(FilmToSeeListFragment.class.getSimpleName()
-				.toString())) {
-			key = FilmToSeeListFragment.class.getSimpleName().toString();
-		} else if (fragmentWanted.equals(FilmAllListFragment.class
-				.getSimpleName().toString())) {
-			key = FilmAllListFragment.class.getSimpleName().toString();
-		} else if (fragmentWanted.equals(FilmFavouriteListFragment.class
-				.getSimpleName().toString())) {
-			key = FilmFavouriteListFragment.class.getSimpleName().toString();
-		}
-
-		if (fragments.contains(key)) {
+		if (fragments.contains(fragmentWanted)) {
 			// Refresh the fragment
-			refreshFragment(fragments.get(key));
+			refreshFragment(fragments.get(fragmentWanted));
 
 		} else {
 			// Initialize the fragment and add it to the list of fragment
-			FilmListFragment frag = initMoviesFragment(fragmentWanted);
-			fragments.put(key, frag);
+			Fragment frag = initMoviesFragment(fragmentWanted);
+			fragments.put(fragmentWanted, frag);
 
 		}
 
-		return fragments.get(key);
+		return fragments.get(fragmentWanted);
 	}
 
-	public FilmListFragment initMoviesFragment(String fragmentName) {
-		FilmListFragment fragmentWanted = null;
+	public Fragment initMoviesFragment(String fragmentName) {
+		Fragment fragmentWanted = null;
 
 		if (fragmentName.equals(FilmToSeeListFragment.class.getSimpleName()
 				.toString())) {
@@ -96,27 +78,39 @@ public class FragFilmList {
 		} else if (fragmentName.equals(FilmFavouriteListFragment.class
 				.getSimpleName().toString())) {
 			fragmentWanted = new FilmFavouriteListFragment();
+		} else if (fragmentName.equals(SearchResultsFragment.class
+				.getSimpleName().toString())) {
+			fragmentWanted = new SearchResultsFragment();
 		}
 
-		List<Film> films = getFilms(fragmentWanted);
-		Bundle args = null;
+		if (fragmentWanted instanceof FilmListFragment) {
 
-		ArrayList<String> list = new ArrayList<String>();
+			FilmListFragment flf = (FilmListFragment) fragmentWanted;
 
-		for (Film film : films) {
-			list.add(film.getName());
+			List<Film> films = getFilms(fragmentWanted);
+			Bundle args = null;
+
+			ArrayList<String> list = new ArrayList<String>();
+
+			for (Film film : films) {
+				list.add(film.getName());
+			}
+
+			args = new Bundle();
+			args.putStringArrayList(FilmListFragment.LIST_KEY, list);
+			flf.setArguments(args);
+			flf.setList(list);
+			flf.setAdapter(Home.adapter);
+			flf.setListview(Home.listview);
+			fragmentWanted = flf;
+		} else if (fragmentWanted instanceof SearchResultsFragment) {
+			
 		}
 
-		args = new Bundle();
-		args.putStringArrayList(FilmListFragment.LIST_KEY, list);
-		fragmentWanted.setArguments(args);
-		fragmentWanted.setList(list);
-		fragmentWanted.setAdapter(Home.adapter);
-		fragmentWanted.setListview(Home.listview);
 		return fragmentWanted;
 	}
 
-	public void refreshFragment(FilmListFragment fragmentWanted) {
+	public void refreshFragment(Fragment fragmentWanted) {
 		List<Film> films = getFilms(fragmentWanted);
 		Bundle args = null;
 
@@ -132,7 +126,7 @@ public class FragFilmList {
 
 	}
 
-	public List<Film> getFilms(FilmListFragment fragmentWanted) {
+	public List<Film> getFilms(Fragment fragmentWanted) {
 		List<Film> films = null;
 		if (fragmentWanted instanceof FilmFavouriteListFragment) {
 			favouriteDAO.open();
@@ -150,5 +144,5 @@ public class FragFilmList {
 
 		return films;
 	}
-	
+
 }
