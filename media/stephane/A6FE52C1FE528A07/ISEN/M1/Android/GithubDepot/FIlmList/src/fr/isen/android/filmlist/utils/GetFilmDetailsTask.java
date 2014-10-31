@@ -24,14 +24,12 @@ public class GetFilmDetailsTask extends AsyncTask<String, Void, JSONObject> {
 	private static final String URL = "http://www.omdbapi.com/?i=";
 	private HttpClient client;
 	private FilmDetailsFragment fragment;
-	private View view;
 
-	public GetFilmDetailsTask(FilmDetailsFragment _fragment, View _view) {
+	public GetFilmDetailsTask(FilmDetailsFragment _fragment) {
 		client = new DefaultHttpClient();
 		client.getParams().setParameter(CoreProtocolPNames.USER_AGENT,
 				"android");
 		fragment = _fragment;
-		view = _view;
 	}
 
 	public JSONObject doInBackground(String... imdbId) {
@@ -62,10 +60,6 @@ public class GetFilmDetailsTask extends AsyncTask<String, Void, JSONObject> {
 
 	public void onPostExecute(JSONObject result) {
 		fragment.film = new Film(result);
-		// fragment.setFilmView(view);   Ca ne marche pas
-		((TextView)(fragment.getActivity().findViewById(R.id.film_director))).setText(fragment.film.getDirector());
-		((TextView)(fragment.getActivity().findViewById(R.id.film_year))).setText(fragment.film.getYear());
-		((TextView)(fragment.getActivity().findViewById(R.id.film_runtime))).setText(fragment.film.getRuntime());
-		((TextView)(fragment.getActivity().findViewById(R.id.film_year))).setText(fragment.film.getYear());
+		fragment.setFilmView();
 	}
 }

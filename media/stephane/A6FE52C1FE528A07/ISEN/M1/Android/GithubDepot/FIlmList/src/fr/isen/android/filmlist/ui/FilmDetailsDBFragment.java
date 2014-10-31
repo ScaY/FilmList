@@ -22,7 +22,7 @@ public class FilmDetailsDBFragment extends FilmDetailsFragment {
 			dao.open();
 			film = dao.select(filmName);
 			dao.close();
-			setFilmView(view);
+			setFilmView();
 		}
 		
 		return view;

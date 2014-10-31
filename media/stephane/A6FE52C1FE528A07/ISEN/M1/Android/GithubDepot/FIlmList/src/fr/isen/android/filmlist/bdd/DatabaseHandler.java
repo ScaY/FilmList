@@ -13,7 +13,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	  public static final String FILM_RUNTIME = "runtime";
 	  public static final String FILM_DIRECTOR = "director";
 	  public static final String FILM_STORY = "story";
-	  public static final String FILM_ALL_COLUMNS[] = {DatabaseHandler.FILM_KEY, DatabaseHandler.FILM_NAME, FILM_YEAR, FILM_RELEASE_DATE, FILM_RUNTIME, FILM_DIRECTOR, FILM_STORY};
+	  public static final String FILM_IMAGE = "image";
+	  public static final String FILM_ALL_COLUMNS[] = {DatabaseHandler.FILM_KEY, DatabaseHandler.FILM_NAME, FILM_YEAR, FILM_RELEASE_DATE, FILM_RUNTIME, FILM_DIRECTOR, FILM_STORY, FILM_IMAGE};
 	  public static final String FILM_TABLE_NAME = "film";
 	  public static final String FILM_TABLE_CREATE =
 	    "CREATE TABLE " + FILM_TABLE_NAME + " (" +
@@ -23,7 +24,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	    		FILM_RELEASE_DATE + " DATETIME DEFAULT CURRENT_TIMESTAMP, " +
 	    		FILM_RUNTIME + " TEXT, " +
 	    		FILM_DIRECTOR + " TEXT, " +
-	    		FILM_STORY + " TEXT);";
+	    		FILM_STORY + " TEXT, " +
+	    		FILM_IMAGE + ");";
 	  public static final String FILM_TABLE_DROP = "DROP TABLE IF EXISTS " + FILM_TABLE_NAME + ";";
 	  
 	  public static final String FAVOURITE_FILM_KEY = "filmId";

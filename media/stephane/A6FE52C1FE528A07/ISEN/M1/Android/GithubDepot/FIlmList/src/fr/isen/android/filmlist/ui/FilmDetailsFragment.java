@@ -1,10 +1,13 @@
 package fr.isen.android.filmlist.ui;
 
-import java.io.Serializable;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.GregorianCalendar;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.provider.CalendarContract.Events;
@@ -12,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.filmlist.R;
@@ -19,10 +23,8 @@ import com.example.filmlist.R;
 import fr.isen.android.filmlist.bdd.FavouriteFilmsDAO;
 import fr.isen.android.filmlist.bdd.Film;
 import fr.isen.android.filmlist.bdd.FilmDAO;
-import fr.isen.android.filmlist.bdd.FilmSearchResult;
 import fr.isen.android.filmlist.bdd.ToSeeFilmsDAO;
-import fr.isen.android.filmlist.fragments.FragFilmList;
-import fr.isen.android.filmlist.utils.GetFilmDetailsTask;
+import fr.isen.android.filmlist.utils.DownloadImageTask;
 
 public abstract class FilmDetailsFragment extends Fragment {
 
@@ -150,12 +152,17 @@ public abstract class FilmDetailsFragment extends Fragment {
 		}
 	}
 	
-	public void setFilmView(View view) {
+	public void setFilmView() {
+		Activity activity = getActivity();
 		getActivity().setTitle(film.getName());
-		((TextView) view.findViewById(R.id.film_title)).setText(film.getName());
-		((TextView) view.findViewById(R.id.film_director)).setText(film.getDirector());
-		((TextView) view.findViewById(R.id.film_year)).setText(film.getYear());
-		((TextView) view.findViewById(R.id.film_runtime)).setText(film.getRuntime());
+		((TextView) activity.findViewById(R.id.film_title)).setText(film.getName());
+		((TextView) activity.findViewById(R.id.film_director)).setText(film.getDirector());
+		((TextView) activity.findViewById(R.id.film_year)).setText(film.getYear());
+		((TextView) activity.findViewById(R.id.film_runtime)).setText(film.getRuntime());
 		//((TextView) view.findViewById(R.id.film_story)).setText(film.getStory());
+		
+		ImageView image = (ImageView) activity.findViewById(R.id.imageView1);
+		DownloadImageTask task = new DownloadImageTask(image);
+		task.execute(film.getImageUrl());
 	}
 }

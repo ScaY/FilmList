@@ -97,7 +97,7 @@ public class FilmDAO extends DAOBase {
 	  }
 	  
 	  private Film cursorToFilm(Cursor cursor) {
-		  return new Film(cursor.getLong(0), cursor.getString(1), cursor.getString(2), new Date(0), cursor.getString(4), cursor.getString(5), cursor.getString(6));
+		  return new Film(cursor.getLong(0), cursor.getString(1), cursor.getString(2), new Date(0), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7));
 	  }
 	  
 	  private ContentValues filmToValues(Film f) {
@@ -108,6 +108,7 @@ public class FilmDAO extends DAOBase {
 		  value.put(DatabaseHandler.FILM_RUNTIME, f.getRuntime());
 		  value.put(DatabaseHandler.FILM_DIRECTOR, f.getDirector());
 		  value.put(DatabaseHandler.FILM_STORY, f.getStory());
+		  value.put(DatabaseHandler.FILM_IMAGE, f.getImageUrl());
 		  
 		  return value;
 	  }

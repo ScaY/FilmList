@@ -13,6 +13,7 @@ public class Film {
 	private String runtime;
 	private String director;
 	private String story;
+	private String imageUrl;
   
 	public Film(long id, String name) {
 	  this.id = id;
@@ -20,7 +21,7 @@ public class Film {
 	  this.director = "";
 	}
 	
-	public Film(long id, String name, String year, Date releaseDate, String runtime, String director, String story) {
+	public Film(long id, String name, String year, Date releaseDate, String runtime, String director, String story, String imageUrl) {
 	  this.id = id;
 	  this.name = name;
 	  this.year = year;
@@ -28,6 +29,7 @@ public class Film {
 	  this.runtime = runtime;
 	  this.director = director;
 	  this.story = story;
+	  this.imageUrl = imageUrl;
 	}
 	
 	public Film(JSONObject jsonFilm) {
@@ -39,6 +41,7 @@ public class Film {
 			runtime = jsonFilm.getString("Runtime");
 			director = jsonFilm.getString("Director");
 			story = jsonFilm.getString("Plot");
+			imageUrl = jsonFilm.getString("Poster");
 		}
 		catch(Exception e) {}
 	}
@@ -97,5 +100,13 @@ public class Film {
 	
 	public void setStory(String story) {
 		this.story = story;
+	}
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 }
