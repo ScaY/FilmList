@@ -21,9 +21,12 @@ public class FilmDetailsDBFragment extends FilmDetailsFragment {
 			dao.open();
 			film = dao.select(filmName);
 			dao.close();
-			setFilmView();
 		}
 
 		return view;
+	}
+	
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		setFilmView();
 	}
 }
