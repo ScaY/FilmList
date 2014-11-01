@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import android.app.Fragment;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,11 +21,11 @@ public class SearchResultsFragment extends Fragment implements
 		OnItemClickListener {
 	public static final int position = 4;
 	public static final String LIST_KEY = "FILMS_RESULTS_LIST";
-	private  ArrayList<FilmSearchResult> list;
+	private ArrayList<FilmSearchResult> list;
 	private FilmSearchResultAdapter adapter;
 	private ListView listview;
 
-	public  ArrayList<FilmSearchResult> getList() {
+	public ArrayList<FilmSearchResult> getList() {
 		return this.list;
 	}
 
@@ -44,15 +42,17 @@ public class SearchResultsFragment extends Fragment implements
 
 		Bundle args = getArguments();
 
-		if (args != null && args.containsKey(LIST_KEY)) {
-			Serializable arg = args.getSerializable(LIST_KEY);
-			if (arg instanceof ArrayList<?>) {
-				list = (ArrayList<FilmSearchResult>) arg;
+		if (list == null) {
+			if (args != null && args.containsKey(LIST_KEY)) {
+				Serializable arg = args.getSerializable(LIST_KEY);
+				if (arg instanceof ArrayList<?>) {
+					list = (ArrayList<FilmSearchResult>) arg;
+				} else {
+					list = new ArrayList<FilmSearchResult>();
+				}
 			} else {
 				list = new ArrayList<FilmSearchResult>();
 			}
-		} else {
-			list = new ArrayList<FilmSearchResult>();
 		}
 
 		adapter = new FilmSearchResultAdapter(getActivity(), list);
@@ -61,6 +61,7 @@ public class SearchResultsFragment extends Fragment implements
 		listview.setOnItemClickListener(this);
 		adapter.notifyDataSetChanged();
 
+		setRetainInstance(true);
 		return view;
 	}
 

@@ -41,7 +41,6 @@ public abstract class FilmListFragment extends Fragment {
 		return listview;
 	}
 
-	
 	public void setList(ArrayList<String> list_) {
 		list = list_;
 	}
@@ -57,8 +56,8 @@ public abstract class FilmListFragment extends Fragment {
 	public void setListview(ListView listview_) {
 		listview = listview_;
 	}
-	
-	public HashMap<String, View> getItemSelected(){
+
+	public HashMap<String, View> getItemSelected() {
 		return this.itemSelected;
 	}
 
@@ -66,20 +65,20 @@ public abstract class FilmListFragment extends Fragment {
 		return this.mActionMode;
 	}
 
-	public Drawable getDefaultBackground(){
+	public Drawable getDefaultBackground() {
 		return this.defaultBackground;
 	}
-	
-	public ArrayAdapter<String> getAdapter(){
+
+	public ArrayAdapter<String> getAdapter() {
 		return this.adapter;
 	}
-	
-	public ActionBarCallBack getActionBarCallBack(){
+
+	public ActionBarCallBack getActionBarCallBack() {
 		return this.actionBarCallBack;
 	}
-	
+
 	public abstract int getPosition();
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -93,10 +92,12 @@ public abstract class FilmListFragment extends Fragment {
 
 		Bundle args = getArguments();
 
-		if (args != null && args.containsKey(FilmListFragment.LIST_KEY)) {
-			list = args.getStringArrayList(FilmListFragment.LIST_KEY);
-		} else {
-			list = new ArrayList<String>();
+		if (list == null) {
+			if (args != null && args.containsKey(FilmListFragment.LIST_KEY)) {
+				list = args.getStringArrayList(FilmListFragment.LIST_KEY);
+			} else {
+				list = new ArrayList<String>();
+			}
 		}
 
 		adapter = new ArrayAdapter<String>(getActivity(),
@@ -105,7 +106,7 @@ public abstract class FilmListFragment extends Fragment {
 		listview.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
 		defaultBackground = listview.getBackground();
-		actionBarCallBack = new ActionBarCallBack((Home)getActivity(), this);
+		actionBarCallBack = new ActionBarCallBack((Home) getActivity(), this);
 
 		// Check for the rotation screen
 		listview.post(new Runnable() {
@@ -137,7 +138,8 @@ public abstract class FilmListFragment extends Fragment {
 		return view;
 	}
 
-	public static void additemListener(ListView listFl, final String typeKey_, final ArrayList<String> list, final Home activity) {
+	public static void additemListener(ListView listFl, final String typeKey_,
+			final ArrayList<String> list, final Home activity) {
 		if (listFl != null) {
 			listFl.setOnItemClickListener(new OnItemClickListener() {
 				@Override
@@ -184,7 +186,8 @@ public abstract class FilmListFragment extends Fragment {
 						if (itemSelected.isEmpty()) {
 							itemSelected.clear();
 							mActionMode.finish();
-							additemListener(listview, typeKey, getList(), (Home)getActivity());
+							additemListener(listview, typeKey, getList(),
+									(Home) getActivity());
 
 						}
 					}

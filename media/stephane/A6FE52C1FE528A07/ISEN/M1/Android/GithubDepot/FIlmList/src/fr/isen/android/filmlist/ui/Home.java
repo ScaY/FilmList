@@ -1,7 +1,5 @@
 package fr.isen.android.filmlist.ui;
 
-import java.util.ArrayList;
-
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.res.Configuration;
@@ -17,7 +15,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
-import android.widget.Toast;
 
 import com.example.filmlist.R;
 
@@ -34,10 +31,6 @@ public class Home extends FragmentActivity {
 	private ActionBarDrawerToggle drawerToggle;
 	private CharSequence drawerTitle;
 	private CharSequence mTitle;
-
-	private ArrayList<String> list;
-	public static ArrayAdapter<String> adapter;
-	public static ListView listview;
 
 	private android.app.Fragment fragment;
 	public static final String LIST_KEY = "keyHomeActivity";
@@ -68,7 +61,7 @@ public class Home extends FragmentActivity {
 		// Set the list's click listener
 		drawerList.setOnItemClickListener(new ListView.OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView parent, View view,
+			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				selectItem(position);
 			}
@@ -102,38 +95,15 @@ public class Home extends FragmentActivity {
 		// Set the drawer toggle as the DrawerListener
 		drawerLayout.setDrawerListener(drawerToggle);
 
-		list = new ArrayList<String>();
-		adapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, list);
-		listview = (ListView) findViewById(R.id.listview);
-
 		// Set the DAO for the FragListFragment singleton
-		FragFilmList fgl = FragFilmList.getInstance();
+		AllFragments fgl = AllFragments.getInstance();
 		fgl.setFavouriteFIlmDAO(favouriteDAO);
 		fgl.setFilmDAO(filmDAO);
 		fgl.setToSeeFilmDAO(toSeeDAO);
 
-		// Initialize the fragment of movies to see
-		FilmToSeeListFragment filmToSeeFragment = (FilmToSeeListFragment) fgl
-				.getFragment(FilmToSeeListFragment.class.getSimpleName()
-						.toString());
-		filmToSeeFragment.setList(list);
-		filmToSeeFragment.setAdapter(new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, list));
-		filmToSeeFragment.setListview((ListView) findViewById(R.id.listview));
-
-		// Initialize the fragment of all movies
-		FilmAllListFragment filmAllListFragment = (FilmAllListFragment) fgl
-				.getFragment(FilmAllListFragment.class.getSimpleName()
-						.toString());
-
-		// Initialize the fragment of the movies research
-		SearchResultsFragment searchResultsFragment = (SearchResultsFragment) fgl
-				.getFragment(SearchResultsFragment.class.getSimpleName()
-						.toString());
-
 		// Case where there is a screen rotation
 		if (savedInstanceState != null) {
+
 			// Retrieve the previous fragment
 			fragment = getFragmentManager().findFragmentByTag(fragmentStack);
 
@@ -148,22 +118,33 @@ public class Home extends FragmentActivity {
 							FilmToSeeListFragment.class.getSimpleName()
 									.toString())) {
 						// Initialize the stack for the filmToSee
-						setFragment(filmToSeeFragment, fragmentStack, true);
-						setFragment(fragment, fragmentStack, true);
+						setFragment(fgl.getFragment(FilmToSeeListFragment.class
+								.getSimpleName().toString()), fragmentStack,
+								true);
+					} else if (fd.getType().equals(
+							FilmFavouriteListFragment.class.getSimpleName()
+									.toString())) {
+						// Initialize the stack for the movies favorite
+						setFragment(
+								fgl.getFragment(FilmFavouriteListFragment.class
+										.getSimpleName().toString()),
+								fragmentStack, true);
 					} else if (fd.getType().equals(
 							FilmAllListFragment.class.getSimpleName()
 									.toString())) {
 						// Initialize the stack for the list of all the film
-						setFragment(filmAllListFragment, fragmentStack, true);
-						setFragment(fragment, fragmentStack, true);
+						setFragment(fgl.getFragment(FilmAllListFragment.class
+								.getSimpleName().toString()), fragmentStack,
+								true);
 					} else if (fd.getType().equals(
 							SearchResultsFragment.class.getSimpleName()
 									.toString())) {
 						// Initialize the stack for the results of the search
-						setFragment(searchResultsFragment, fragmentStack, true);
-						setFragment(fragment, fragmentStack, true);
-
+						setFragment(fgl.getFragment(SearchResultsFragment.class
+								.getSimpleName().toString()), fragmentStack,
+								true);
 					}
+					setFragment(fragment, fragmentStack, true);
 				} // End if test fd.getType()
 
 			} else if (fragment instanceof FilmListFragment) {
@@ -172,7 +153,8 @@ public class Home extends FragmentActivity {
 		} else {
 			// Case where it is the first time that the application is
 			// initialized
-			setFragment(filmToSeeFragment, fragmentStack, false);
+			setFragment(fgl.getFragment(FilmToSeeListFragment.class
+					.getSimpleName().toString()), fragmentStack, false);
 
 		}
 	}
@@ -188,7 +170,7 @@ public class Home extends FragmentActivity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.home, menu);
 
-		// Ajout du listener sur la barre de recherche
+		// Set the listener for the search action
 		final SearchView searchView = (SearchView) menu.findItem(
 				R.id.action_new).getActionView();
 		final MenuItem searchMenuItem = menu.findItem(R.id.action_new);
@@ -241,17 +223,17 @@ public class Home extends FragmentActivity {
 			fragment = new About();
 			break;
 		case FilmToSeeListFragment.position:
-			fragment = FragFilmList.getInstance().getFragment(
+			fragment = AllFragments.getInstance().getFragment(
 					FilmToSeeListFragment.class.getSimpleName().toString());
 			break;
 
 		case FilmAllListFragment.position:
-			fragment = FragFilmList.getInstance().getFragment(
+			fragment = AllFragments.getInstance().getFragment(
 					FilmAllListFragment.class.getSimpleName().toString());
 			break;
 
 		case FilmFavouriteListFragment.position:
-			fragment = FragFilmList.getInstance().getFragment(
+			fragment = AllFragments.getInstance().getFragment(
 					FilmFavouriteListFragment.class.getSimpleName().toString());
 			break;
 		}
@@ -288,6 +270,23 @@ public class Home extends FragmentActivity {
 		if (disableDrawer) {
 			drawerToggle.setDrawerIndicatorEnabled(false);
 		}
+
+		String key = "";
+
+		if (fragment instanceof FilmDetailsFragment) {
+			key = FilmDetailsFragment.class.getSimpleName().toString();
+		} else if (fragment instanceof FilmToSeeListFragment) {
+			key = FilmToSeeListFragment.class.getSimpleName().toString();
+		} else if (fragment instanceof FilmAllListFragment) {
+			key = FilmAllListFragment.class.getSimpleName().toString();
+		} else if (fragment instanceof SearchResultsFragment) {
+			key = SearchResultsFragment.class.getSimpleName().toString();
+		}
+
+		if (key != "") {
+			AllFragments.getInstance().putFragment(fragment, key);
+		}
+
 		FragmentManager fragmentManager = getFragmentManager();
 		FragmentTransaction ft = fragmentManager.beginTransaction();
 		ft.addToBackStack(name);

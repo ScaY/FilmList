@@ -79,6 +79,7 @@ public class SearchFilmTask extends AsyncTask<String, Void, JSONObject> {
 			args = new Bundle();
 			args.putSerializable(SearchResultsFragment.LIST_KEY, list);
 			fragment.setArguments(args);
+			((SearchResultsFragment)fragment).setList(list);
 			
 			if (fragment != null) {
 				home.setFragment(fragment, Home.fragmentStack, false);
