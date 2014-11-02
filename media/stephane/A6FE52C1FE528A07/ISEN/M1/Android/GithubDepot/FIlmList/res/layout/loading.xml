@@ -7,7 +7,35 @@
     <ProgressBar
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.67"
+        android:layout_weight="0.70"
+        android:indeterminate="true"
+        android:visibility="invisible" />
+
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.70"
+        android:indeterminate="true"
+        android:visibility="invisible" />
+
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.70"
         android:indeterminate="true" />
+
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.70"
+        android:indeterminate="true"
+        android:visibility="invisible" />
+
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.70"
+        android:indeterminate="true"
+        android:visibility="invisible" />
 
 </LinearLayout>
