@@ -27,6 +27,10 @@ import fr.isen.android.filmlist.bdd.ToSeeFilmsDAO;
 import fr.isen.android.filmlist.utils.SearchFilmTask;
 
 public class Home extends FragmentActivity {
+
+	public static final String LIST_KEY = "keyHomeActivity";
+	public static final String fragmentStack = "fragmentStack";
+
 	private String[] navigationArray;
 	private DrawerLayout drawerLayout;
 	private ListView drawerList;
@@ -35,11 +39,7 @@ public class Home extends FragmentActivity {
 	private CharSequence drawerTitle;
 	private CharSequence mTitle;
 
-	private android.app.Fragment fragment;
-	public static final String LIST_KEY = "keyHomeActivity";
-
-	public static final String fragmentStack = "fragmentStack";
-	private FilmDAO filmDAO;
+	private android.app.Fragment fragment;	private FilmDAO filmDAO;
 	private FavouriteFilmsDAO favouriteDAO;
 	private ToSeeFilmsDAO toSeeDAO;
 
