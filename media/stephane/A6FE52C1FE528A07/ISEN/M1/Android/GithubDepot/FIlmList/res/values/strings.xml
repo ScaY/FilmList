@@ -16,8 +16,8 @@
         <item>A propos</item>
     </string-array>
     
-	<string name="aboutText1">Une application non fonctionnelle, créée par M. Bardin Sylvain et M. Eintrazi Stéphane</string>
-	<string name="aboutText2">BOUUUYYAACHAAKAAA !</string>
+	<string name="aboutText1">Une application créée par Sylvain BARDIN et Stéphane EINTRAZI</string>
+	<string name="aboutText2">Have fun!</string>
 
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
@@ -39,4 +39,6 @@
     <!--  Selection mode -->
     <string name="delete_text">Delete</string>
     <string name="share_text">Share</string>
+    
+    <string name="no_internet">No internet connection found. Try again later.</string>
 </resources>

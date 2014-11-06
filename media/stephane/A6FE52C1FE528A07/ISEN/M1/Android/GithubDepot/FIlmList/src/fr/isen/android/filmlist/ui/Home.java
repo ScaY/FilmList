@@ -2,7 +2,10 @@ package fr.isen.android.filmlist.ui;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.res.Configuration;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
@@ -185,8 +188,15 @@ public class Home extends FragmentActivity {
 
 			@Override
 			public boolean onQueryTextSubmit(String query) {
-				SearchFilmTask retriever = new SearchFilmTask(home);
-				retriever.execute(query);
+				ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+			    NetworkInfo netInfo = cm.getActiveNetworkInfo();
+			    if(netInfo != null && netInfo.isConnectedOrConnecting()) {
+			    	SearchFilmTask retriever = new SearchFilmTask(home);
+			    	retriever.execute(query);
+			    }
+			    else {
+			    	setFragment(new NoInternetFragment(), fragmentStack, false);
+			    }
 				searchMenuItem.collapseActionView();
 				searchView.setQuery("", false);
 				return true;
