@@ -6,8 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public class FilmAllListFragment extends FilmListFragment {
-	public static final int position = 2;
-
+	public static final int POSITION = 2;
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -15,16 +15,10 @@ public class FilmAllListFragment extends FilmListFragment {
 		String typeKey = this.getClass().getSimpleName().toString();
 		View view = super.onCreateView(inflater, container, savedInstanceState);
 		additemListener(getListView(), typeKey.toString(), getList(),
-				(Home) getActivity());
+				(HomeActivity) getActivity());
 		addItemLongClick(getListView(), typeKey);
 		getActionBarCallBack().setTypeKey(typeKey);
 
 		return view;
 	}
-
-	@Override
-	public int getPosition() {
-		return position;
-	}
-
 }

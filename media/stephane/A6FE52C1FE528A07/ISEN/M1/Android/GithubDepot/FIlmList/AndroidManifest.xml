@@ -24,7 +24,7 @@
             android:value="fr.isen.android.Home" />
 
         <activity
-            android:name="fr.isen.android.filmlist.ui.Home"
+            android:name="fr.isen.android.filmlist.ui.HomeActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

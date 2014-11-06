@@ -1,5 +1,8 @@
 package fr.isen.android.filmlist.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -22,14 +25,16 @@ import android.widget.SearchView.OnQueryTextListener;
 import com.example.filmlist.R;
 
 import fr.isen.android.filmlist.bdd.FavouriteFilmsDAO;
+import fr.isen.android.filmlist.bdd.Film;
 import fr.isen.android.filmlist.bdd.FilmDAO;
+import fr.isen.android.filmlist.bdd.FilmsListDAO;
 import fr.isen.android.filmlist.bdd.ToSeeFilmsDAO;
 import fr.isen.android.filmlist.utils.SearchFilmTask;
 
-public class Home extends FragmentActivity {
+public class HomeActivity extends FragmentActivity {
 
 	public static final String LIST_KEY = "keyHomeActivity";
-	public static final String fragmentStack = "fragmentStack";
+	public static final String FRAGMENTSTACK = "fragmentStack";
 
 	private String[] navigationArray;
 	private DrawerLayout drawerLayout;
@@ -39,7 +44,8 @@ public class Home extends FragmentActivity {
 	private CharSequence drawerTitle;
 	private CharSequence mTitle;
 
-	private android.app.Fragment fragment;	private FilmDAO filmDAO;
+	private android.app.Fragment fragment;
+	private FilmDAO filmDAO;
 	private FavouriteFilmsDAO favouriteDAO;
 	private ToSeeFilmsDAO toSeeDAO;
 
@@ -99,16 +105,17 @@ public class Home extends FragmentActivity {
 		drawerLayout.setDrawerListener(drawerToggle);
 
 		// Set the DAO for the FragListFragment singleton
-		AllFragments fgl = AllFragments.getInstance();
-		fgl.setFavouriteFIlmDAO(favouriteDAO);
-		fgl.setFilmDAO(filmDAO);
-		fgl.setToSeeFilmDAO(toSeeDAO);
+		/*
+		 * AllFragments fgl = AllFragments.getInstance();
+		 * fgl.setFavouriteFIlmDAO(favouriteDAO); fgl.setFilmDAO(filmDAO);
+		 * fgl.setToSeeFilmDAO(toSeeDAO);
+		 */
 
 		// Case where there is a screen rotation
 		if (savedInstanceState != null) {
 
 			// Retrieve the previous fragment
-			fragment = getFragmentManager().findFragmentByTag(fragmentStack);
+			fragment = getFragmentManager().findFragmentByTag(FRAGMENTSTACK);
 
 			// Case where the fragment is the detail about a film
 			if (fragment instanceof FilmDetailsFragment) {
@@ -121,43 +128,59 @@ public class Home extends FragmentActivity {
 							FilmToSeeListFragment.class.getSimpleName()
 									.toString())) {
 						// Initialize the stack for the filmToSee
-						setFragment(fgl.getFragment(FilmToSeeListFragment.class
-								.getSimpleName().toString()), fragmentStack,
-								true);
+						// setFragment(fgl.getFragment(FilmToSeeListFragment.class
+						// .getSimpleName().toString()), fragmentStack,
+						// true);
+
+						setFragment(
+								createFilmListFragment(toSeeDAO,
+										new FilmToSeeListFragment()),
+								FRAGMENTSTACK, true);
 					} else if (fd.getType().equals(
 							FilmFavouriteListFragment.class.getSimpleName()
 									.toString())) {
 						// Initialize the stack for the movies favorite
+						// setFragment(
+						// fgl.getFragment(FilmFavouriteListFragment.class
+						// .getSimpleName().toString()),
+						// fragmentStack, true);
 						setFragment(
-								fgl.getFragment(FilmFavouriteListFragment.class
-										.getSimpleName().toString()),
-								fragmentStack, true);
+								createFilmListFragment(favouriteDAO,
+										new FilmFavouriteListFragment()),
+								FRAGMENTSTACK, true);
 					} else if (fd.getType().equals(
 							FilmAllListFragment.class.getSimpleName()
 									.toString())) {
 						// Initialize the stack for the list of all the film
-						setFragment(fgl.getFragment(FilmAllListFragment.class
-								.getSimpleName().toString()), fragmentStack,
-								true);
+						// setFragment(fgl.getFragment(FilmAllListFragment.class
+						// .getSimpleName().toString()), fragmentStack,
+						// true);
+						setFragment(
+								createFilmListFragment(filmDAO,
+										new FilmAllListFragment()),
+								FRAGMENTSTACK, true);
 					} else if (fd.getType().equals(
 							SearchResultsFragment.class.getSimpleName()
 									.toString())) {
 						// Initialize the stack for the results of the search
-						setFragment(fgl.getFragment(SearchResultsFragment.class
-								.getSimpleName().toString()), fragmentStack,
+						// setFragment(fgl.getFragment(SearchResultsFragment.class
+						// .getSimpleName().toString()), FRAGMENTSTACK,
+						// true);
+						setFragment(new SearchResultsFragment(), FRAGMENTSTACK,
 								true);
 					}
-					setFragment(fragment, fragmentStack, true);
+					setFragment(fragment, FRAGMENTSTACK, true);
 				} // End if test fd.getType()
 
 			} else if (fragment instanceof FilmListFragment) {
-				setFragment(fragment, fragmentStack, false);
+				setFragment(fragment, FRAGMENTSTACK, false);
 			}
 		} else {
 			// Case where it is the first time that the application is
 			// initialized
-			setFragment(fgl.getFragment(FilmToSeeListFragment.class
-					.getSimpleName().toString()), fragmentStack, false);
+			//setFragment(fgl.getFragment(FilmToSeeListFragment.class
+			//		.getSimpleName().toString()), fragmentStack, false);
+			setFragment(createFilmListFragment(toSeeDAO, new FilmToSeeListFragment()), FRAGMENTSTACK, false);
 
 		}
 	}
@@ -177,26 +200,24 @@ public class Home extends FragmentActivity {
 		final SearchView searchView = (SearchView) menu.findItem(
 				R.id.action_new).getActionView();
 		final MenuItem searchMenuItem = menu.findItem(R.id.action_new);
-		final Home home = this;
+		final HomeActivity home = this;
 
 		searchView.setOnQueryTextListener(new OnQueryTextListener() {
 			@Override
 			public boolean onQueryTextChange(String newText) {
-
 				return true;
 			}
 
 			@Override
 			public boolean onQueryTextSubmit(String query) {
 				ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-			    NetworkInfo netInfo = cm.getActiveNetworkInfo();
-			    if(netInfo != null && netInfo.isConnectedOrConnecting()) {
-			    	SearchFilmTask retriever = new SearchFilmTask(home);
-			    	retriever.execute(query);
-			    }
-			    else {
-			    	setFragment(new NoInternetFragment(), fragmentStack, false);
-			    }
+				NetworkInfo netInfo = cm.getActiveNetworkInfo();
+				if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+					SearchFilmTask retriever = new SearchFilmTask(home);
+					retriever.execute(query);
+				} else {
+					setFragment(new NoInternetFragment(), FRAGMENTSTACK, false);
+				}
 				searchMenuItem.collapseActionView();
 				searchView.setQuery("", false);
 				return true;
@@ -232,24 +253,24 @@ public class Home extends FragmentActivity {
 		case About.position:
 			fragment = new About();
 			break;
-		case FilmToSeeListFragment.position:
-			fragment = AllFragments.getInstance().getFragment(
-					FilmToSeeListFragment.class.getSimpleName().toString());
+		case FilmToSeeListFragment.POSTION:
+			fragment = createFilmListFragment(toSeeDAO, new FilmToSeeListFragment());//AllFragments.getInstance().getFragment(
+					//FilmToSeeListFragment.class.getSimpleName().toString());
 			break;
 
-		case FilmAllListFragment.position:
-			fragment = AllFragments.getInstance().getFragment(
-					FilmAllListFragment.class.getSimpleName().toString());
+		case FilmAllListFragment.POSITION:
+			fragment = createFilmListFragment(filmDAO, new FilmAllListFragment());//AllFragments.getInstance().getFragment(
+					//FilmAllListFragment.class.getSimpleName().toString());
 			break;
 
-		case FilmFavouriteListFragment.position:
-			fragment = AllFragments.getInstance().getFragment(
-					FilmFavouriteListFragment.class.getSimpleName().toString());
+		case FilmFavouriteListFragment.POSITION:
+			fragment = createFilmListFragment(favouriteDAO, new FilmFavouriteListFragment());//AllFragments.getInstance().getFragment(
+					//FilmFavouriteListFragment.class.getSimpleName().toString());
 			break;
 		}
 
 		if (fragment != null) {
-			setFragment(fragment, fragmentStack, false);
+			setFragment(fragment, FRAGMENTSTACK, false);
 		}
 
 		// Highlight the selected item and close the drawer
@@ -280,7 +301,7 @@ public class Home extends FragmentActivity {
 		if (disableDrawer) {
 			drawerToggle.setDrawerIndicatorEnabled(false);
 		}
-
+/*
 		String key = "";
 
 		if (fragment instanceof FilmDetailsFragment) {
@@ -295,12 +316,35 @@ public class Home extends FragmentActivity {
 
 		if (key != "") {
 			AllFragments.getInstance().putFragment(fragment, key);
-		}
+		}*/
 
 		FragmentManager fragmentManager = getFragmentManager();
 		FragmentTransaction ft = fragmentManager.beginTransaction();
 		ft.addToBackStack(name);
 		ft.replace(R.id.film_list_fragment, fragment, name);
 		ft.commit();
+	}
+
+	private FilmListFragment createFilmListFragment(FilmsListDAO daoBase,
+			FilmListFragment fragment) {
+
+		daoBase.open();
+		List<Film> films = daoBase.getAllFilms();
+		daoBase.close();
+
+		Bundle args = null;
+
+		ArrayList<String> list = new ArrayList<String>();
+
+		for (Film film : films) {
+			list.add(film.getName());
+		}
+
+		args = new Bundle();
+		args.putStringArrayList(FilmListFragment.LIST_KEY, list);
+		fragment.setArguments(args);
+		fragment.setList(list);
+
+		return fragment;
 	}
 }

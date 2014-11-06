@@ -18,16 +18,16 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import fr.isen.android.filmlist.bdd.FilmSearchResult;
 import fr.isen.android.filmlist.ui.FilmListFragment;
-import fr.isen.android.filmlist.ui.Home;
+import fr.isen.android.filmlist.ui.HomeActivity;
 import fr.isen.android.filmlist.ui.LoadingFragment;
 import fr.isen.android.filmlist.ui.SearchResultsFragment;
 
 public class SearchFilmTask extends AsyncTask<String, Void, JSONObject> {
 	private static final String URL = "http://www.omdbapi.com/?s=";
 	private HttpClient client;
-	private Home home;
+	private HomeActivity home;
 	
-	public SearchFilmTask(Home _home) {
+	public SearchFilmTask(HomeActivity _home) {
 		client = new DefaultHttpClient();
 		client.getParams().setParameter(CoreProtocolPNames.USER_AGENT, "android");
 		home = _home;
@@ -60,7 +60,7 @@ public class SearchFilmTask extends AsyncTask<String, Void, JSONObject> {
 	}
 	
 	protected void onPreExecute() {
-		home.setFragment(new LoadingFragment(), Home.fragmentStack, false);
+		home.setFragment(new LoadingFragment(), HomeActivity.FRAGMENTSTACK, false);
     }
 
     protected void onPostExecute(JSONObject result) {		
@@ -82,7 +82,7 @@ public class SearchFilmTask extends AsyncTask<String, Void, JSONObject> {
 			((SearchResultsFragment)fragment).setList(list);
 			
 			if (fragment != null) {
-				home.setFragment(fragment, Home.fragmentStack, false);
+				home.setFragment(fragment, HomeActivity.FRAGMENTSTACK, false);
 			}
 		}
 		catch(Exception e) {}

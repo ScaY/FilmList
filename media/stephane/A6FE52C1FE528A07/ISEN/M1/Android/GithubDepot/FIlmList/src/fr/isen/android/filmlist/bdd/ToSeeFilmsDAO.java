@@ -8,7 +8,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
-public class ToSeeFilmsDAO extends DAOBase {
+public class ToSeeFilmsDAO extends FilmsListDAO {
 
 	public ToSeeFilmsDAO(Context pContext) {
 		super(pContext);
@@ -50,6 +50,7 @@ public class ToSeeFilmsDAO extends DAOBase {
 		return film;
 	}
 	
+	@Override
 	public List<Film> getAllFilms() {
 		List<Film> films = new ArrayList<Film>();
 		  

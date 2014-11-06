@@ -8,22 +8,16 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
-public class FilmDAO extends DAOBase {
+public class FilmDAO extends FilmsListDAO {
 	  public FilmDAO(Context pContext) {
 		  super(pContext);
 	  }
 	  
-	  /**
-	   * @param m le film à ajouter à la base
-	   */
 	  public long insert(Film f) {
 		  ContentValues value = filmToValues(f);
 		  return mDb.insert(DatabaseHandler.FILM_TABLE_NAME, null, value);
 	  }
 
-	  /**
-	   * @param id l'identifiant du film à supprimer
-	   */
 	  public void delete(Film film) {
 		  delete(film.getId());
 	  }
@@ -35,17 +29,11 @@ public class FilmDAO extends DAOBase {
 		  mDb.delete(DatabaseHandler.FILM_TABLE_NAME, DatabaseHandler.FILM_KEY + " = ?", args);
 	  }
 
-	  /**
-	   * @param m le film modifié
-	   */
 	  public void edit(Film f) {
 		  ContentValues value = filmToValues(f);
 		  mDb.update(DatabaseHandler.FILM_TABLE_NAME, value, DatabaseHandler.FILM_KEY  + " = ?", new String[] {String.valueOf(f.getId())});
 	  }
 
-	  /**
-	   * @param id l'identifiant du film à récupérer
-	   */
 	  public Film select(long id) {
 		  String columns[] = DatabaseHandler.FILM_ALL_COLUMNS;
 		  String args[] = {String.valueOf(id)};
@@ -81,6 +69,7 @@ public class FilmDAO extends DAOBase {
 		  return film;
 	  }
 	  
+	  @Override
 	  public List<Film> getAllFilms() {
 		  List<Film> films = new ArrayList<Film>();
 		  

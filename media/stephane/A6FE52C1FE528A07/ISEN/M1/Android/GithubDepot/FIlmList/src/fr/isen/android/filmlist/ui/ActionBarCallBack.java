@@ -20,10 +20,10 @@ import fr.isen.android.filmlist.bdd.ToSeeFilmsDAO;
 public class ActionBarCallBack implements ActionMode.Callback {
 
 	private String typeKey;
-	private Home activity;
+	private HomeActivity activity;
 	private FilmListFragment filmListFragment;
 
-	public ActionBarCallBack(Home activity, FilmListFragment filmListFragment) {
+	public ActionBarCallBack(HomeActivity activity, FilmListFragment filmListFragment) {
 		this.typeKey = FilmAllListFragment.class.getSimpleName().toString();
 		this.activity = activity;
 		this.filmListFragment = filmListFragment;

@@ -31,7 +31,7 @@ public abstract class FilmListFragment extends Fragment {
 	private ActionBarCallBack actionBarCallBack;
 
 	public static final String LIST_KEY = "fr.isen.android.filmlist.ui.filmlistfragment.filmlistkey";
-
+	
 	public FilmListFragment() {
 		itemSelected = new HashMap<String, View>();
 		mActionMode = null;
@@ -77,8 +77,6 @@ public abstract class FilmListFragment extends Fragment {
 		return this.actionBarCallBack;
 	}
 
-	public abstract int getPosition();
-
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -106,7 +104,7 @@ public abstract class FilmListFragment extends Fragment {
 		listview.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
 		defaultBackground = listview.getBackground();
-		actionBarCallBack = new ActionBarCallBack((Home) getActivity(), this);
+		actionBarCallBack = new ActionBarCallBack((HomeActivity) getActivity(), this);
 
 		// Check for the rotation screen
 		listview.post(new Runnable() {
@@ -123,7 +121,7 @@ public abstract class FilmListFragment extends Fragment {
 					}
 
 					// Activate the selection mode
-					mActionMode = ((Home) getActivity())
+					mActionMode = ((HomeActivity) getActivity())
 							.startActionMode(actionBarCallBack);
 
 					// Remove the listener to open the details for a movie
@@ -139,7 +137,7 @@ public abstract class FilmListFragment extends Fragment {
 	}
 
 	public static void additemListener(ListView listFl, final String typeKey_,
-			final ArrayList<String> list, final Home activity) {
+			final ArrayList<String> list, final HomeActivity activity) {
 		if (listFl != null) {
 			listFl.setOnItemClickListener(new OnItemClickListener() {
 				@Override
@@ -153,7 +151,7 @@ public abstract class FilmListFragment extends Fragment {
 					args.putString(FilmDetailsFragment.TYPE_KEY, typeKey_);
 					filmDetailsFragment.setArguments(args);
 					activity.setFragment(filmDetailsFragment,
-							Home.fragmentStack, true);
+							HomeActivity.FRAGMENTSTACK, true);
 				}
 			});
 		}
@@ -171,7 +169,7 @@ public abstract class FilmListFragment extends Fragment {
 								Color.GRAY);
 
 						if (itemSelected.size() == 1) {
-							mActionMode = ((Home) getActivity())
+							mActionMode = ((HomeActivity) getActivity())
 									.startActionMode(actionBarCallBack);
 							getListView().setOnItemClickListener(null);
 						}
@@ -180,14 +178,14 @@ public abstract class FilmListFragment extends Fragment {
 						itemSelected.remove(Integer.toString(position));
 						getListView().getChildAt(position).setBackground(
 								defaultBackground);
-						((Home) getActivity()).setTitle(Integer
+						((HomeActivity) getActivity()).setTitle(Integer
 								.toString(position));
 
 						if (itemSelected.isEmpty()) {
 							itemSelected.clear();
 							mActionMode.finish();
 							additemListener(listview, typeKey, getList(),
-									(Home) getActivity());
+									(HomeActivity) getActivity());
 
 						}
 					}

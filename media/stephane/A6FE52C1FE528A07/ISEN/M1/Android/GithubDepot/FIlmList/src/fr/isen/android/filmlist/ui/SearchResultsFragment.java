@@ -43,6 +43,7 @@ public class SearchResultsFragment extends Fragment implements
 		Bundle args = getArguments();
 
 		if (list == null) {
+			
 			if (args != null && args.containsKey(LIST_KEY)) {
 				Serializable arg = args.getSerializable(LIST_KEY);
 				if (arg instanceof ArrayList<?>) {
@@ -78,8 +79,8 @@ public class SearchResultsFragment extends Fragment implements
 		args.putString(FilmDetailsFragment.TYPE_KEY,
 				SearchResultsFragment.class.getSimpleName().toString());
 		filmDetailsFragment.setArguments(args);
-		((Home) getActivity()).setFragment(filmDetailsFragment,
-				Home.fragmentStack, true);
+		((HomeActivity) getActivity()).setFragment(filmDetailsFragment,
+				HomeActivity.FRAGMENTSTACK, true);
 
 	}
 }
