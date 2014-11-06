@@ -116,7 +116,7 @@ public abstract class FilmDetailsFragment extends Fragment {
 		Bundle args = getArguments();
 		setRetainInstance(true);
 		setType(retrieveStringArgs(TYPE_KEY, args));
-		
+
 		return view;
 	}
 
@@ -152,8 +152,8 @@ public abstract class FilmDetailsFragment extends Fragment {
 				.getYear());
 		((TextView) activity.findViewById(R.id.film_runtime)).setText(film
 				.getRuntime());
-		// ((TextView)
-		// view.findViewById(R.id.film_story)).setText(film.getStory());
+		((TextView) activity.findViewById(R.id.film_story)).setText(film
+				.getStory());
 
 		ImageView image = (ImageView) activity.findViewById(R.id.imageView1);
 		DownloadImageTask task = new DownloadImageTask(image);

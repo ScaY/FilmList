@@ -55,6 +55,11 @@
             android:layout_height="match_parent"
             android:orientation="vertical" >
 
+            <ListView
+                android:id="@+id/film_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
             <TextView
                 android:id="@+id/film_runtime"
                 android:layout_width="wrap_content"
@@ -78,6 +83,13 @@
 
             <TextView
                 android:id="@+id/film_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="33dp"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/film_story"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="33dp"
