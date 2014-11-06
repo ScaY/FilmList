@@ -158,5 +158,25 @@ public abstract class FilmDetailsFragment extends Fragment {
 		ImageView image = (ImageView) activity.findViewById(R.id.imageView1);
 		DownloadImageTask task = new DownloadImageTask(image);
 		task.execute(film.getImageUrl());
+		
+		final Button button = (Button) getActivity()
+				.findViewById(R.id.button_add_film_calendar);
+		ToSeeFilmsDAO toSeeDAO = new ToSeeFilmsDAO(getActivity());
+		toSeeDAO.open();
+		if (toSeeDAO.select(film.getId()) != null) {
+			
+			button.setText("Remove film from planning");
+		}
+		toSeeDAO.close();
+		
+		final Button favourite = (Button) getActivity()
+				.findViewById(R.id.button_add_film_favourites);
+		FavouriteFilmsDAO favouriteDAO = new FavouriteFilmsDAO(
+				getActivity());
+		favouriteDAO.open();
+		if (favouriteDAO.select(film.getId()) != null) {
+			favourite.setText("Remove film from favourites");
+		}
+		favouriteDAO.close();
 	}
 }
