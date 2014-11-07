@@ -62,7 +62,7 @@ public abstract class FilmDetailsFragment extends Fragment {
 		listview = (ListView) view.findViewById(R.id.film_details);
 		listview.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
-		
+
 		// Set the button to add the movie to the calendar
 		final Button button = (Button) view
 				.findViewById(R.id.button_add_film_calendar);
@@ -157,37 +157,41 @@ public abstract class FilmDetailsFragment extends Fragment {
 
 	public void setFilmView() {
 		Activity activity = getActivity();
-		getActivity().setTitle(film.getName());
-		list.clear();
-		list.add(film.getYear());
-		list.add(film.getRuntime());
-		list.add(film.getDirector());
-		list.add(film.getStory());
-		
-		adapter.notifyDataSetChanged();
+		if (film != null) {
 
-		ImageView image = (ImageView) activity.findViewById(R.id.imageView1);
-		DownloadImageTask task = new DownloadImageTask(image);
-		task.execute(film.getImageUrl());
-		
-		final Button button = (Button) getActivity()
-				.findViewById(R.id.button_add_film_calendar);
-		ToSeeFilmsDAO toSeeDAO = new ToSeeFilmsDAO(getActivity());
-		toSeeDAO.open();
-		if (toSeeDAO.select(film.getId()) != null) {
-			
-			button.setText("Remove film from planning");
+			getActivity().setTitle(film.getName());
+			list.clear();
+			list.add(film.getYear());
+			list.add(film.getRuntime());
+			list.add(film.getDirector());
+			list.add(film.getStory());
+
+			adapter.notifyDataSetChanged();
+
+			ImageView image = (ImageView) activity
+					.findViewById(R.id.imageView1);
+			DownloadImageTask task = new DownloadImageTask(image);
+			task.execute(film.getImageUrl());
+
+			final Button button = (Button) getActivity().findViewById(
+					R.id.button_add_film_calendar);
+			ToSeeFilmsDAO toSeeDAO = new ToSeeFilmsDAO(getActivity());
+			toSeeDAO.open();
+			if (toSeeDAO.select(film.getId()) != null) {
+
+				button.setText("Remove film from planning");
+			}
+			toSeeDAO.close();
+
+			final Button favourite = (Button) getActivity().findViewById(
+					R.id.button_add_film_favourites);
+			FavouriteFilmsDAO favouriteDAO = new FavouriteFilmsDAO(
+					getActivity());
+			favouriteDAO.open();
+			if (favouriteDAO.select(film.getId()) != null) {
+				favourite.setText("Remove film from favourites");
+			}
+			favouriteDAO.close();
 		}
-		toSeeDAO.close();
-		
-		final Button favourite = (Button) getActivity()
-				.findViewById(R.id.button_add_film_favourites);
-		FavouriteFilmsDAO favouriteDAO = new FavouriteFilmsDAO(
-				getActivity());
-		favouriteDAO.open();
-		if (favouriteDAO.select(film.getId()) != null) {
-			favourite.setText("Remove film from favourites");
-		}
-		favouriteDAO.close();
 	}
 }

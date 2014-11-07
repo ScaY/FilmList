@@ -80,7 +80,7 @@ public class SearchResultsFragment extends Fragment implements
 				SearchResultsFragment.class.getSimpleName().toString());
 		filmDetailsFragment.setArguments(args);
 		((HomeActivity) getActivity()).setFragment(filmDetailsFragment,
-				HomeActivity.FRAGMENTSTACK, true);
+				HomeActivity.STACK_FILMLIST, true);
 
 	}
 }

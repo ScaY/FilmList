@@ -151,7 +151,7 @@ public abstract class FilmListFragment extends Fragment {
 					args.putString(FilmDetailsFragment.TYPE_KEY, typeKey_);
 					filmDetailsFragment.setArguments(args);
 					activity.setFragment(filmDetailsFragment,
-							HomeActivity.FRAGMENTSTACK, true);
+							HomeActivity.STACK_FILMLIST, true);
 				}
 			});
 		}
