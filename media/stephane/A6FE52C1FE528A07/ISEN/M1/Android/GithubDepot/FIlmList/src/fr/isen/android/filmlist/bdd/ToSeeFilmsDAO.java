@@ -70,8 +70,4 @@ public class ToSeeFilmsDAO extends FilmsListDAO {
 		  
 		return films;
 	}
-
-	private Film cursorToFilm(Cursor cursor) {
-	  return new Film(cursor.getLong(0), cursor.getString(1), cursor.getString(2), new Date(0), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7));
-  }
 }

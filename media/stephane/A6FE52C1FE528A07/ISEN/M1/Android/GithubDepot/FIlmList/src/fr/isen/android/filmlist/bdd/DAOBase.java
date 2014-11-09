@@ -4,7 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 public abstract class DAOBase {
-	protected final static int VERSION = 7;
+	//à modifier pour mettre à jour la table (la fonction onUpgrade de DatabaseHandler sera exécutée)
+	protected final static int VERSION = 8;
 	protected final static String NOM = "film_list.db";
 
 	protected SQLiteDatabase mDb = null;

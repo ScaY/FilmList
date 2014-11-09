@@ -15,6 +15,9 @@ public class Film implements Serializable{
 	private String director;
 	private String story;
 	private String imageUrl;
+	private String imdbRating;
+	private String imdbVotes;
+	private String actors;
   
 	public Film(long id, String name) {
 	  this.id = id;
@@ -22,7 +25,7 @@ public class Film implements Serializable{
 	  this.director = "";
 	}
 	
-	public Film(long id, String name, String year, Date releaseDate, String runtime, String director, String story, String imageUrl) {
+	public Film(long id, String name, String year, Date releaseDate, String runtime, String director, String story, String imageUrl, String imdbRating, String imdbVotes, String actors) {
 	  this.id = id;
 	  this.name = name;
 	  this.year = year;
@@ -31,6 +34,9 @@ public class Film implements Serializable{
 	  this.director = director;
 	  this.story = story;
 	  this.imageUrl = imageUrl;
+	  this.imdbRating = imdbRating;
+	  this.imdbVotes = imdbVotes;
+	  this.actors = actors;
 	}
 	
 	public Film(JSONObject jsonFilm) {
@@ -43,6 +49,9 @@ public class Film implements Serializable{
 			director = jsonFilm.getString("Director");
 			story = jsonFilm.getString("Plot");
 			imageUrl = jsonFilm.getString("Poster");
+			imdbRating = jsonFilm.getString("imdbRating");
+			imdbVotes = jsonFilm.getString("imdbVotes");
+			actors = jsonFilm.getString("Actors");
 		}
 		catch(Exception e) {}
 	}
@@ -109,5 +118,29 @@ public class Film implements Serializable{
 
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
+	}
+
+	public String getImdbRating() {
+		return imdbRating;
+	}
+
+	public void setImdbRating(String imdbRating) {
+		this.imdbRating = imdbRating;
+	}
+
+	public String getImdbVotes() {
+		return imdbVotes;
+	}
+
+	public void setImdbVotes(String imdbVotes) {
+		this.imdbVotes = imdbVotes;
+	}
+
+	public String getActors() {
+		return actors;
+	}
+
+	public void setActors(String actors) {
+		this.actors = actors;
 	}
 }

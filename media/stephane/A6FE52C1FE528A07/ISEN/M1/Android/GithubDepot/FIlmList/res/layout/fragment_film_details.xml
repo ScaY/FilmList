@@ -52,6 +52,12 @@
 			        android:text="" />
 		        
 		        <TextView
+		            android:id="@+id/film_details_actors"
+			        android:layout_width="fill_parent"
+			        android:layout_height="wrap_content"
+			        android:text="" />
+		        
+		        <TextView
 		            android:id="@+id/film_details_year"
 			        android:layout_width="fill_parent"
 			        android:layout_height="wrap_content"
@@ -59,6 +65,12 @@
 		        
 		        <TextView
 		            android:id="@+id/film_details_duration"
+			        android:layout_width="fill_parent"
+			        android:layout_height="wrap_content"
+			        android:text="" />
+		        
+		        <TextView
+		            android:id="@+id/film_details_rating"
 			        android:layout_width="fill_parent"
 			        android:layout_height="wrap_content"
 			        android:text="" />

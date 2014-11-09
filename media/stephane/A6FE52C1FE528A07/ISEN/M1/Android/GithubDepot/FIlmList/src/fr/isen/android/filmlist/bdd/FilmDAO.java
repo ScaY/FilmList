@@ -1,6 +1,5 @@
 package fr.isen.android.filmlist.bdd;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,10 +84,6 @@ public class FilmDAO extends FilmsListDAO {
 		  return films;
 	  }
 	  
-	  private Film cursorToFilm(Cursor cursor) {
-		  return new Film(cursor.getLong(0), cursor.getString(1), cursor.getString(2), new Date(0), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7));
-	  }
-	  
 	  private ContentValues filmToValues(Film f) {
 		  ContentValues value = new ContentValues();
 		  value.put(DatabaseHandler.FILM_NAME, f.getName());
@@ -98,6 +93,9 @@ public class FilmDAO extends FilmsListDAO {
 		  value.put(DatabaseHandler.FILM_DIRECTOR, f.getDirector());
 		  value.put(DatabaseHandler.FILM_STORY, f.getStory());
 		  value.put(DatabaseHandler.FILM_IMAGE, f.getImageUrl());
+		  value.put(DatabaseHandler.FILM_RATING, f.getImdbRating());
+		  value.put(DatabaseHandler.FILM_VOTES, f.getImdbVotes());
+		  value.put(DatabaseHandler.FILM_ACTORS, f.getActors());
 		  
 		  return value;
 	  }

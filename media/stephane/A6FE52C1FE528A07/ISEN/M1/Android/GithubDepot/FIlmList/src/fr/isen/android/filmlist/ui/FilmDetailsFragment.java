@@ -148,8 +148,10 @@ public abstract class FilmDetailsFragment extends Fragment {
 			activity.setTitle(film.getName());
 			((TextView)activity.findViewById(R.id.film_details_title)).setText(film.getName());
 			((TextView)activity.findViewById(R.id.film_details_director)).setText(film.getDirector());
+			((TextView)activity.findViewById(R.id.film_details_actors)).setText(film.getActors());
 			((TextView)activity.findViewById(R.id.film_details_year)).setText(film.getYear());
 			((TextView)activity.findViewById(R.id.film_details_duration)).setText(film.getRuntime());
+			((TextView)activity.findViewById(R.id.film_details_rating)).setText(film.getImdbRating() + "/10 from " + film.getImdbVotes() + " users");
 			((TextView)activity.findViewById(R.id.film_details_story)).setText(film.getStory());
 
 			ImageView image = (ImageView) activity
