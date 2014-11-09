@@ -12,11 +12,6 @@ import org.apache.http.params.CoreProtocolPNames;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
-import android.view.View;
-import android.widget.TextView;
-
-import com.example.filmlist.R;
-
 import fr.isen.android.filmlist.bdd.Film;
 import fr.isen.android.filmlist.ui.FilmDetailsFragment;
 

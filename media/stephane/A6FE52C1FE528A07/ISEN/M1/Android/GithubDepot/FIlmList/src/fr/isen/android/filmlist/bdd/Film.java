@@ -1,10 +1,11 @@
 package fr.isen.android.filmlist.bdd;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 import org.json.JSONObject;
 
-public class Film {
+public class Film implements Serializable{
 	// Notez que l'identifiant est un long
 	private long id;
 	private String name;

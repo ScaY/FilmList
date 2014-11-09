@@ -32,7 +32,7 @@ public abstract class FilmDetailsFragment extends Fragment {
 	public static final String TYPE_KEY = "fr.isen.android.filmlist.ui.filmdetailsfragment.typekey";
 	private ArrayList<String> list;
 	private ArrayAdapter<String> adapter;
-	private ListView listview;
+	protected ListView listview;
 
 	public Film film;
 	public String type;

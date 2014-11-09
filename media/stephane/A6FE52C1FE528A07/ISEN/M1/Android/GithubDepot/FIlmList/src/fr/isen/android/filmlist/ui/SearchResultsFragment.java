@@ -14,22 +14,23 @@ import android.widget.ListView;
 
 import com.example.filmlist.R;
 
+import fr.isen.android.filmlist.bdd.Film;
 import fr.isen.android.filmlist.bdd.FilmSearchResult;
-import fr.isen.android.filmlist.utils.FilmSearchResultAdapter;
 
 public class SearchResultsFragment extends Fragment implements
 		OnItemClickListener {
 	public static final int position = 4;
 	public static final String LIST_KEY = "FILMS_RESULTS_LIST";
-	private ArrayList<FilmSearchResult> list;
-	private FilmSearchResultAdapter adapter;
+	private ArrayList<Film> list;
+	//private FilmSearchResultAdapter adapter;
 	private ListView listview;
+	private CustomListAdapter adapter;
 
-	public ArrayList<FilmSearchResult> getList() {
+	public ArrayList<Film> getList() {
 		return this.list;
 	}
 
-	public void setList(ArrayList<FilmSearchResult> list_) {
+	public void setList(ArrayList<Film> list_) {
 		this.list = list_;
 	}
 
@@ -47,16 +48,16 @@ public class SearchResultsFragment extends Fragment implements
 			if (args != null && args.containsKey(LIST_KEY)) {
 				Serializable arg = args.getSerializable(LIST_KEY);
 				if (arg instanceof ArrayList<?>) {
-					list = (ArrayList<FilmSearchResult>) arg;
+					list = (ArrayList<Film>) arg;
 				} else {
-					list = new ArrayList<FilmSearchResult>();
+					list = new ArrayList<Film>();
 				}
 			} else {
-				list = new ArrayList<FilmSearchResult>();
+				list = new ArrayList<Film>();
 			}
 		}
 
-		adapter = new FilmSearchResultAdapter(getActivity(), list);
+		adapter = new CustomListAdapter(getActivity(), list);//new FilmSearchResultAdapter(getActivity(), list);
 		listview = (ListView) view.findViewById(R.id.listview);
 		listview.setAdapter(adapter);
 		listview.setOnItemClickListener(this);
@@ -75,7 +76,7 @@ public class SearchResultsFragment extends Fragment implements
 			long id) {
 		FilmDetailsAPIFragment filmDetailsFragment = new FilmDetailsAPIFragment();
 		Bundle args = new Bundle();
-		args.putSerializable(FilmDetailsFragment.MOVIE_KEY, list.get(position));
+		args.putSerializable(FilmDetailsFragment.MOVIE_KEY, (Serializable) list.get(position));
 		args.putString(FilmDetailsFragment.TYPE_KEY,
 				SearchResultsFragment.class.getSimpleName().toString());
 		filmDetailsFragment.setArguments(args);
@@ -83,4 +84,5 @@ public class SearchResultsFragment extends Fragment implements
 				HomeActivity.STACK_FILMLIST, true);
 
 	}
+	
 }

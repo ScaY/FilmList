@@ -20,9 +20,9 @@ import fr.isen.android.filmlist.utils.DownloadImageTask;
 public class CustomListAdapter extends BaseAdapter {
 	private Activity activity;
 	private LayoutInflater inflater;
-	private List<FilmSearchResult> movieItems;
+	private List<Film> movieItems;
 
-	public CustomListAdapter(Activity activity, List<FilmSearchResult> movieItems) {
+	public CustomListAdapter(Activity activity, List<Film> movieItems) {
 		this.activity = activity;
 		this.movieItems = movieItems;
 	}
@@ -59,27 +59,28 @@ public class CustomListAdapter extends BaseAdapter {
 		TextView year = (TextView) convertView.findViewById(R.id.releaseYear);
 
 		// getting movie data for the row
-		FilmSearchResult f = movieItems.get(position);
+		Film f = movieItems.get(position);
 
 		// image ImageView image = (ImageView) activity
-		//ImageView image = (ImageView) convertView.findViewById(R.id.imageView);
-		//DownloadImageTask task = new DownloadImageTask(image);
-		//task.execute(f.getImageUrl());
+		ImageView image = (ImageView) convertView.findViewById(R.id.imageView);
+		DownloadImageTask task = new DownloadImageTask(image);
+		if (f.getImageUrl() != null && f.getImageUrl() != "") {
+			task.execute(f.getImageUrl());
+		}
 
 		// title
-		title.setText(f.getImdbID());
+		title.setText(f.getName());
 
 		// rating
 		rating.setText("Rating: " + String.valueOf(5));
 
 		// genre
-		/*String genreStr = "";
-		for (String str : m.getGenre()) {
-			genreStr += str + ", ";
-		}
-		genreStr = genreStr.length() > 0 ? genreStr.substring(0,
-				genreStr.length() - 2) : genreStr;*/
-		genre.setText(f.getTitle());
+		/*
+		 * String genreStr = ""; for (String str : m.getGenre()) { genreStr +=
+		 * str + ", "; } genreStr = genreStr.length() > 0 ?
+		 * genreStr.substring(0, genreStr.length() - 2) : genreStr;
+		 */
+		genre.setText(f.getDirector());
 
 		// release year
 		year.setText(String.valueOf(f.getYear()));

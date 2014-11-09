@@ -3,15 +3,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="fr.isen.android.filmlist.ui.FilmToSeeListFragment" >
-    
-	<ListView android:id="@+id/listview"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"/>
-	
-	 <Button
+
+    <ListView
+        android:id="@+id/listview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:divider="@color/list_divider"
+        android:dividerHeight="1dp"
+        android:listSelector="@drawable/list_row_selector" />
+
+    <Button
         android:id="@+id/btn_remove"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Remove"
         android:visibility="gone" />
+
 </RelativeLayout>
