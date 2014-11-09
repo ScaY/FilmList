@@ -13,7 +13,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/logo_movie_list"
         android:label="@string/app_name"
         android:parentActivityName="fr.isen.android.Home"
         android:theme="@style/AppTheme" >
