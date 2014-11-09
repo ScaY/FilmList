@@ -35,17 +35,12 @@ public class FilmDetailsAPIFragment extends FilmDetailsFragment {
 		
 		if(film != null){
 			this.film = film;
-			// Pour afficher l'image
-			listview.post(new Runnable() {
-				
-				@Override
-				public void run() {
-					setFilmView();
-					
-				}
-			});
 		}
 		
 		return view;
+	}
+	
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		setFilmView();
 	}
 }

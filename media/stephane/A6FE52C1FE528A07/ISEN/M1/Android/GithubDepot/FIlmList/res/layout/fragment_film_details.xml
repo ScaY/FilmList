@@ -1,66 +1,96 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="fr.isen.android.filmlist.FilmDetails$PlaceholderFragment" >
-
-    <LinearLayout
-        android:id="@+id/linearLayout1"
-        android:layout_width="match_parent"
-        android:layout_height="146dp"
-        android:orientation="horizontal" >
-
-        <ImageView
-            android:id="@+id/imageView1"
-            android:layout_width="98dp"
-            android:layout_height="98dp"
-            android:contentDescription="@string/image_text"
-            android:src="@drawable/no_picture" />
-
-        <LinearLayout
-            android:id="@+id/linearLayout2"
-            android:layout_width="match_parent"
-            android:layout_height="146dp"
-            android:orientation="vertical" >
-
-            <Button
-                android:id="@+id/button_add_film_calendar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/button_add_film_calendar" />
-
-            <Button
-                android:id="@+id/button_add_film_favourites"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/button_add_film_favourite" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignLeft="@+id/linearLayout1"
-        android:layout_alignTop="@+id/linearLayout1"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="120dp"
-        android:orientation="vertical" >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" >
-
-            <ListView
-                android:id="@+id/film_details"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-    </LinearLayout>
-
-</RelativeLayout>
+<ScrollView 
+      xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools"
+      android:id="@+id/scroll" 
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content">
+      
+	<LinearLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical"
+	    android:paddingBottom="@dimen/activity_vertical_margin"
+	    android:paddingLeft="@dimen/activity_horizontal_margin"
+	    android:paddingRight="@dimen/activity_horizontal_margin"
+	    android:paddingTop="@dimen/activity_vertical_margin"
+	    tools:context="fr.isen.android.filmlist.FilmDetails$PlaceholderFragment" >
+	
+	    <TextView
+	        android:id="@+id/film_details_title"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:text=""
+	        android:textAppearance="?android:attr/textAppearanceLarge"
+	        android:gravity="center"
+	    	android:layout_marginBottom="20dp" />
+	    
+	    <LinearLayout
+	        android:id="@+id/linearLayout1"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginBottom="20dp"
+	        android:orientation="horizontal" >
+	
+	        <ImageView
+	            android:id="@+id/imageView1"
+	            android:layout_width="100dp"
+	            android:layout_height="wrap_content"
+	            android:contentDescription="@string/image_text"
+	            android:layout_marginRight="20dp"
+	            android:src="@drawable/no_picture" />
+	        
+	        <LinearLayout
+	            android:orientation="vertical"
+	            android:id="@+id/linearLayoutDetails"
+	            android:layout_width="fill_parent"
+	            android:layout_height="match_parent">
+	            
+		        <TextView
+		            android:id="@+id/film_details_director"
+			        android:layout_width="fill_parent"
+			        android:layout_height="wrap_content"
+			        android:text="" />
+		        
+		        <TextView
+		            android:id="@+id/film_details_year"
+			        android:layout_width="fill_parent"
+			        android:layout_height="wrap_content"
+			        android:text="" />
+		        
+		        <TextView
+		            android:id="@+id/film_details_duration"
+			        android:layout_width="fill_parent"
+			        android:layout_height="wrap_content"
+			        android:text="" />
+	        </LinearLayout>
+	
+	    </LinearLayout>
+	
+	    <LinearLayout
+	            android:id="@+id/linearLayout2"
+	            android:layout_width="fill_parent"
+	            android:layout_height="match_parent"
+	            android:orientation="vertical" >
+	
+	        	<TextView
+	        		android:id="@+id/film_details_story"
+			        android:layout_width="fill_parent"
+			        android:layout_height="wrap_content"
+			        android:layout_marginBottom="20dp"
+			        android:text="" />
+	        
+	            <Button
+	                android:id="@+id/button_add_film_calendar"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:text="@string/button_add_film_calendar" />
+	
+	            <Button
+	                android:id="@+id/button_add_film_favourites"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:text="@string/button_add_film_favourite" />
+	        </LinearLayout>
+	
+	</LinearLayout>
+</ScrollView>
