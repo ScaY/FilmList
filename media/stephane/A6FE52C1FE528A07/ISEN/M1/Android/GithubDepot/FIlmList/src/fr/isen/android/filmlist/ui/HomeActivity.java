@@ -321,14 +321,14 @@ public class HomeActivity extends FragmentActivity {
 
 		Bundle args = null;
 
-		ArrayList<String> list = new ArrayList<String>();
+		ArrayList<Film> list = new ArrayList<Film>();
 
 		for (Film film : films) {
-			list.add(film.getName());
+			list.add(film);
 		}
 
 		args = new Bundle();
-		args.putStringArrayList(FilmListFragment.LIST_KEY, list);
+		args.putSerializable(FilmListFragment.LIST_KEY, list);
 		fragment.setArguments(args);
 		fragment.setList(list);
 

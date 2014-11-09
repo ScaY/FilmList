@@ -8,7 +8,6 @@ import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ShareActionProvider;
-import android.widget.Toast;
 
 import com.example.filmlist.R;
 
@@ -42,7 +41,7 @@ public class ActionBarCallBack implements ActionMode.Callback {
 				filmListFragment.getListView().getChildAt(Integer.parseInt(i))
 						.setBackground(filmListFragment.getDefaultBackground());
 				String nameFilm = filmListFragment.getList().remove(
-						Integer.parseInt(i));
+						Integer.parseInt(i)).getName();
 
 				List<Film> films = null;
 				if (typeKey.equals(FilmFavouriteListFragment.class
@@ -153,12 +152,11 @@ public class ActionBarCallBack implements ActionMode.Callback {
 			}
 		}
 
-		activity.setTitle("Taillle : " + Integer.toString(nameFilms.size()));
 		
 		for (String i : filmListFragment.getItemSelected().keySet()) {
 
 			String filmName = filmListFragment.getList().get(
-					Integer.parseInt(i));
+					Integer.parseInt(i)).getName();
 			if (nameFilms.size() == 1) {
 				msg += filmName + " ";
 			} else if (Integer.parseInt(i) == nameFilms.size() - 1) {

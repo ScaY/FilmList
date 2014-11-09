@@ -1,5 +1,6 @@
 package fr.isen.android.filmlist.ui;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -14,17 +15,19 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.filmlist.R;
 
+import fr.isen.android.filmlist.bdd.Film;
+
 public abstract class FilmListFragment extends Fragment {
-	private ArrayList<String> list;
-	private ArrayAdapter<String> adapter;
+	//private ArrayList<String> list;
+	//private ArrayAdapter<String> adapter;
+	private ArrayList<Film> list;
 	private ListView listview;
 	private HashMap<String, View> itemSelected;
-
+	private CustomListAdapter adapter;
 	private Drawable defaultBackground;
 
 	private ActionMode mActionMode;
@@ -41,15 +44,15 @@ public abstract class FilmListFragment extends Fragment {
 		return listview;
 	}
 
-	public void setList(ArrayList<String> list_) {
+	public void setList(ArrayList<Film> list_) {
 		list = list_;
 	}
 
-	public ArrayList<String> getList() {
+	public ArrayList<Film> getList() {
 		return list;
 	}
 
-	public void setAdapter(ArrayAdapter<String> adapter_) {
+	public void setAdapter(CustomListAdapter adapter_) {
 		this.adapter = adapter_;
 	}
 
@@ -69,7 +72,7 @@ public abstract class FilmListFragment extends Fragment {
 		return this.defaultBackground;
 	}
 
-	public ArrayAdapter<String> getAdapter() {
+	public CustomListAdapter getAdapter() {
 		return this.adapter;
 	}
 
@@ -92,14 +95,18 @@ public abstract class FilmListFragment extends Fragment {
 
 		if (list == null) {
 			if (args != null && args.containsKey(FilmListFragment.LIST_KEY)) {
-				list = args.getStringArrayList(FilmListFragment.LIST_KEY);
+				Serializable arg = args.getSerializable(FilmListFragment.LIST_KEY);;
+				if(arg instanceof ArrayList<?>){
+					list = (ArrayList<Film>) arg;
+				}else{
+					list = new ArrayList<Film>();
+				}
 			} else {
-				list = new ArrayList<String>();
+				list = new ArrayList<Film>();
 			}
 		}
-
-		adapter = new ArrayAdapter<String>(getActivity(),
-				android.R.layout.simple_list_item_1, list);
+		
+		adapter = new CustomListAdapter(getActivity(), list);
 		listview = (ListView) view.findViewById(R.id.listview);
 		listview.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
@@ -137,7 +144,7 @@ public abstract class FilmListFragment extends Fragment {
 	}
 
 	public static void additemListener(ListView listFl, final String typeKey_,
-			final ArrayList<String> list, final HomeActivity activity) {
+			final ArrayList<Film> list, final HomeActivity activity) {
 		if (listFl != null) {
 			listFl.setOnItemClickListener(new OnItemClickListener() {
 				@Override
@@ -147,7 +154,7 @@ public abstract class FilmListFragment extends Fragment {
 					FilmDetailsFragment filmDetailsFragment = new FilmDetailsDBFragment();
 					Bundle args = new Bundle();
 					args.putString(FilmDetailsFragment.MOVIE_KEY,
-							list.get(position));
+							list.get(position).getName());
 					args.putString(FilmDetailsFragment.TYPE_KEY, typeKey_);
 					filmDetailsFragment.setArguments(args);
 					activity.setFragment(filmDetailsFragment,
@@ -195,7 +202,7 @@ public abstract class FilmListFragment extends Fragment {
 		}
 	}
 
-	public void refresh(String film) {
+	public void refresh(Film film) {
 		list.add(film);
 		adapter.notifyDataSetChanged();
 	}

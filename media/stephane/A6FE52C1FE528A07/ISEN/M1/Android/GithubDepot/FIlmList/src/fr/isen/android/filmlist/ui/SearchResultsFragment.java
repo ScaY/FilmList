@@ -57,7 +57,7 @@ public class SearchResultsFragment extends Fragment implements
 			}
 		}
 
-		adapter = new CustomListAdapter(getActivity(), list);//new FilmSearchResultAdapter(getActivity(), list);
+		adapter = new CustomListAdapter(getActivity(), list);
 		listview = (ListView) view.findViewById(R.id.listview);
 		listview.setAdapter(adapter);
 		listview.setOnItemClickListener(this);
