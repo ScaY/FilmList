@@ -1,6 +1,5 @@
 package fr.isen.android.filmlist.ui;
 
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 import android.app.Activity;
@@ -12,10 +11,8 @@ import android.provider.CalendarContract.Events;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.filmlist.R;
@@ -30,9 +27,6 @@ public abstract class FilmDetailsFragment extends Fragment {
 
 	public static final String MOVIE_KEY = "fr.isen.android.filmlist.ui.filmdetailsfragment.moviekey";
 	public static final String TYPE_KEY = "fr.isen.android.filmlist.ui.filmdetailsfragment.typekey";
-	private ArrayList<String> list;
-	private ArrayAdapter<String> adapter;
-	protected ListView listview;
 
 	public Film film;
 	public String type;
@@ -54,14 +48,6 @@ public abstract class FilmDetailsFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_film_details, container,
 				false);
-
-		// Set the details about the movie
-		list = new ArrayList<String>();
-		adapter = new ArrayAdapter<String>(getActivity(),
-				android.R.layout.simple_list_item_1, list);
-		listview = (ListView) view.findViewById(R.id.film_details);
-		listview.setAdapter(adapter);
-		adapter.notifyDataSetChanged();
 
 		// Set the button to add the movie to the calendar
 		final Button button = (Button) view
@@ -159,23 +145,21 @@ public abstract class FilmDetailsFragment extends Fragment {
 		Activity activity = getActivity();
 		if (film != null) {
 
-			getActivity().setTitle(film.getName());
-			list.clear();
-			list.add(film.getYear());
-			list.add(film.getRuntime());
-			list.add(film.getDirector());
-			list.add(film.getStory());
-
-			adapter.notifyDataSetChanged();
+			activity.setTitle(film.getName());
+			((TextView)activity.findViewById(R.id.film_details_title)).setText(film.getName());
+			((TextView)activity.findViewById(R.id.film_details_director)).setText(film.getDirector());
+			((TextView)activity.findViewById(R.id.film_details_year)).setText(film.getYear());
+			((TextView)activity.findViewById(R.id.film_details_duration)).setText(film.getRuntime());
+			((TextView)activity.findViewById(R.id.film_details_story)).setText(film.getStory());
 
 			ImageView image = (ImageView) activity
 					.findViewById(R.id.imageView1);
 			DownloadImageTask task = new DownloadImageTask(image);
 			task.execute(film.getImageUrl());
 
-			final Button button = (Button) getActivity().findViewById(
+			final Button button = (Button) activity.findViewById(
 					R.id.button_add_film_calendar);
-			ToSeeFilmsDAO toSeeDAO = new ToSeeFilmsDAO(getActivity());
+			ToSeeFilmsDAO toSeeDAO = new ToSeeFilmsDAO(activity);
 			toSeeDAO.open();
 			if (toSeeDAO.select(film.getId()) != null) {
 
