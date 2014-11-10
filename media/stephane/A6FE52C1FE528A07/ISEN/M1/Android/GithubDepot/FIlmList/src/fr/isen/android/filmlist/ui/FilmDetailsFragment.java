@@ -1,10 +1,15 @@
 package fr.isen.android.filmlist.ui;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.GregorianCalendar;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.provider.CalendarContract.Events;
@@ -23,7 +28,7 @@ import fr.isen.android.filmlist.bdd.FilmDAO;
 import fr.isen.android.filmlist.bdd.ToSeeFilmsDAO;
 import fr.isen.android.filmlist.utils.DownloadImageTask;
 
-public abstract class FilmDetailsFragment extends Fragment {
+public class FilmDetailsFragment extends Fragment {
 
 	public static final String MOVIE_KEY = "fr.isen.android.filmlist.ui.filmdetailsfragment.moviekey";
 	public static final String TYPE_KEY = "fr.isen.android.filmlist.ui.filmdetailsfragment.typekey";
@@ -48,7 +53,15 @@ public abstract class FilmDetailsFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_film_details, container,
 				false);
-
+		
+		Bundle args = getArguments();
+		if (args != null && args.containsKey(MOVIE_KEY)) {
+			Serializable arg = args.getSerializable(MOVIE_KEY);
+			if(arg instanceof Film){
+				film = (Film)arg;
+			}
+		}
+		
 		// Set the button to add the movie to the calendar
 		final Button button = (Button) view
 				.findViewById(R.id.button_add_film_calendar);
@@ -63,6 +76,9 @@ public abstract class FilmDetailsFragment extends Fragment {
 					button.setText("Add film to planning");
 				} else {
 					toSeeDAO.insert(film);
+					if(film.getImage() != null) {
+						saveImageToFile(film.getImage(), film.getName()+ ".png");
+					}
 					button.setText("Remove film from planning");
 
 					Intent intent = new Intent(Intent.ACTION_INSERT);
@@ -106,6 +122,9 @@ public abstract class FilmDetailsFragment extends Fragment {
 					favourite.setText("Add film to favourites");
 				} else {
 					favouriteDAO.insert(film);
+					if(film.getImage() != null) {
+						saveImageToFile(film.getImage(), film.getName()+ ".png");
+					}
 					favourite.setText("Remove film from favourites");
 				}
 
@@ -113,11 +132,15 @@ public abstract class FilmDetailsFragment extends Fragment {
 			}
 		});
 
-		Bundle args = getArguments();
+		args = getArguments();
 		setRetainInstance(true);
 		setType(retrieveStringArgs(TYPE_KEY, args));
 
 		return view;
+	}
+	
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		setFilmView();
 	}
 
 	public String retrieveStringArgs(String key, Bundle args) {
@@ -184,5 +207,20 @@ public abstract class FilmDetailsFragment extends Fragment {
 			}
 			favouriteDAO.close();
 		}
+	}
+	
+	public void saveImageToFile(Bitmap image, String fileName) {
+	FileOutputStream out = null;
+	try {
+	    out = getActivity().openFileOutput(fileName, Context.MODE_PRIVATE);
+	    image.compress(Bitmap.CompressFormat.PNG, 100, out);
+	} catch (Exception e) {}
+	finally {
+	    try {
+	        if (out != null) {
+	            out.close();
+	        }
+	    } catch (IOException e) {}
+}
 	}
 }

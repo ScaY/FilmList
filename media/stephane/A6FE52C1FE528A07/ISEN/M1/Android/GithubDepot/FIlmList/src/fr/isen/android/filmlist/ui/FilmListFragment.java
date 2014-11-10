@@ -151,11 +151,11 @@ public abstract class FilmListFragment extends Fragment {
 				public void onItemClick(AdapterView<?> arg0, View arg1,
 						int position, long arg3) {
 
-					FilmDetailsFragment filmDetailsFragment = new FilmDetailsDBFragment();
+					FilmDetailsFragment filmDetailsFragment = new FilmDetailsFragment();
 					Bundle args = new Bundle();
-					args.putString(FilmDetailsFragment.MOVIE_KEY,
-							list.get(position).getName());
-					args.putString(FilmDetailsFragment.TYPE_KEY, typeKey_);
+					args.putSerializable(FilmDetailsFragment.MOVIE_KEY, (Serializable) list.get(position));
+					args.putString(FilmDetailsFragment.TYPE_KEY,
+							SearchResultsFragment.class.getSimpleName().toString());
 					filmDetailsFragment.setArguments(args);
 					activity.setFragment(filmDetailsFragment,
 							HomeActivity.STACK_FILMLIST, true);

@@ -1,5 +1,7 @@
 package fr.isen.android.filmlist.ui;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +10,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -325,6 +328,18 @@ public class HomeActivity extends FragmentActivity {
 
 		for (Film film : films) {
 			list.add(film);
+			FileInputStream in = null;
+			try {
+			    in = openFileInput(film.getName() + ".png");
+			    film.setImage(BitmapFactory.decodeStream(in));
+			} catch (Exception e) {}
+			finally {
+			    try {
+			        if (in != null) {
+			            in.close();
+			        }
+			    } catch (IOException e) {}
+			}
 		}
 
 		args = new Bundle();

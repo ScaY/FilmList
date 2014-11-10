@@ -74,7 +74,7 @@ public class SearchResultsFragment extends Fragment implements
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		FilmDetailsAPIFragment filmDetailsFragment = new FilmDetailsAPIFragment();
+		FilmDetailsFragment filmDetailsFragment = new FilmDetailsFragment();
 		Bundle args = new Bundle();
 		args.putSerializable(FilmDetailsFragment.MOVIE_KEY, (Serializable) list.get(position));
 		args.putString(FilmDetailsFragment.TYPE_KEY,
