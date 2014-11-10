@@ -76,9 +76,6 @@ public class FilmDetailsFragment extends Fragment {
 					button.setText("Add film to planning");
 				} else {
 					toSeeDAO.insert(film);
-					if(film.getImage() != null) {
-						saveImageToFile(film.getImage(), film.getName()+ ".png");
-					}
 					button.setText("Remove film from planning");
 
 					Intent intent = new Intent(Intent.ACTION_INSERT);
@@ -122,9 +119,6 @@ public class FilmDetailsFragment extends Fragment {
 					favourite.setText("Add film to favourites");
 				} else {
 					favouriteDAO.insert(film);
-					if(film.getImage() != null) {
-						saveImageToFile(film.getImage(), film.getName()+ ".png");
-					}
 					favourite.setText("Remove film from favourites");
 				}
 
@@ -161,6 +155,10 @@ public class FilmDetailsFragment extends Fragment {
 			}
 			film.setId(id);
 			dao.close();
+			
+			if(film.getImage() != null) {
+				saveImageToFile(film.getImage(), film.getName()+ ".png");
+			}
 		}
 	}
 
