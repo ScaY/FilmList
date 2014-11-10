@@ -143,4 +143,8 @@ public class Film implements Serializable{
 	public void setActors(String actors) {
 		this.actors = actors;
 	}
+	
+	public String toStringRate(){
+		return "Rating : " + this.imdbRating + "/10";
+	}
 }

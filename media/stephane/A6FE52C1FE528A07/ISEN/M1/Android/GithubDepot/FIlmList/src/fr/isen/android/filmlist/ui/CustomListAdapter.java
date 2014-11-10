@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.example.filmlist.R;
 
 import fr.isen.android.filmlist.bdd.Film;
-import fr.isen.android.filmlist.bdd.FilmSearchResult;
 import fr.isen.android.filmlist.utils.DownloadImageTask;
 
 public class CustomListAdapter extends BaseAdapter {
@@ -51,8 +50,6 @@ public class CustomListAdapter extends BaseAdapter {
 		if (convertView == null)
 			convertView = inflater.inflate(R.layout.list_row, null);
 
-		// NetworkImageView thumbNail = (NetworkImageView) convertView
-		// .findViewById(R.id.thumbnail);
 		TextView title = (TextView) convertView.findViewById(R.id.title);
 		TextView rating = (TextView) convertView.findViewById(R.id.rating);
 		TextView genre = (TextView) convertView.findViewById(R.id.genre);
@@ -67,23 +64,11 @@ public class CustomListAdapter extends BaseAdapter {
 		if (f.getImageUrl() != null && f.getImageUrl() != "") {
 			task.execute(f.getImageUrl());
 		}
-
-		// title
+		
 		title.setText(f.getName());
-
-		// rating
-		rating.setText("Rating: " + String.valueOf(5));
-
-		// genre
-		/*
-		 * String genreStr = ""; for (String str : m.getGenre()) { genreStr +=
-		 * str + ", "; } genreStr = genreStr.length() > 0 ?
-		 * genreStr.substring(0, genreStr.length() - 2) : genreStr;
-		 */
 		genre.setText(f.getDirector());
-
-		// release year
 		year.setText(String.valueOf(f.getYear()));
+		rating.setText(f.toStringRate());
 
 		return convertView;
 	}
