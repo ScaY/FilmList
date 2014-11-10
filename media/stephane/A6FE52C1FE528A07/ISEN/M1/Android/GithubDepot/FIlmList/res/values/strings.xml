@@ -3,7 +3,7 @@
 
     <string name="title_activity_home">Home</string>
     <string name="action_settings">Settings</string>
-    <string name="app_name">MoviesList</string>
+    <string name="app_name">Movies List</string>
     <string name="search_hint">Add a movie</string>
     <string name="action_search">Search movie</string>
 

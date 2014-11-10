@@ -12,7 +12,7 @@ public class FilmFavouriteListFragment extends FilmListFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		getActivity().setTitle("Favourite films");
+		getActivity().setTitle("Favourite movies");
 		String typeKey = this.getClass().getSimpleName().toString();
 		View view = super.onCreateView(inflater, container, savedInstanceState);
 		additemListener(getListView(), typeKey.toString(), getList(),
