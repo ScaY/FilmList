@@ -11,7 +11,7 @@ public class FilmAllListFragment extends FilmListFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		getActivity().setTitle("All films");
+		getActivity().setTitle("All movies");
 		String typeKey = this.getClass().getSimpleName().toString();
 		View view = super.onCreateView(inflater, container, savedInstanceState);
 		additemListener(getListView(), typeKey.toString(), getList(),
