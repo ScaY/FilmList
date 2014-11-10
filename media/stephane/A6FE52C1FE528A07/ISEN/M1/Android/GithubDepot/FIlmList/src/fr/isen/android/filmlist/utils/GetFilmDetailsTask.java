@@ -46,9 +46,7 @@ public class GetFilmDetailsTask extends AsyncTask<String, Void, JSONObject> {
 			}
 
 			jsonResponse = new JSONObject(result.toString());
-		} catch (Exception e) {
-			int i = 1;
-		}
+		} catch (Exception e) {}
 
 		return jsonResponse;
 	}

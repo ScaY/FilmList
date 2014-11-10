@@ -5,6 +5,10 @@ import java.io.Serializable;
 import org.json.JSONObject;
 
 public class FilmSearchResult implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String title;
 	private int year;
 	private String imdbID;

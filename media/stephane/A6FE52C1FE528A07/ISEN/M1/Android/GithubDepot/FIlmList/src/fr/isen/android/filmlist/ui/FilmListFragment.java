@@ -183,8 +183,6 @@ public abstract class FilmListFragment extends Fragment {
 
 					} else {
 						itemSelected.remove(Integer.toString(position));
-						getListView().getChildAt(position).setBackground(
-								defaultBackground);
 						((HomeActivity) getActivity()).setTitle(Integer
 								.toString(position));
 

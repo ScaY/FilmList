@@ -8,6 +8,10 @@ import org.json.JSONObject;
 import android.graphics.Bitmap;
 
 public class Film implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	// Notez que l'identifiant est un long
 	private long id;
 	private String name;

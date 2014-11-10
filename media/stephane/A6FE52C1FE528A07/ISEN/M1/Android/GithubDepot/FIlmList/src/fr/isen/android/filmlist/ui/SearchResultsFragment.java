@@ -15,7 +15,6 @@ import android.widget.ListView;
 import com.example.filmlist.R;
 
 import fr.isen.android.filmlist.bdd.Film;
-import fr.isen.android.filmlist.bdd.FilmSearchResult;
 
 public class SearchResultsFragment extends Fragment implements
 		OnItemClickListener {

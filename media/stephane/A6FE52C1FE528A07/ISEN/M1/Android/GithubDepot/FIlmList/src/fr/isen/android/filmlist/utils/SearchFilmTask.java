@@ -11,7 +11,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.CoreProtocolPNames;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Fragment;
@@ -56,9 +55,7 @@ public class SearchFilmTask extends AsyncTask<String, Void, JSONObject> {
 			}
 
 			jsonResponse = new JSONObject(result.toString());
-		} catch (Exception e) {
-			int i = 1;
-		}
+		} catch (Exception e) {}
 
 		try {
 			JSONArray searchArray = jsonResponse.getJSONArray("Search");
@@ -91,15 +88,11 @@ public class SearchFilmTask extends AsyncTask<String, Void, JSONObject> {
 
 						jsonResponse2 = new JSONObject(result.toString());
 						listFilm.add(new Film(jsonResponse2));
-					} catch (Exception e) {
-						int erreur = 1;
-					}
+					} catch (Exception e) {}
 				}
 			}
 
-		} catch (Exception e) {
-			int erreur = 0;
-		}
+		} catch (Exception e) {}
 		return jsonResponse;
 	}
 
