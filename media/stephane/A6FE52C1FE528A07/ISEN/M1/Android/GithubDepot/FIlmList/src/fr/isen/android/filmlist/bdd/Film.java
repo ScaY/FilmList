@@ -5,6 +5,8 @@ import java.sql.Date;
 
 import org.json.JSONObject;
 
+import android.graphics.Bitmap;
+
 public class Film implements Serializable{
 	// Notez que l'identifiant est un long
 	private long id;
@@ -18,11 +20,13 @@ public class Film implements Serializable{
 	private String imdbRating;
 	private String imdbVotes;
 	private String actors;
+	private Bitmap image;
   
 	public Film(long id, String name) {
 	  this.id = id;
 	  this.name = name;
 	  this.director = "";
+	  this.image = null;
 	}
 	
 	public Film(long id, String name, String year, Date releaseDate, String runtime, String director, String story, String imageUrl, String imdbRating, String imdbVotes, String actors) {
@@ -37,6 +41,7 @@ public class Film implements Serializable{
 	  this.imdbRating = imdbRating;
 	  this.imdbVotes = imdbVotes;
 	  this.actors = actors;
+	  this.image = null;
 	}
 	
 	public Film(JSONObject jsonFilm) {
@@ -146,5 +151,13 @@ public class Film implements Serializable{
 	
 	public String toStringRate(){
 		return "Rating : " + this.imdbRating + "/10";
+	}
+
+	public Bitmap getImage() {
+		return image;
+	}
+
+	public void setImage(Bitmap image) {
+		this.image = image;
 	}
 }

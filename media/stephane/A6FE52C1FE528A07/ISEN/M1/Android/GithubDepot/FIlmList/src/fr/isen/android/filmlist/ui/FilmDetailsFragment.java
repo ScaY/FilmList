@@ -156,8 +156,13 @@ public abstract class FilmDetailsFragment extends Fragment {
 
 			ImageView image = (ImageView) activity
 					.findViewById(R.id.imageView1);
-			DownloadImageTask task = new DownloadImageTask(image);
-			task.execute(film.getImageUrl());
+			if(film.getImage() == null) {
+				DownloadImageTask task = new DownloadImageTask(image, film);
+				task.execute(film.getImageUrl());
+			}
+			else {
+				image.setImageBitmap(film.getImage());
+			}
 
 			final Button button = (Button) activity.findViewById(
 					R.id.button_add_film_calendar);

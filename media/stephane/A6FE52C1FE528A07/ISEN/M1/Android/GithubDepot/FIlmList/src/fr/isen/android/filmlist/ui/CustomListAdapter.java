@@ -58,11 +58,15 @@ public class CustomListAdapter extends BaseAdapter {
 		// getting movie data for the row
 		Film f = movieItems.get(position);
 
-		// image ImageView image = (ImageView) activity
 		ImageView image = (ImageView) convertView.findViewById(R.id.imageView);
-		DownloadImageTask task = new DownloadImageTask(image);
-		if (f.getImageUrl() != null && f.getImageUrl() != "") {
-			task.execute(f.getImageUrl());
+		if(f.getImage() == null) {
+			DownloadImageTask task = new DownloadImageTask(image, f);
+			if (f.getImageUrl() != null && f.getImageUrl() != "") {
+				task.execute(f.getImageUrl());
+			}
+		}
+		else {
+			image.setImageBitmap(f.getImage());
 		}
 		
 		title.setText(f.getName());

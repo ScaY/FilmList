@@ -7,12 +7,15 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ImageView;
+import fr.isen.android.filmlist.bdd.Film;
 
 public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 	  ImageView bmImage;
-	
-	  public DownloadImageTask(ImageView bmImage) {
+	  Film film;
+	  
+	  public DownloadImageTask(ImageView bmImage, Film film) {
 	      this.bmImage = bmImage;
+	      this.film = film;
 	  }
 	
 	  protected Bitmap doInBackground(String... urls) {
@@ -31,6 +34,7 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 	  protected void onPostExecute(Bitmap result) {
 		  if(bmImage != null && result != null){
 			  bmImage.setImageBitmap(result);
+			  film.setImage(result);
 		  }
 	  }
 	}
