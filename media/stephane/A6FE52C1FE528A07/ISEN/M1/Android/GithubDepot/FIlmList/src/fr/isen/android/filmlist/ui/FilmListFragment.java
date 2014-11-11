@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
