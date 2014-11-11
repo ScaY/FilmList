@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -22,8 +23,8 @@ import com.example.filmlist.R;
 import fr.isen.android.filmlist.bdd.Film;
 
 public abstract class FilmListFragment extends Fragment {
-	//private ArrayList<String> list;
-	//private ArrayAdapter<String> adapter;
+	// private ArrayList<String> list;
+	// private ArrayAdapter<String> adapter;
 	private ArrayList<Film> list;
 	private ListView listview;
 	private HashMap<String, View> itemSelected;
@@ -34,7 +35,7 @@ public abstract class FilmListFragment extends Fragment {
 	private ActionBarCallBack actionBarCallBack;
 
 	public static final String LIST_KEY = "fr.isen.android.filmlist.ui.filmlistfragment.filmlistkey";
-	
+
 	public FilmListFragment() {
 		itemSelected = new HashMap<String, View>();
 		mActionMode = null;
@@ -95,23 +96,26 @@ public abstract class FilmListFragment extends Fragment {
 
 		if (list == null) {
 			if (args != null && args.containsKey(FilmListFragment.LIST_KEY)) {
-				Serializable arg = args.getSerializable(FilmListFragment.LIST_KEY);;
-				if(arg instanceof ArrayList<?>){
+				Serializable arg = args
+						.getSerializable(FilmListFragment.LIST_KEY);
+				;
+				if (arg instanceof ArrayList<?>) {
 					list = (ArrayList<Film>) arg;
-				}else{
+				} else {
 					list = new ArrayList<Film>();
 				}
 			} else {
 				list = new ArrayList<Film>();
 			}
 		}
-		
+
 		adapter = new CustomListAdapter(getActivity(), list);
 		listview = (ListView) view.findViewById(R.id.listview);
 		listview.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
 		defaultBackground = listview.getBackground();
-		actionBarCallBack = new ActionBarCallBack((HomeActivity) getActivity(), this);
+		actionBarCallBack = new ActionBarCallBack((HomeActivity) getActivity(),
+				this);
 
 		// Check for the rotation screen
 		listview.post(new Runnable() {
@@ -153,9 +157,11 @@ public abstract class FilmListFragment extends Fragment {
 
 					FilmDetailsFragment filmDetailsFragment = new FilmDetailsFragment();
 					Bundle args = new Bundle();
-					args.putSerializable(FilmDetailsFragment.MOVIE_KEY, (Serializable) list.get(position));
+					args.putSerializable(FilmDetailsFragment.MOVIE_KEY,
+							(Serializable) list.get(position));
 					args.putString(FilmDetailsFragment.TYPE_KEY,
-							SearchResultsFragment.class.getSimpleName().toString());
+							SearchResultsFragment.class.getSimpleName()
+									.toString());
 					filmDetailsFragment.setArguments(args);
 					activity.setFragment(filmDetailsFragment,
 							HomeActivity.STACK_FILMLIST, true);
@@ -183,8 +189,8 @@ public abstract class FilmListFragment extends Fragment {
 
 					} else {
 						itemSelected.remove(Integer.toString(position));
-						((HomeActivity) getActivity()).setTitle(Integer
-								.toString(position));
+
+						getListView().getChildAt(position).setBackgroundColor(Color.WHITE);
 
 						if (itemSelected.isEmpty()) {
 							itemSelected.clear();
@@ -194,6 +200,7 @@ public abstract class FilmListFragment extends Fragment {
 
 						}
 					}
+					actionBarCallBack.getShareActionProvider().setShareIntent(actionBarCallBack.getDefaultShareIntent());
 					return true;
 				}
 			});

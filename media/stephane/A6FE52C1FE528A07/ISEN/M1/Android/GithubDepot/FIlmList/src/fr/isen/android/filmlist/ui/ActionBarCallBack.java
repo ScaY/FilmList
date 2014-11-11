@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,8 +22,11 @@ public class ActionBarCallBack implements ActionMode.Callback {
 	private String typeKey;
 	private HomeActivity activity;
 	private FilmListFragment filmListFragment;
-
-	public ActionBarCallBack(HomeActivity activity, FilmListFragment filmListFragment) {
+	private MenuItem itemShare;
+	private ShareActionProvider shareActionProvider;
+	
+	public ActionBarCallBack(HomeActivity activity,
+			FilmListFragment filmListFragment) {
 		this.typeKey = FilmAllListFragment.class.getSimpleName().toString();
 		this.activity = activity;
 		this.filmListFragment = filmListFragment;
@@ -39,9 +43,9 @@ public class ActionBarCallBack implements ActionMode.Callback {
 
 			for (String i : filmListFragment.getItemSelected().keySet()) {
 				filmListFragment.getListView().getChildAt(Integer.parseInt(i))
-						.setBackground(filmListFragment.getDefaultBackground());
-				String nameFilm = filmListFragment.getList().remove(
-						Integer.parseInt(i)).getName();
+						.setBackgroundColor(Color.WHITE);
+				String nameFilm = filmListFragment.getList()
+						.remove(Integer.parseInt(i)).getName();
 
 				List<Film> films = null;
 				if (typeKey.equals(FilmFavouriteListFragment.class
@@ -76,13 +80,16 @@ public class ActionBarCallBack implements ActionMode.Callback {
 			filmListFragment.getActionMode().finish();
 			break;
 		}
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean onCreateActionMode(ActionMode mode, Menu menu) {
 		// TODO Auto-generated method stub
 		mode.getMenuInflater().inflate(R.menu.contextual_menu, menu);
+
+		itemShare = menu.findItem(R.id.item_share);
+		
 		return true;
 	}
 
@@ -91,7 +98,7 @@ public class ActionBarCallBack implements ActionMode.Callback {
 
 		for (String i : filmListFragment.getItemSelected().keySet()) {
 			filmListFragment.getListView().getChildAt(Integer.parseInt(i))
-					.setBackground(filmListFragment.getDefaultBackground());
+					.setBackgroundColor(Color.WHITE);
 		}
 		filmListFragment.getItemSelected().clear();
 		FilmListFragment.additemListener(filmListFragment.getListView(),
@@ -101,13 +108,19 @@ public class ActionBarCallBack implements ActionMode.Callback {
 	@Override
 	public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
 
-		// Initialize the listener for the share button
-		MenuItem item = menu.findItem(R.id.item_share);
-		ShareActionProvider shareActionProvider = (ShareActionProvider) item
+		// Set the action for the share button
+		shareActionProvider = (ShareActionProvider) itemShare
 				.getActionProvider();
 		shareActionProvider.setShareIntent(getDefaultShareIntent());
-
 		return false;
+	}
+
+	public ShareActionProvider getShareActionProvider() {
+		return shareActionProvider;
+	}
+
+	public void setShareActionProvider(ShareActionProvider shareActionProvider) {
+		this.shareActionProvider = shareActionProvider;
 	}
 
 	public long getIdFilm(String nameFilm, List<Film> films) {
@@ -126,10 +139,10 @@ public class ActionBarCallBack implements ActionMode.Callback {
 
 	}
 
-	private Intent getDefaultShareIntent() {
+	public Intent getDefaultShareIntent() {
 		Intent intent = new Intent(Intent.ACTION_SEND);
 		intent.setType("text/plain");
-		intent.putExtra(Intent.EXTRA_SUBJECT, "FilmList");
+		intent.putExtra(Intent.EXTRA_SUBJECT, "Movies List");
 		String msg = "";
 		Set<String> nameFilms = filmListFragment.getItemSelected().keySet();
 
@@ -152,11 +165,10 @@ public class ActionBarCallBack implements ActionMode.Callback {
 			}
 		}
 
-		
 		for (String i : filmListFragment.getItemSelected().keySet()) {
 
-			String filmName = filmListFragment.getList().get(
-					Integer.parseInt(i)).getName();
+			String filmName = filmListFragment.getList()
+					.get(Integer.parseInt(i)).getName();
 			if (nameFilms.size() == 1) {
 				msg += filmName + " ";
 			} else if (Integer.parseInt(i) == nameFilms.size() - 1) {
