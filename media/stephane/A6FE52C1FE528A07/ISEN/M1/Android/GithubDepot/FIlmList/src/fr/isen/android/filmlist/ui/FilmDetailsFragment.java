@@ -10,6 +10,8 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.PorterDuff.Mode;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.provider.CalendarContract.Events;
@@ -53,15 +55,15 @@ public class FilmDetailsFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_film_details, container,
 				false);
-		
+
 		Bundle args = getArguments();
 		if (args != null && args.containsKey(MOVIE_KEY)) {
 			Serializable arg = args.getSerializable(MOVIE_KEY);
-			if(arg instanceof Film){
-				film = (Film)arg;
+			if (arg instanceof Film) {
+				film = (Film) arg;
 			}
 		}
-		
+
 		// Set the button to add the movie to the calendar
 		final Button button = (Button) view
 				.findViewById(R.id.button_add_film_calendar);
@@ -73,10 +75,14 @@ public class FilmDetailsFragment extends Fragment {
 
 				if (toSeeDAO.select(film.getId()) != null) {
 					toSeeDAO.delete(film);
-					button.setText("Add film to planning");
+					button.setText("Add to planning");
+					button.getBackground().setColorFilter(Color.rgb(204, 204, 204),
+							Mode.SRC);
 				} else {
 					toSeeDAO.insert(film);
-					button.setText("Remove film from planning");
+					button.setText("Remove from planning");
+					button.getBackground().setColorFilter(Color.rgb(204, 204, 153),
+							Mode.SRC);
 
 					Intent intent = new Intent(Intent.ACTION_INSERT);
 					intent.setType("vnd.android.cursor.item/event");
@@ -116,10 +122,14 @@ public class FilmDetailsFragment extends Fragment {
 
 				if (favouriteDAO.select(film.getId()) != null) {
 					favouriteDAO.delete(film);
-					favourite.setText("Add film to favourites");
+					favourite.setText("Add to favourites");
+					favourite.getBackground().setColorFilter(Color.rgb(204, 204, 204),
+							Mode.SRC);
 				} else {
 					favouriteDAO.insert(film);
-					favourite.setText("Remove film from favourites");
+					favourite.setText("Remove from favourites");
+					favourite.getBackground().setColorFilter(Color.rgb(204, 204, 153),
+							Mode.SRC);
 				}
 
 				favouriteDAO.close();
@@ -132,7 +142,7 @@ public class FilmDetailsFragment extends Fragment {
 
 		return view;
 	}
-	
+
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		setFilmView();
 	}
@@ -155,9 +165,9 @@ public class FilmDetailsFragment extends Fragment {
 			}
 			film.setId(id);
 			dao.close();
-			
-			if(film.getImage() != null) {
-				saveImageToFile(film.getImage(), film.getName()+ ".png");
+
+			if (film.getImage() != null) {
+				saveImageToFile(film.getImage(), film.getName() + ".png");
 			}
 		}
 	}
@@ -167,32 +177,45 @@ public class FilmDetailsFragment extends Fragment {
 		if (film != null) {
 
 			activity.setTitle(film.getName());
-			((TextView)activity.findViewById(R.id.film_details_title)).setText(film.getName());
-			((TextView)activity.findViewById(R.id.film_details_director)).setText(film.getDirector());
-			((TextView)activity.findViewById(R.id.film_details_actors)).setText(film.getActors());
-			((TextView)activity.findViewById(R.id.film_details_year)).setText(film.getYear());
-			((TextView)activity.findViewById(R.id.film_details_duration)).setText(film.getRuntime());
-			((TextView)activity.findViewById(R.id.film_details_rating)).setText(film.getImdbRating() + "/10 from " + film.getImdbVotes() + " users");
-			((TextView)activity.findViewById(R.id.film_details_story)).setText(film.getStory());
+			((TextView) activity.findViewById(R.id.film_details_title))
+					.setText(film.getName());
+			((TextView) activity.findViewById(R.id.film_details_director))
+					.setText(film.getDirector());
+			((TextView) activity.findViewById(R.id.film_details_actors))
+					.setText(film.getActors());
+			((TextView) activity.findViewById(R.id.film_details_year))
+					.setText(film.getYear());
+			((TextView) activity.findViewById(R.id.film_details_duration))
+					.setText(film.getRuntime());
+			((TextView) activity.findViewById(R.id.film_details_rating))
+					.setText(film.getImdbRating() + "/10 from "
+							+ film.getImdbVotes() + " users");
+			((TextView) activity.findViewById(R.id.film_details_story))
+					.setText(film.getStory());
 
 			ImageView image = (ImageView) activity
 					.findViewById(R.id.imageView1);
-			if(film.getImage() == null) {
+			if (film.getImage() == null) {
 				DownloadImageTask task = new DownloadImageTask(image, film);
 				task.execute(film.getImageUrl());
-			}
-			else {
+			} else {
 				image.setImageBitmap(film.getImage());
 			}
 
-			final Button button = (Button) activity.findViewById(
-					R.id.button_add_film_calendar);
+			final Button button = (Button) activity
+					.findViewById(R.id.button_add_film_calendar);
 			ToSeeFilmsDAO toSeeDAO = new ToSeeFilmsDAO(activity);
 			toSeeDAO.open();
 			if (toSeeDAO.select(film.getId()) != null) {
 
-				button.setText("Remove film from planning");
+				button.setText("Remove from planning");
+				button.getBackground().setColorFilter(Color.rgb(204, 204, 153),
+						Mode.SRC);
+			}else{
+				button.getBackground().setColorFilter(Color.rgb(204, 204, 204),
+						Mode.SRC);
 			}
+
 			toSeeDAO.close();
 
 			final Button favourite = (Button) getActivity().findViewById(
@@ -201,24 +224,30 @@ public class FilmDetailsFragment extends Fragment {
 					getActivity());
 			favouriteDAO.open();
 			if (favouriteDAO.select(film.getId()) != null) {
-				favourite.setText("Remove film from favourites");
+				favourite.setText("Remove from favourites");
+				favourite.getBackground().setColorFilter(
+						Color.rgb(204, 204, 153), Mode.SRC);
+			}else{
+				favourite.getBackground().setColorFilter(Color.rgb(204, 204, 204),
+						Mode.SRC);
 			}
 			favouriteDAO.close();
 		}
 	}
-	
+
 	public void saveImageToFile(Bitmap image, String fileName) {
-	FileOutputStream out = null;
-	try {
-	    out = getActivity().openFileOutput(fileName, Context.MODE_PRIVATE);
-	    image.compress(Bitmap.CompressFormat.PNG, 100, out);
-	} catch (Exception e) {}
-	finally {
-	    try {
-	        if (out != null) {
-	            out.close();
-	        }
-	    } catch (IOException e) {}
-}
+		FileOutputStream out = null;
+		try {
+			out = getActivity().openFileOutput(fileName, Context.MODE_PRIVATE);
+			image.compress(Bitmap.CompressFormat.PNG, 100, out);
+		} catch (Exception e) {
+		} finally {
+			try {
+				if (out != null) {
+					out.close();
+				}
+			} catch (IOException e) {
+			}
+		}
 	}
 }
